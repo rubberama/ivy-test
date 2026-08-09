@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>나에게 맞는 아이비리그는? | 성향 매칭 테스트</title>
+<meta name="description" content="18개 질문으로 알아보는 나와 잘 맞는 아이비리그 8개교. 성향 기반 매칭 테스트.">
+<meta name="theme-color" content="#0B0B0F">
+<meta property="og:type" content="website">
+<meta property="og:title" content="나에게 맞는 아이비리그는?">
+<meta property="og:description" content="18개 질문으로 알아보는 나와 잘 맞는 아이비리그. 재미로 보는 성향 매칭이에요.">
+<!-- 파비콘을 인라인 SVG 로 넣는다. 별도 파일이 없어도 되고 file:// 에서도 뜬다. -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23ec4899'/%3E%3Cpath d='M9 23 L16 9 L23 23' stroke='white' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="shell header-inner">
+    <span class="logo" aria-hidden="true">IVY</span>
+    <span class="header-title">아이비리그 성향 매칭</span>
+  </div>
+</header>
+
+<main class="shell" id="main">
+
+  <!-- ───────────── 인트로 ───────────── -->
+  <section id="screen-intro" class="screen">
+    <div class="card hero-card">
+      <p class="eyebrow">18개 질문 · 약 2분</p>
+      <h1 class="hero-title">나랑 결이 맞는<br>아이비리그는 어디일까?</h1>
+      <p class="hero-sub">
+        하버드부터 다트머스까지, 아이비리그 8개교는 분위기도 학제도 서로 꽤 달라요.
+        성적이 아니라 <b>성향</b>으로 나와 잘 맞는 학교 세 곳을 찾아드릴게요.
+      </p>
+      <button type="button" class="btn btn-primary btn-block" id="btn-start">
+        시작하기 <span aria-hidden="true">→</span>
+      </button>
+      <button type="button" class="btn btn-ghost btn-block hidden" id="btn-resume">
+        이어서 하기
+      </button>
+    </div>
+
+    <div class="card">
+      <h2 class="section-title">이런 걸 봐요</h2>
+      <ul class="axis-preview" id="axis-preview"></ul>
+    </div>
+
+    <p class="disclaimer">
+      재미로 보는 <b>성향 매칭</b>이에요. 합격 가능성을 예측하는 도구가 아니고,
+      성적·시험 점수·스펙은 하나도 묻지 않아요. 학교 선택은 실제 방문과 상담으로 결정하세요.
+    </p>
+  </section>
+
+  <!-- ───────────── 질문 ───────────── -->
+  <section id="screen-quiz" class="screen hidden">
+    <div class="card progress-card">
+      <div class="progress-head">
+        <span class="progress-label">진행률</span>
+        <span class="progress-count"><b id="progress-now">0</b> / <span id="progress-total">18</span></span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+      <p class="progress-note">정답은 없어요. 더 나 같거나, 오래 해도 덜 지칠 것 같은 쪽을 골라주세요.</p>
+    </div>
+
+    <div class="card question-card">
+      <div class="question-head">
+        <span class="q-pill">질문 <b id="q-index">1</b></span>
+        <div class="dots" id="dots" aria-hidden="true"></div>
+      </div>
+
+      <h2 class="question-text" id="question-text" tabindex="-1"></h2>
+
+      <!-- 진짜 radio input 을 쓴다. 방향키 이동, 스페이스로 선택,
+           "4개 중 2번째, 선택됨" 같은 스크린리더 안내가 전부 공짜로 따라온다. -->
+      <fieldset class="options" id="options">
+        <legend class="offscreen" id="options-legend">선택지</legend>
+      </fieldset>
+
+      <div class="nav-row">
+        <button type="button" class="btn btn-ghost" id="btn-prev">
+          <span aria-hidden="true">←</span> 이전
+        </button>
+        <button type="button" class="btn btn-primary" id="btn-next">
+          다음 <span aria-hidden="true">→</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────── 계산중 ───────────── -->
+  <section id="screen-loading" class="screen hidden">
+    <div class="card loading-card">
+      <div class="spinner" aria-hidden="true"></div>
+      <p class="loading-text">답변을 8개 학교 성향과 맞춰보는 중…</p>
+    </div>
+  </section>
+
+  <!-- ───────────── 결과 ───────────── -->
+  <section id="screen-result" class="screen hidden">
+
+    <div class="card result-hero" id="result-hero">
+      <p class="eyebrow">나와 가장 잘 맞는 학교</p>
+      <h1 class="result-name" id="result-name"></h1>
+      <p class="result-en" id="result-en"></p>
+      <p class="result-tagline" id="result-tagline"></p>
+      <div class="result-score">
+        <span class="result-percent" id="result-percent"></span>
+        <span class="result-percent-label">매칭 적합도</span>
+      </div>
+      <ul class="chips" id="result-keywords"></ul>
+    </div>
+
+    <div class="card">
+      <h2 class="section-title">TOP 3</h2>
+      <div id="ranking"></div>
+    </div>
+
+    <div class="card">
+      <h2 class="section-title" id="detail-title">1위 상세 해설</h2>
+      <div id="why-block" class="why-block"></div>
+      <div id="detail-block"></div>
+    </div>
+
+    <div class="card">
+      <h2 class="section-title">내 성향 축</h2>
+      <p class="section-sub">가운데에서 멀수록 그쪽 성향이 뚜렷하다는 뜻이에요.</p>
+      <div id="axis-chart" class="axis-chart"></div>
+    </div>
+
+    <div class="card">
+      <h2 class="section-title">결과 저장하고 공유하기</h2>
+      <div class="action-grid">
+        <button type="button" class="btn btn-primary btn-block" id="btn-share">결과 링크 복사</button>
+        <button type="button" class="btn btn-outline btn-block" id="btn-image">결과 이미지 저장</button>
+        <button type="button" class="btn btn-ghost btn-block" id="btn-restart">다시 하기</button>
+      </div>
+      <p class="share-hint" id="share-hint" role="status" aria-live="polite"></p>
+    </div>
+
+    <p class="disclaimer">
+      재미로 보는 <b>성향 매칭</b>이에요. 합격 가능성 예측이 아니고, 이 결과로 지원 여부를
+      정하지는 마세요. 학교마다 실제로 가보고 재학생과 이야기해보는 게 제일 정확해요.
+    </p>
+  </section>
+
+</main>
+
+<footer class="site-footer shell">
+  <p>아이비리그 8개교 성향 매칭 · 비공식 · 학교와 무관한 팬 프로젝트</p>
+</footer>
+
+<canvas id="export-canvas" width="1080" height="1350" class="offscreen" aria-hidden="true"></canvas>
+
+<!-- 일반 script 로 순서대로 로드한다. type="module" 을 쓰면 file:// 에서
+     CORS 때문에 안 열려서, index.html 더블클릭으로는 못 쓰게 된다. -->
+<script src="js/data/axes.js"></script>
+<script src="js/data/schools.js"></script>
+<script src="js/data/questions.js"></script>
+<script src="js/scoring.js"></script>
+<script src="js/share.js"></script>
+<script src="js/resultImage.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
