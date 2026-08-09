@@ -1,0 +1,2665 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>나에게 맞는 아이비리그는? | 성향 매칭 테스트</title>
+<meta name="description" content="18개 질문으로 알아보는 나와 잘 맞는 아이비리그 8개교. 성향 기반 매칭 테스트.">
+<meta name="theme-color" content="#0B0B0F">
+<meta property="og:type" content="website">
+<meta property="og:title" content="나에게 맞는 아이비리그는?">
+<meta property="og:description" content="18개 질문으로 알아보는 나와 잘 맞는 아이비리그. 재미로 보는 성향 매칭이에요.">
+<!-- 파비콘을 인라인 SVG 로 넣는다. 별도 파일이 없어도 되고 file:// 에서도 뜬다. -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23ec4899'/%3E%3Cpath d='M9 23 L16 9 L23 23' stroke='white' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+/* ─────────────────────────────────────────────────────────────
+   디자인 토큰
+   레퍼런스(밝은 회색 배경 + 흰 카드 + 핫핑크 포인트 + 검은 버튼)를 따른다.
+   외부 웹폰트를 안 쓰기 때문에 한글은 시스템 폰트 스택으로 처리한다.
+   ───────────────────────────────────────────────────────────── */
+:root {
+  color-scheme: light;
+
+  --bg: #f4f5f7;
+  --card: #ffffff;
+  --ink: #14161a;
+  --ink-soft: #5b6472;
+  --ink-faint: #9aa3b0;
+  --line: #e8eaef;
+  --line-strong: #d7dbe3;
+
+  --accent: #ec4899;
+  --accent-soft: #fdeaf4;
+  --accent-deep: #be2d75;
+
+  --r-sm: 10px;
+  --r-md: 16px;
+  --r-lg: 20px;
+  --r-pill: 999px;
+
+  --shell: 480px;
+  --pad: 20px;
+
+  --font: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard",
+          "Noto Sans KR", "Malgun Gothic", "맑은 고딕", system-ui, sans-serif;
+}
+
+/* ── 리셋 ─────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.6;
+  word-break: keep-all;      /* 한글이 단어 중간에서 안 끊기게 */
+  overflow-wrap: break-word;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, p, ul, li, figure { margin: 0; padding: 0; }
+ul { list-style: none; }
+b, strong { font-weight: 700; }
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  touch-action: manipulation;   /* 모바일 300ms 탭 지연 제거 */
+}
+
+.hidden { display: none !important; }
+
+.offscreen {
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  pointer-events: none;
+}
+
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* ── 레이아웃 ─────────────────────────────────────────────── */
+.shell {
+  width: 100%;
+  max-width: var(--shell);
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(255, 255, 255, .88);
+  backdrop-filter: saturate(1.6) blur(12px);
+  border-bottom: 1px solid var(--line);
+  padding-top: env(safe-area-inset-top);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 56px;
+}
+
+.logo {
+  display: inline-grid;
+  place-items: center;
+  width: 30px; height: 30px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, var(--accent), #a855f7);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .02em;
+}
+
+.header-title { font-size: 15px; font-weight: 700; letter-spacing: -.01em; }
+
+main { padding: 20px 16px 40px; }
+
+.screen { display: grid; gap: 14px; }
+
+/* ── 카드 ─────────────────────────────────────────────────── */
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: var(--pad);
+}
+
+.eyebrow {
+  color: var(--accent);
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: .02em;
+  margin-bottom: 10px;
+}
+
+.section-title { font-size: 17px; font-weight: 800; letter-spacing: -.02em; }
+.section-sub { color: var(--ink-soft); font-size: 13px; margin-top: 4px; }
+
+.disclaimer {
+  color: var(--ink-faint);
+  font-size: 12.5px;
+  line-height: 1.7;
+  padding: 2px 4px 0;
+}
+.disclaimer b { color: var(--ink-soft); }
+
+/* ── 인트로 ───────────────────────────────────────────────── */
+.hero-card { padding: 26px 20px 22px; }
+
+.hero-title {
+  font-size: 27px;
+  font-weight: 800;
+  line-height: 1.34;
+  letter-spacing: -.035em;
+}
+
+.hero-sub {
+  color: var(--ink-soft);
+  font-size: 14.5px;
+  margin: 12px 0 20px;
+}
+
+.axis-preview { display: grid; gap: 9px; margin-top: 12px; }
+
+.axis-preview li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  color: var(--ink-soft);
+}
+
+.axis-preview .pole { color: var(--ink); font-weight: 600; }
+
+.axis-preview .vs {
+  color: var(--ink-faint);
+  font-size: 11px;
+  flex: none;
+}
+
+/* ── 버튼 ─────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 52px;
+  padding: 0 20px;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  font-size: 15.5px;
+  font-weight: 700;
+  letter-spacing: -.01em;
+  transition: transform .06s ease, background-color .15s ease, opacity .15s ease;
+}
+.btn:active { transform: scale(.985); }
+.btn-block { width: 100%; }
+
+.btn-primary { background: var(--ink); color: #fff; }
+.btn-primary:hover { background: #262a31; }
+
+.btn-outline {
+  background: #fff;
+  color: var(--ink);
+  border-color: var(--line-strong);
+}
+.btn-outline:hover { background: #fafbfc; }
+
+.btn-ghost { background: transparent; color: var(--ink-soft); }
+.btn-ghost:hover { color: var(--ink); }
+
+.btn:disabled {
+  opacity: .38;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ── 진행률 ───────────────────────────────────────────────── */
+.progress-card { padding: 16px 18px 18px; }
+
+.progress-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 10px;
+}
+
+.progress-label { font-size: 14px; font-weight: 700; }
+
+.progress-count { color: var(--ink-faint); font-size: 14px; font-weight: 700; }
+.progress-count b { color: var(--accent); font-size: 16px; }
+
+.progress-track {
+  height: 6px;
+  background: #eef0f4;
+  border-radius: var(--r-pill);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0;
+  border-radius: var(--r-pill);
+  background: linear-gradient(90deg, var(--accent), #f472b6);
+  transition: width .32s cubic-bezier(.4, 0, .2, 1);
+}
+
+.progress-note {
+  color: var(--ink-soft);
+  font-size: 13px;
+  margin-top: 12px;
+  line-height: 1.65;
+}
+
+/* ── 질문 ─────────────────────────────────────────────────── */
+.question-card { padding: 20px 18px; }
+
+.question-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.q-pill {
+  flex: none;
+  padding: 6px 12px;
+  border-radius: var(--r-pill);
+  background: #f1f3f7;
+  color: var(--ink-soft);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+.q-pill b { color: var(--ink); }
+
+.dots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  flex: 1;
+}
+
+.dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: #e2e5ea;
+  transition: background-color .2s ease;
+}
+.dot.answered { background: #f9a8d4; }
+.dot.current { background: var(--accent); transform: scale(1.25); }
+
+.question-text {
+  font-size: 21px;
+  font-weight: 800;
+  line-height: 1.42;
+  letter-spacing: -.03em;
+  margin-bottom: 18px;
+}
+
+.options {
+  display: grid;
+  gap: 9px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  width: 100%;
+  min-height: 62px;              /* 탭 영역 충분히 */
+  padding: 13px 15px;
+  text-align: left;
+  background: #fff;
+  border: 1.5px solid var(--line);
+  border-radius: var(--r-md);
+  font-size: 15px;
+  line-height: 1.5;
+  font-weight: 500;
+  color: var(--ink);
+  transition: border-color .14s ease, background-color .14s ease;
+}
+.option:hover { border-color: var(--line-strong); }
+
+.option-badge {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  background: #f1f3f7;
+  color: var(--ink-soft);
+  font-size: 13px;
+  font-weight: 700;
+  transition: background-color .14s ease, color .14s ease;
+}
+
+.option.is-selected {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.option.is-selected .option-badge {
+  background: var(--accent);
+  color: #fff;
+}
+.option.is-selected .option-label { font-weight: 600; }
+
+/* radio 자체는 화면에서 숨기지만 접근성 트리에는 남긴다.
+   display:none 을 쓰면 방향키 이동이 사라져서 절대 안 된다. */
+.option input[type="radio"] {
+  position: absolute;
+  width: 1px; height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+.option:has(input:focus-visible) {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.nav-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+}
+.nav-row .btn-ghost { flex: 0 0 34%; border: 1px solid var(--line); }
+.nav-row .btn-primary { flex: 1; }
+
+/* ── 계산중 ───────────────────────────────────────────────── */
+.loading-card {
+  display: grid;
+  place-items: center;
+  gap: 16px;
+  padding: 56px 20px;
+  text-align: center;
+}
+
+.spinner {
+  width: 38px; height: 38px;
+  border: 3px solid #eef0f4;
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.loading-text { color: var(--ink-soft); font-size: 14.5px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner { animation-duration: 2.4s; }
+  .progress-fill, .rank-fill { transition: none; }
+}
+
+/* ── 결과: 히어로 ─────────────────────────────────────────── */
+.result-hero {
+  position: relative;
+  overflow: hidden;
+  padding: 26px 20px 22px;
+  border-top: 4px solid var(--school-color, var(--accent));
+}
+
+.result-name {
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -.04em;
+  line-height: 1.2;
+  color: var(--school-color, var(--ink));
+}
+
+.result-en {
+  color: var(--ink-faint);
+  font-size: 13px;
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+.result-tagline {
+  font-size: 15px;
+  color: var(--ink-soft);
+  margin-top: 12px;
+  font-weight: 500;
+}
+
+.result-score {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+
+.result-percent {
+  font-size: 40px;
+  font-weight: 800;
+  letter-spacing: -.045em;
+  line-height: 1;
+  color: var(--school-color, var(--accent));
+}
+
+.result-percent-label { color: var(--ink-faint); font-size: 13px; font-weight: 600; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
+
+.chips li {
+  padding: 5px 11px;
+  border-radius: var(--r-pill);
+  background: #f4f5f8;
+  color: var(--ink-soft);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+/* ── 결과: 랭킹 ───────────────────────────────────────────── */
+#ranking { display: grid; gap: 10px; margin-top: 14px; }
+
+.rank-card {
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 15px 16px;
+}
+.rank-card.is-top { border-color: #f9c8e0; background: #fffafc; }
+
+.rank-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.rank-pill {
+  padding: 4px 11px;
+  border-radius: var(--r-pill);
+  background: var(--accent-soft);
+  color: var(--accent-deep);
+  font-size: 12.5px;
+  font-weight: 800;
+}
+
+.rank-percent {
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: -.03em;
+  color: var(--ink);
+}
+
+.rank-name {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -.025em;
+  margin-top: 10px;
+}
+
+.rank-tagline { color: var(--ink-soft); font-size: 13.5px; margin-top: 3px; }
+
+.rank-track {
+  height: 7px;
+  background: #eef0f4;
+  border-radius: var(--r-pill);
+  overflow: hidden;
+  margin-top: 13px;
+}
+
+.rank-fill {
+  height: 100%;
+  width: 0;
+  border-radius: var(--r-pill);
+  background: linear-gradient(90deg, var(--accent), #f472b6);
+  transition: width .7s cubic-bezier(.22, 1, .36, 1);
+}
+
+/* ── 결과: 해설 ───────────────────────────────────────────── */
+.why-block {
+  background: #fafbfc;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 15px 16px;
+  margin: 14px 0 16px;
+}
+
+.why-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--accent-deep);
+  margin-bottom: 9px;
+}
+
+.why-list { display: grid; gap: 7px; }
+
+.why-list li {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  font-size: 14px;
+  color: var(--ink-soft);
+  line-height: 1.55;
+}
+
+.why-list .why-tag {
+  flex: none;
+  padding: 2px 9px;
+  border-radius: var(--r-pill);
+  background: var(--accent-soft);
+  color: var(--accent-deep);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.detail-part + .detail-part { margin-top: 16px; }
+
+.detail-head {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+
+.detail-body { color: var(--ink-soft); font-size: 14.5px; line-height: 1.75; }
+
+/* ── 결과: 성향 축 그래프 ─────────────────────────────────── */
+.axis-chart { display: grid; gap: 15px; margin-top: 16px; }
+
+.axis-row { display: grid; gap: 6px; }
+
+.axis-poles {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  font-size: 11.5px;
+  color: var(--ink-faint);
+  font-weight: 600;
+}
+
+.axis-poles .axis-name {
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.axis-poles .lit { color: var(--accent-deep); }
+
+.axis-track {
+  position: relative;
+  height: 26px;
+  background: #f5f6f9;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.axis-center {
+  position: absolute;
+  left: 50%;
+  top: 0; bottom: 0;
+  width: 1px;
+  background: var(--line-strong);
+  transform: translateX(-.5px);
+}
+
+.axis-bar {
+  position: absolute;
+  top: 5px; bottom: 5px;
+  min-width: 3px;
+  border-radius: 5px;
+  background: linear-gradient(90deg, #f472b6, var(--accent));
+}
+
+/* ── 결과: 액션 ───────────────────────────────────────────── */
+.action-grid { display: grid; gap: 9px; margin-top: 14px; }
+
+.share-hint {
+  min-height: 20px;
+  margin-top: 10px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent-deep);
+}
+
+/* ── iOS 이미지 저장 안내 시트 ────────────────────────────── */
+.sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(12, 14, 18, .62);
+}
+
+.sheet {
+  width: 100%;
+  max-width: 360px;
+  background: #fff;
+  border-radius: var(--r-lg);
+  padding: 18px;
+  text-align: center;
+}
+
+.sheet-title { font-size: 15px; font-weight: 700; margin-bottom: 12px; }
+
+.sheet-img {
+  width: 100%;
+  height: auto;
+  border-radius: var(--r-md);
+  border: 1px solid var(--line);
+  margin-bottom: 12px;
+}
+
+/* ── 안내 배너 (예전 버전 링크 등) ────────────────────────── */
+.notice {
+  border: 1px solid #fbd5e6;
+  background: #fff7fb;
+  border-radius: var(--r-md);
+  padding: 13px 15px;
+  color: var(--accent-deep);
+  font-size: 13.5px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+/* ── 푸터 ─────────────────────────────────────────────────── */
+.site-footer {
+  padding: 4px 16px 32px;
+  text-align: center;
+  color: var(--ink-faint);
+  font-size: 12px;
+}
+
+/* ── 작은 화면 ────────────────────────────────────────────── */
+@media (max-width: 360px) {
+  .hero-title { font-size: 24px; }
+  .question-text { font-size: 19px; }
+  .result-name { font-size: 29px; }
+  .option { font-size: 14.5px; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="shell header-inner">
+    <span class="logo" aria-hidden="true">IVY</span>
+    <span class="header-title">아이비리그 성향 매칭</span>
+  </div>
+</header>
+
+<main class="shell" id="main">
+
+  <!-- ───────────── 인트로 ───────────── -->
+  <section id="screen-intro" class="screen">
+    <div class="card hero-card">
+      <p class="eyebrow">18개 질문 · 약 2분</p>
+      <h1 class="hero-title">나랑 결이 맞는<br>아이비리그는 어디일까?</h1>
+      <p class="hero-sub">
+        하버드부터 다트머스까지, 아이비리그 8개교는 분위기도 학제도 서로 꽤 달라요.
+        성적이 아니라 <b>성향</b>으로 나와 잘 맞는 학교 세 곳을 찾아드릴게요.
+      </p>
+      <button type="button" class="btn btn-primary btn-block" id="btn-start">
+        시작하기 <span aria-hidden="true">→</span>
+      </button>
+      <button type="button" class="btn btn-ghost btn-block hidden" id="btn-resume">
+        이어서 하기
+      </button>
+    </div>
+
+    <div class="card">
+      <h2 class="section-title">이런 걸 봐요</h2>
+      <ul class="axis-preview" id="axis-preview"></ul>
+    </div>
+
+    <p class="disclaimer">
+      재미로 보는 <b>성향 매칭</b>이에요. 합격 가능성을 예측하는 도구가 아니고,
+      성적·시험 점수·스펙은 하나도 묻지 않아요. 학교 선택은 실제 방문과 상담으로 결정하세요.
+    </p>
+  </section>
+
+  <!-- ───────────── 질문 ───────────── -->
+  <section id="screen-quiz" class="screen hidden">
+    <div class="card progress-card">
+      <div class="progress-head">
+        <span class="progress-label">진행률</span>
+        <span class="progress-count"><b id="progress-now">0</b> / <span id="progress-total">18</span></span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+      <p class="progress-note">정답은 없어요. 더 나 같거나, 오래 해도 덜 지칠 것 같은 쪽을 골라주세요.</p>
+    </div>
+
+    <div class="card question-card">
+      <div class="question-head">
+        <span class="q-pill">질문 <b id="q-index">1</b></span>
+        <div class="dots" id="dots" aria-hidden="true"></div>
+      </div>
+
+      <h2 class="question-text" id="question-text" tabindex="-1"></h2>
+
+      <!-- 진짜 radio input 을 쓴다. 방향키 이동, 스페이스로 선택,
+           "4개 중 2번째, 선택됨" 같은 스크린리더 안내가 전부 공짜로 따라온다. -->
+      <fieldset class="options" id="options">
+        <legend class="offscreen" id="options-legend">선택지</legend>
+      </fieldset>
+
+      <div class="nav-row">
+        <button type="button" class="btn btn-ghost" id="btn-prev">
+          <span aria-hidden="true">←</span> 이전
+        </button>
+        <button type="button" class="btn btn-primary" id="btn-next">
+          다음 <span aria-hidden="true">→</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────── 계산중 ───────────── -->
+  <section id="screen-loading" class="screen hidden">
+    <div class="card loading-card">
+      <div class="spinner" aria-hidden="true"></div>
+      <p class="loading-text">답변을 8개 학교 성향과 맞춰보는 중…</p>
+    </div>
+  </section>
+
+  <!-- ───────────── 결과 ───────────── -->
+  <section id="screen-result" class="screen hidden">
+
+    <div class="card result-hero" id="result-hero">
+      <p class="eyebrow">나와 가장 잘 맞는 학교</p>
+      <h1 class="result-name" id="result-name"></h1>
+      <p class="result-en" id="result-en"></p>
+      <p class="result-tagline" id="result-tagline"></p>
+      <div class="result-score">
+        <span class="result-percent" id="result-percent"></span>
+        <span class="result-percent-label">매칭 적합도</span>
+      </div>
+      <ul class="chips" id="result-keywords"></ul>
+    </div>
+
+    <div class="card">
+      <h2 class="section-title">TOP 3</h2>
+      <div id="ranking"></div>
+    </div>
+
+    <div class="card">
+      <h2 class="section-title" id="detail-title">1위 상세 해설</h2>
+      <div id="why-block" class="why-block"></div>
+      <div id="detail-block"></div>
+    </div>
+
+    <div class="card">
+      <h2 class="section-title">내 성향 축</h2>
+      <p class="section-sub">가운데에서 멀수록 그쪽 성향이 뚜렷하다는 뜻이에요.</p>
+      <div id="axis-chart" class="axis-chart"></div>
+    </div>
+
+    <div class="card">
+      <h2 class="section-title">결과 저장하고 공유하기</h2>
+      <div class="action-grid">
+        <button type="button" class="btn btn-primary btn-block" id="btn-share">결과 링크 복사</button>
+        <button type="button" class="btn btn-outline btn-block" id="btn-image">결과 이미지 저장</button>
+        <button type="button" class="btn btn-ghost btn-block" id="btn-restart">다시 하기</button>
+      </div>
+      <p class="share-hint" id="share-hint" role="status" aria-live="polite"></p>
+    </div>
+
+    <p class="disclaimer">
+      재미로 보는 <b>성향 매칭</b>이에요. 합격 가능성 예측이 아니고, 이 결과로 지원 여부를
+      정하지는 마세요. 학교마다 실제로 가보고 재학생과 이야기해보는 게 제일 정확해요.
+    </p>
+  </section>
+
+</main>
+
+<footer class="site-footer shell">
+  <p>아이비리그 8개교 성향 매칭 · 비공식 · 학교와 무관한 팬 프로젝트</p>
+</footer>
+
+<canvas id="export-canvas" width="1080" height="1350" class="offscreen" aria-hidden="true"></canvas>
+
+<!-- 일반 script 로 순서대로 로드한다. type="module" 을 쓰면 file:// 에서
+     CORS 때문에 안 열려서, index.html 더블클릭으로는 못 쓰게 된다. -->
+<script>
+/* === js/data/axes.js === */
+/**
+ * 성향 축 정의
+ *
+ * 7개의 양극(bipolar) 축. 모든 값은 -2 ~ +2 스케일을 쓴다.
+ * neg 라벨이 음수 쪽, pos 라벨이 양수 쪽이다.
+ *
+ * 이 배열의 순서가 곧 벡터의 축 순서다. 순서를 바꾸면
+ * schools.js 의 벡터 해석이 달라지지 않도록 모든 접근은
+ * id 키 기반으로만 한다.
+ */
+const AXES = [
+  {
+    id: 'curriculum',
+    name: '커리큘럼',
+    neg: '내가 짜는 자유 학제',
+    pos: '정해진 필수 과정',
+    negShort: '자유 설계',
+    posShort: '정해진 틀',
+  },
+  {
+    id: 'orientation',
+    name: '지향점',
+    neg: '순수 학문·지적 탐구',
+    pos: '실용·커리어 직결',
+    negShort: '학문 탐구',
+    posShort: '실용·커리어',
+  },
+  {
+    id: 'setting',
+    name: '환경',
+    neg: '대도시 한복판',
+    pos: '자연·캠퍼스타운',
+    negShort: '대도시',
+    posShort: '자연',
+  },
+  {
+    id: 'scale',
+    name: '규모',
+    neg: '소수정예·다 아는 사이',
+    pos: '대규모·다양성',
+    negShort: '소수정예',
+    posShort: '대규모',
+  },
+  {
+    id: 'pace',
+    name: '분위기',
+    neg: '경쟁·야망·성취',
+    pos: '협력·여유·내 페이스',
+    negShort: '경쟁·야망',
+    posShort: '협력·여유',
+  },
+  {
+    id: 'community',
+    name: '소속감',
+    neg: '끈끈한 전통·학교 자부심',
+    pos: '독립적·개인주의',
+    negShort: '끈끈한 공동체',
+    posShort: '독립적',
+  },
+  {
+    id: 'field',
+    name: '관심 결',
+    neg: '인문·예술·글쓰기',
+    pos: 'STEM·수리·응용',
+    negShort: '인문·예술',
+    posShort: 'STEM·응용',
+  },
+];
+
+const AXIS_IDS = AXES.map(function (a) { return a.id; });
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { AXES: AXES, AXIS_IDS: AXIS_IDS };
+}
+</script>
+<script>
+/* === js/data/schools.js === */
+/**
+ * 아이비리그 8개교 성향 프로필
+ *
+ * vector 의 각 값은 -2 ~ +2. axes.js 의 축 id 를 키로 쓴다.
+ * 값의 근거는 각 학교의 널리 알려진 학제/문화적 특성이며,
+ * "좋다/나쁘다"가 아니라 "어느 쪽 성향이냐"만 나타낸다.
+ *
+ * 이 매트릭스는 scripts/check-reachability.js 로 검증된 상태다.
+ * 값을 수정하면 반드시 그 스크립트를 다시 돌려서
+ * 8개교가 모두 1위로 도달 가능한지 확인할 것.
+ */
+const SCHOOLS = [
+  {
+    id: 'brown',
+    nameKo: '브라운',
+    nameEn: 'Brown University',
+    location: '미국 로드아일랜드주 프로비던스',
+    color: '#8C5A3C',
+    tagline: '내 커리큘럼을 내가 설계하는 자유형',
+    keywords: ['오픈 커리큘럼', '필수과목 0개', '협력적'],
+    vector: {
+      curriculum: -2, orientation: -1, setting: 0, scale: -1,
+      pace: 2, community: 1, field: -1,
+    },
+    detail: {
+      vibe: '아이비 중에 제일 "네 맘대로 해"에 가까운 학교야. 오픈 커리큘럼(Open Curriculum)이라고 해서 전교생이 들어야 하는 필수 교양이 아예 없어. 뭘 들을지 처음부터 끝까지 네가 정하고, 심지어 원하는 과목은 학점 대신 이수/미이수(S/NC)로 들을 수도 있어서 "망할까 봐 무서워서 안 듣는" 일이 잘 없어. 그래서 분위기가 경쟁적이라기보다 서로 뭐 듣는지 물어보고 같이 파는 쪽에 가까워.',
+      strength: '기존 전공에 내가 원하는 게 없으면 직접 만들어서 졸업하는 독립 전공(Independent Concentration) 제도가 있어. 문예창작이랑 컴퓨터과학이 특히 세고, 길 건너 로드아일랜드 디자인스쿨(RISD)이랑 수업을 서로 들을 수 있어서 디자인·예술 쪽으로 넘나드는 학생이 많아. 사회 문제에 목소리 내는 학생들이 많은 것도 브라운의 오래된 색깔이야.',
+      fitsWho: '하고 싶은 게 여러 개인데 하나로 못 줄이겠는 사람. 남이 짜준 시간표를 그대로 따라가는 게 답답한 사람. 옆자리 친구를 이겨야 하는 분위기보다 같이 뭔가 만드는 분위기에서 더 힘이 나는 사람.',
+    },
+  },
+  {
+    id: 'columbia',
+    nameKo: '컬럼비아',
+    nameEn: 'Columbia University',
+    location: '미국 뉴욕주 뉴욕시 맨해튼',
+    color: '#1D4E89',
+    tagline: '뉴욕 한복판에서 고전을 읽는 도시형',
+    keywords: ['코어 커리큘럼', '맨해튼', '독립적'],
+    vector: {
+      curriculum: 2, orientation: 0, setting: -2, scale: 0,
+      pace: -1.5, community: 2, field: -1,
+    },
+    detail: {
+      vibe: '브라운의 정확히 반대편에 있는 학교야. 코어 커리큘럼(Core Curriculum)이라고, 전공이 뭐든 상관없이 전교생이 똑같이 문학·철학 고전을 읽고 토론하는 수업을 몇 학기씩 들어. 공대생도 플라톤을 읽어. 빡세다고 불평하면서도 졸업생들이 제일 많이 얘기하는 게 이 수업이야. 캠퍼스를 나서면 바로 맨해튼이라, 학교가 세상의 전부인 다른 아이비들과 분위기가 많이 달라.',
+      strength: '위치가 곧 스펙인 학교야. 유엔, 월가, 언론사, 미술관, 스타트업이 지하철 몇 정거장 거리라 학기 중에 인턴을 하는 게 자연스러워. 정치학·국제관계·역사 같은 인문사회 쪽 전통이 아주 강하고, 공대(SEAS)도 같은 캠퍼스에 붙어 있어.',
+      fitsWho: '학교 안에서만 노는 게 답답하고 도시 자체를 캠퍼스로 쓰고 싶은 사람. 학교가 정해준 필독서를 같이 읽는 게 귀찮기보다 오히려 든든한 사람. 혼자 다니는 게 외롭지 않고 편한 사람.',
+    },
+  },
+  {
+    id: 'dartmouth',
+    nameKo: '다트머스',
+    nameEn: 'Dartmouth College',
+    location: '미국 뉴햄프셔주 하노버',
+    color: '#00693E',
+    tagline: '숲속에서 평생 갈 친구를 만드는 유대형',
+    keywords: ['최소 규모', '자연', '끈끈함'],
+    vector: {
+      curriculum: 0, orientation: 0.5, setting: 2, scale: -2,
+      pace: 1, community: -2, field: 0,
+    },
+    detail: {
+      vibe: '아이비 중 학부생이 제일 적고(4천 명대), 뉴햄프셔 숲과 강에 둘러싸인 작은 마을에 있어. 그래서 "학교가 곧 동네"고 사람들끼리 다 알아. 학교 이름에 University가 아니라 College가 붙어 있는 것도 학부 교육을 중심에 둔다는 자부심 때문이야. 홈커밍 모닥불, 윈터 카니발 같은 전통 행사에 진심이고 동문들의 애교심이 유별나게 강해.',
+      strength: 'D-Plan이라는 독특한 학사 일정이 있어. 1년을 네 학기로 쪼개서 어느 학기에 수업 듣고 어느 학기에 인턴할지를 학생이 직접 조합해. 덕분에 남들 학기 중일 때 인턴을 하러 갈 수 있어. 2학년 여름엔 동기 전체가 캠퍼스에 같이 남는 학기가 있는데, 다트머스 유대감의 핵심이 여기서 나와. 규모는 작은데 컨설팅·금융 쪽 취업이 아주 잘 되는 학교이기도 해.',
+      fitsWho: '넓고 얕은 관계보다 좁고 깊은 관계가 편한 사람. 도시의 소음보다 산·강·눈이 있는 환경에서 에너지를 얻는 사람. 학교 행사에 몰려가서 같이 소리 지르는 게 창피하지 않고 재밌는 사람.',
+    },
+  },
+  {
+    id: 'cornell',
+    nameKo: '코넬',
+    nameEn: 'Cornell University',
+    location: '미국 뉴욕주 이타카',
+    color: '#B31B1B',
+    tagline: '없는 전공이 없는 종합 실용형',
+    keywords: ['최대 규모', '7개 단과대', '응용·STEM'],
+    vector: {
+      curriculum: 1, orientation: 1.5, setting: 1.5, scale: 2,
+      pace: -1, community: -0.5, field: 2,
+    },
+    detail: {
+      vibe: '아이비 중 학부생이 가장 많고(1만 5천 명대) 캠퍼스도 제일 커. 설립자 에즈라 코넬이 남긴 "어떤 사람이든, 어떤 학문이든(any person, any study)"이라는 문장이 학교의 성격을 그대로 설명해. 협곡(gorges)과 호수로 둘러싸인 이타카에 있어서 자연은 좋은데 겨울이 길고 춥기로 유명해. 공부량이 많기로도 유명해서 "들어가기보다 버티기가 어렵다"는 말을 듣는 학교야.',
+      strength: '학부가 7개 단과대로 나뉘어 있고, 다른 아이비엔 아예 없는 전공이 많아. 호텔경영, 농업생명과학, 노사관계(ILR), 인간생태학 같은 게 학부 단위로 있어. 공대와 컴퓨터과학이 특히 강하고, 이론보다 "실제로 만들고 적용하는" 쪽에 무게가 실려 있어.',
+      fitsWho: '관심사가 특이하거나 아주 구체적이어서 일반적인 전공 목록에서 못 찾는 사람. 큰 학교에서 다양한 사람들 사이에 섞이는 게 좋은 사람. 손으로 만들고 숫자로 검증하는 걸 좋아하는 사람.',
+    },
+  },
+  {
+    id: 'penn',
+    nameKo: '유펜',
+    nameEn: 'University of Pennsylvania',
+    location: '미국 펜실베이니아주 필라델피아',
+    color: '#990000',
+    tagline: '배운 걸 바로 써먹는 프리프로페셔널형',
+    keywords: ['와튼', '실용주의', '사회생활'],
+    vector: {
+      curriculum: 0.5, orientation: 2, setting: -1.5, scale: 1.5,
+      pace: -1.5, community: -0.5, field: 0.5,
+    },
+    detail: {
+      vibe: '아이비 중에서 가장 실용·취업 지향이 뚜렷한 학교야. 설립자 벤저민 프랭클린부터가 "쓸모 있는 교육"을 내세운 사람이었고, 그 색깔이 지금까지 이어져. 학부 과정에 경영대(와튼)와 간호대가 있는 게 아이비에선 굉장히 이례적이야. 공부만 하는 분위기는 아니고 사교 활동도 활발해서 "소셜 아이비"라는 별명이 붙어 있어.',
+      strength: '와튼(Wharton)은 학부 경영 교육에서 세계에서 가장 유명한 이름이야. 게다가 원 유니버시티 폴리시(One University Policy) 덕분에 소속 단과대와 상관없이 다른 단과대 수업을 들을 수 있어서, 공대+경영, 인문+경영처럼 섞는 학생이 많아. 두 개 학위를 동시에 하는 헌츠먼·M&T 같은 통합 프로그램도 유명해.',
+      fitsWho: '"이걸 배우면 뭘 할 수 있는데?"라는 질문이 자연스럽게 먼저 나오는 사람. 목표가 이미 꽤 뚜렷하고 거기까지 가는 길을 빨리 밟고 싶은 사람. 공부만큼 사람 만나고 어울리는 것도 중요한 사람.',
+    },
+  },
+  {
+    id: 'princeton',
+    nameKo: '프린스턴',
+    nameEn: 'Princeton University',
+    location: '미국 뉴저지주 프린스턴',
+    color: '#E77500',
+    tagline: '끝까지 파고들어 내 논문을 쓰는 탐구형',
+    keywords: ['학부 중심', '졸업논문', '이론'],
+    vector: {
+      curriculum: 0.5, orientation: -2, setting: 1, scale: -1.5,
+      pace: -0.5, community: -1.5, field: 1.5,
+    },
+    detail: {
+      vibe: '아이비 중 학부생에게 자원을 가장 몰아주는 학교로 유명해. 경영대·법대·의대가 아예 없어서 교수와 예산의 관심이 학부로 향해. 조용한 소도시에 캠퍼스가 있어서 바깥 소음이 적고, 그만큼 학교 안에서 깊게 파고드는 분위기야. 학생들끼리 이걸 "오렌지 버블(Orange Bubble)"이라고 불러.',
+      strength: '전교생이 4학년 때 졸업논문(Senior Thesis)을 반드시 써. 1년 내내 교수와 일대일로 붙어서 자기 주제를 파는 건데, 프린스턴 졸업생들이 학교에서 가장 힘들었고 가장 기억에 남는다고 말하는 경험이야. 프리셉트(precept)라는 소규모 토론 수업이 기본이고, 수학·물리·경제학·금융공학처럼 이론적으로 깊이 들어가는 분야가 특히 세. 재정지원이 후한 것으로도 잘 알려져 있어.',
+      fitsWho: '얕고 넓게 훑는 것보다 하나를 끝까지 파는 게 성격에 맞는 사람. 취업 준비보다 "이게 왜 이렇게 되는지"가 더 궁금한 사람. 교수님이 내 이름을 아는 작은 규모가 편한 사람.',
+    },
+  },
+  {
+    id: 'yale',
+    nameKo: '예일',
+    nameEn: 'Yale University',
+    location: '미국 코네티컷주 뉴헤이븐',
+    color: '#00356B',
+    tagline: '기숙사가 집이 되는 따뜻한 인문·예술형',
+    keywords: ['레지덴셜 칼리지', '인문·예술', '따뜻함'],
+    vector: {
+      curriculum: -0.5, orientation: -1.5, setting: -0.5, scale: -1,
+      pace: 1.5, community: -1.5, field: -2,
+    },
+    detail: {
+      vibe: '입학하면 14개 레지덴셜 칼리지 중 하나에 배정돼서 4년 내내 그곳 소속으로 지내. 각 칼리지마다 식당·도서관·행사가 따로 있고 학장도 따로 있어서, 큰 학교 안에 작은 학교가 하나 생기는 구조야. 해리포터 기숙사를 떠올리면 얼추 맞아. 아이비 중에서 학생들 사이가 덜 살벌하고 서로 잘 챙긴다는 평이 특히 강한 학교야.',
+      strength: '인문학과 예술이 가장 강한 아이비야. 연극·드라마 쪽은 세계적인 수준이고 여기서 배출된 배우와 연출가가 즐비해. 아카펠라 그룹, 학내 신문, 토론 동아리 같은 학생 활동 문화가 유별나게 발달해 있고, 글쓰기와 토론으로 승부하는 분야에서 오랫동안 강했어. 정치권으로 나가는 졸업생도 많아.',
+      fitsWho: '글 쓰고 말하고 무대에 서는 게 즐거운 사람. 경쟁에서 이기는 것보다 좋은 사람들과 오래 같이 있는 게 중요한 사람. 큰 학교의 자원은 누리고 싶은데 소속감 없이 붕 뜨는 건 싫은 사람.',
+    },
+  },
+  {
+    id: 'harvard',
+    nameKo: '하버드',
+    nameEn: 'Harvard University',
+    location: '미국 매사추세츠주 케임브리지',
+    color: '#A51C30',
+    tagline: '가장 큰 무대에서 가장 야심찬 사람들과',
+    keywords: ['최대 자원', '야망 밀도', '넓은 선택지'],
+    // 하버드는 어느 축에서도 극단이 아니라 벡터가 밋밋해지기 쉽고, 그러면
+    // 컬럼비아(도시·야망·독립)에 흡수돼서 아무도 1위로 못 받는 학교가 된다.
+    // 실제로 하버드를 규정하는 건 규모와 야망 밀도이므로 그 두 축을 끝까지
+    // 밀고, 기숙사·전통이 있는 만큼 community 도 살짝 음수로 둔다.
+    vector: {
+      curriculum: -0.5, orientation: -0.5, setting: -1, scale: 2,
+      pace: -2, community: -0.5, field: -0.5,
+    },
+    detail: {
+      vibe: '학교 자체가 하나의 도시 같은 곳이야. 세계에서 가장 큰 대학 기금과 도서관을 갖고 있어서, 뭘 하고 싶다고 하면 대체로 그걸 할 돈과 사람과 공간이 이미 학교 안에 있어. 대신 주변 사람들이 하나같이 뭔가를 열심히 하고 있어서 밀도가 굉장히 높아. 2학년부터는 12개 기숙사(House) 중 하나에 배정돼서 거기가 생활의 중심이 돼.',
+      strength: '특정 분야가 아니라 거의 모든 분야가 상위권이라는 게 강점이야. 전공을 바꿔도 갈 곳이 있고, 관심사가 아직 안 정해졌어도 선택지가 줄지 않아. 학생 신문, 잡지, 각종 단체 같은 과외 활동이 하나하나 기관급 규모라 거기서 보내는 시간이 수업만큼 중요한 경우도 많아. 졸업 후 동문 네트워크의 규모와 범위는 비교 대상이 없어.',
+      fitsWho: '아직 하나로 좁히기 싫고 선택지를 최대한 열어두고 싶은 사람. 주변에 나보다 잘하는 사람이 많은 게 스트레스가 아니라 자극이 되는 사람. 보스턴이라는 도시와 큰 캠퍼스를 둘 다 원하는 사람.',
+    },
+  },
+];
+
+const SCHOOLS_BY_ID = {};
+SCHOOLS.forEach(function (s) { SCHOOLS_BY_ID[s.id] = s; });
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { SCHOOLS: SCHOOLS, SCHOOLS_BY_ID: SCHOOLS_BY_ID };
+}
+</script>
+<script>
+/* === js/data/questions.js === */
+/**
+ * 18개 질문
+ *
+ * 각 문항은 1개의 주축(primary)을 -2 / -1 / +1 / +2 로 훑고,
+ * 보조축(secondary)을 ±1 로 얹어서 결과에 결이 생기게 한다.
+ * 선택지 순서 자체에는 의미가 없다(A가 항상 음수 쪽인 건 아님).
+ *
+ * 주축 배분: curriculum 3 · orientation 3 · setting 3 ·
+ *            scale 2 · pace 3 · community 2 · field 2  = 18
+ *
+ * 성적·시험·스펙을 묻는 문항은 의도적으로 하나도 넣지 않았다.
+ * 이건 성향 매칭이지 합격 예측이 아니다.
+ */
+const QUESTIONS = [
+  {
+    id: 'q1',
+    primary: 'curriculum',
+    text: '개강 첫 주, 시간표를 짜는 나는',
+    options: [
+      { label: '듣고 싶은 것만 골라 담는다. 필수 과목이란 게 없었으면 좋겠다', weights: { curriculum: -2, community: 1 } },
+      { label: '학교가 정해준 필수부터 채우고 남는 자리를 고른다', weights: { curriculum: 2, pace: -1 } },
+      { label: '전공 로드맵 순서대로 착실히 밟는다', weights: { curriculum: 1, orientation: 1 } },
+      { label: '관심 가는 분야를 일단 여기저기 찔러본다', weights: { curriculum: -1, scale: 1 } },
+    ],
+  },
+  {
+    id: 'q2',
+    primary: 'orientation',
+    text: '전공을 고를 때 가장 먼저 떠오르는 생각은',
+    options: [
+      { label: '이거 진짜 재밌겠다', weights: { orientation: -2, field: -1 } },
+      { label: '졸업하고 뭘 하게 되는지가 분명하다', weights: { orientation: 2, pace: -1 } },
+      { label: '아직 모르겠고 일단 넓게 배우고 싶다', weights: { orientation: -1, scale: 1 } },
+      { label: '배운 걸 바로 써먹을 수 있는 게 좋다', weights: { orientation: 1, field: 1 } },
+    ],
+  },
+  {
+    id: 'q3',
+    primary: 'setting',
+    text: '수업 없는 토요일, 내 기본값은',
+    options: [
+      { label: '지하철 타고 시내 한복판으로 나간다', weights: { setting: -2, community: 1 } },
+      { label: '도시는 도시인데 조용한 동네 카페에 있는다', weights: { setting: -1, pace: 1 } },
+      { label: '학교랑 붙어 있는 동네에서 소소하게 보낸다', weights: { setting: 1, scale: -1 } },
+      { label: '산이든 강이든 자연 있는 데로 나간다', weights: { setting: 2, community: -1 } },
+    ],
+  },
+  {
+    id: 'q4',
+    primary: 'scale',
+    text: '새 학기 첫 수업, 강의실에 들어갔을 때 마음이 편한 쪽은',
+    options: [
+      { label: '열댓 명. 교수님이 내 이름을 안다', weights: { scale: -2, pace: 1 } },
+      { label: '서른 명쯤. 적당히 묻히고 적당히 참여한다', weights: { scale: -1, orientation: -1 } },
+      { label: '200명 대형 강의. 다양한 사람 구경하는 맛이 있다', weights: { scale: 1, setting: -1 } },
+      { label: '수업마다 사람이 싹 달라서 매번 새로 만난다', weights: { scale: 2, community: 1 } },
+    ],
+  },
+  {
+    id: 'q5',
+    primary: 'pace',
+    text: '팀 프로젝트에서 나는',
+    options: [
+      { label: '내가 제일 잘하고 싶다. 결과가 눈에 보여야 한다', weights: { pace: -2, orientation: 1 } },
+      { label: '잘하는 사람 옆에 붙어서 같이 수준을 올린다', weights: { pace: -1, scale: 1 } },
+      { label: '마감은 지키되 서로 감정 상하지 않게 조율한다', weights: { pace: 1, community: -1 } },
+      { label: '다 같이 잘 되는 게 제일 좋다. 점수는 그다음', weights: { pace: 2, field: -1 } },
+    ],
+  },
+  {
+    id: 'q6',
+    primary: 'community',
+    text: '학교 응원전이나 축제 같은 전통 행사에 대해 나는',
+    options: [
+      { label: '무조건 간다. 이런 게 대학 다니는 맛이다', weights: { community: -2, setting: 1 } },
+      { label: '친한 애들이 가면 나도 간다', weights: { community: -1, scale: -1 } },
+      { label: '한 번쯤은 가보는데 매년 챙기지는 않는다', weights: { community: 1, orientation: 1 } },
+      { label: '그 시간에 내 일정을 소화한다', weights: { community: 2, setting: -1 } },
+    ],
+  },
+  {
+    id: 'q7',
+    primary: 'field',
+    text: '밤새 봐도 안 지겨울 것 같은 건',
+    options: [
+      { label: '소설, 영화, 다큐. 결국 사람 이야기', weights: { field: -2, orientation: -1 } },
+      { label: '그림, 음악, 무대. 뭔가 표현하는 것', weights: { field: -1, pace: 1 } },
+      { label: '데이터랑 그래프. 왜 이렇게 되는지', weights: { field: 1, orientation: -1 } },
+      { label: '직접 조립하고 코딩해서 굴러가게 만드는 것', weights: { field: 2, orientation: 1 } },
+    ],
+  },
+  {
+    id: 'q8',
+    primary: 'curriculum',
+    text: '전공 상관없이 전교생이 똑같이 듣는 고전 읽기 수업이 있다면',
+    options: [
+      { label: '왜 내 시간을 거기에 써야 하는지 모르겠다', weights: { curriculum: -2, orientation: 1 } },
+      { label: '필수 말고 선택이면 들어볼 수도 있다', weights: { curriculum: -1, pace: 1 } },
+      { label: '평생 안 읽었을 책을 읽게 되니 나쁘지 않다', weights: { curriculum: 1, field: -1 } },
+      { label: '다 같이 같은 걸 읽는다는 게 오히려 좋다', weights: { curriculum: 2, scale: 1 } },
+    ],
+  },
+  {
+    id: 'q9',
+    primary: 'orientation',
+    text: '방학 3개월이 통으로 비었다. 나는',
+    options: [
+      { label: '인턴에 지원한다. 실무를 겪어봐야 안다', weights: { orientation: 2, pace: -1 } },
+      { label: '관심 있는 주제를 혼자 끝까지 파본다', weights: { orientation: -2, scale: -1 } },
+      { label: '뭐가 됐든 남는 결과물 하나는 만든다', weights: { orientation: 1, community: 1 } },
+      { label: '여행 가고 사람 만나면서 경험을 넓힌다', weights: { orientation: -1, setting: 1 } },
+    ],
+  },
+  {
+    id: 'q10',
+    primary: 'setting',
+    text: '앞으로 4년 동안 살 동네를 고른다면',
+    options: [
+      { label: '새벽에도 뭐든 열려 있는 대도시', weights: { setting: -2, community: 1 } },
+      { label: '학교랑 도시가 적당히 섞여 있는 곳', weights: { setting: -1, pace: -1 } },
+      { label: '학교가 곧 동네인 조용한 캠퍼스타운', weights: { setting: 1, community: -1 } },
+      { label: '창밖에 나무랑 강이 보이는 곳', weights: { setting: 2, pace: 1 } },
+    ],
+  },
+  {
+    id: 'q11',
+    primary: 'scale',
+    text: '동아리를 고를 때 나는',
+    options: [
+      { label: '소수정예로 오래 갈 사람들을 만나는 곳', weights: { scale: -2, community: -1 } },
+      { label: '하나만 제대로, 대신 깊게 하는 곳', weights: { scale: -1, orientation: -1 } },
+      { label: '여러 개 걸쳐두고 상황 따라 움직이는 편', weights: { scale: 1, curriculum: -1 } },
+      { label: '규모 크고 매년 사람이 바뀌는 곳', weights: { scale: 2, setting: -1 } },
+    ],
+  },
+  {
+    id: 'q12',
+    primary: 'pace',
+    text: '주변에 나보다 잘하는 사람이 많을 때',
+    options: [
+      { label: '자극받아서 나도 더 한다', weights: { pace: -2, scale: 1 } },
+      { label: '좀 위축되긴 하는데 결국 배우게 된다', weights: { pace: -1, field: 1 } },
+      { label: '그 사람들이랑 친해져서 같이 한다', weights: { pace: 1, community: -1 } },
+      { label: '비교하지 않으려 한다. 나는 내 속도가 있다', weights: { pace: 2, curriculum: -1 } },
+    ],
+  },
+  {
+    id: 'q13',
+    primary: 'community',
+    text: '졸업하고 10년 뒤, 학교와 나의 관계는',
+    options: [
+      { label: '동문 모임 챙기고 후배들도 끌어준다', weights: { community: -2, scale: -1 } },
+      { label: '친했던 몇 명하고만 계속 연락한다', weights: { community: -1, pace: 1 } },
+      { label: '필요할 때 네트워크로 잘 활용한다', weights: { community: 1, scale: 1 } },
+      { label: '학교보다는 내가 하는 일로 사람을 만난다', weights: { community: 2, orientation: 1 } },
+    ],
+  },
+  {
+    id: 'q14',
+    primary: 'field',
+    text: '어려운 문제를 만났을 때 내 첫 동작은',
+    options: [
+      { label: '이 문제에 대해 사람들이 뭐라고 했는지부터 읽는다', weights: { field: -2, orientation: -1 } },
+      { label: '일단 내 생각을 글로 정리해본다', weights: { field: -1, curriculum: -1 } },
+      { label: '일단 만들어보고 안 되면 고친다', weights: { field: 1, orientation: 1 } },
+      { label: '숫자로 바꿔서 계산해본다', weights: { field: 2, orientation: -1 } },
+    ],
+  },
+  {
+    id: 'q15',
+    primary: 'curriculum',
+    text: "'이건 원래 이렇게 하는 거야'라는 말 앞에서 나는",
+    options: [
+      { label: '납득이 안 되면 안 따른다', weights: { curriculum: -2, community: 1 } },
+      { label: '적당히 지키되 결국 내 방식대로 튼다', weights: { curriculum: -1, field: 1 } },
+      { label: '일단 따라해보고 나중에 판단한다', weights: { curriculum: 1, pace: -1 } },
+      { label: '정해진 게 있으면 오히려 마음이 편하다', weights: { curriculum: 2, scale: 1 } },
+    ],
+  },
+  {
+    id: 'q16',
+    primary: 'orientation',
+    text: '지금까지 들었던 수업 중 가장 만족스러웠던 건',
+    options: [
+      { label: '답이 없는 질문을 갖고 끝까지 토론한 수업', weights: { orientation: -2, field: -1 } },
+      { label: '실제 회사나 시장 사례를 뜯어본 수업', weights: { orientation: 2, scale: 1 } },
+      { label: '이론이 딱 맞아떨어지는 순간을 본 수업', weights: { orientation: -1, field: 1 } },
+      { label: '뭔가를 직접 만들어서 제출한 수업', weights: { orientation: 1, curriculum: -1 } },
+    ],
+  },
+  {
+    id: 'q17',
+    primary: 'setting',
+    text: '겨울에 눈이 아주 많이 오는 곳이라면',
+    options: [
+      { label: '눈보다는 사람 많고 불빛 많은 쪽이 좋다', weights: { setting: -2, scale: 1 } },
+      { label: '별로다. 건물끼리 실내로 이어졌으면 좋겠다', weights: { setting: -1, pace: -1 } },
+      { label: '춥긴 해도 실내에서 잘 지내면 된다', weights: { setting: 1, scale: -1 } },
+      { label: '낭만적이다. 눈 쌓인 캠퍼스 좋아한다', weights: { setting: 2, community: -1 } },
+    ],
+  },
+  {
+    id: 'q18',
+    primary: 'pace',
+    text: "'잘 살았다'는 말을 들으면 떠오르는 건",
+    options: [
+      { label: '누가 봐도 인정하는 자리에 올라간 것', weights: { pace: -2, community: 1 } },
+      { label: '내 분야에서 실력으로 증명해낸 것', weights: { pace: -1, field: 1 } },
+      { label: '좋은 사람들이랑 오래 같이 해온 것', weights: { pace: 1, community: -1 } },
+      { label: '하루하루가 나한테 만족스러웠던 것', weights: { pace: 2, setting: 1 } },
+    ],
+  },
+];
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { QUESTIONS: QUESTIONS };
+}
+</script>
+<script>
+/* === js/scoring.js === */
+/**
+ * 매칭 점수 계산
+ *
+ * 흐름:
+ *   답변 인덱스 배열
+ *     -> 축별 가중치 합산 -> 축별 최대치로 나눠 사용자 벡터 u (-1 ~ 1)
+ *     -> 학교 벡터를 [-1,1]로 줄이고 축마다 8개교 평균을 뺀 s'
+ *     -> cos(u, s') 로 순위 결정
+ *     -> cos 최댓값과 답변의 뚜렷함(d)을 섞어 1위 퍼센티지를 84~97 사이에 배치
+ *
+ * s' 의 크기로 나누는 것(=코사인)이 중요하다. 안 그러면 축 값이 극단적인
+ * 학교가 방향과 무관하게 유리해진다.
+ *
+ * 아래 보정 상수는 scripts/check-reachability.js 로 실제 분포를 뽑아
+ * 맞춘 값이다. 질문이나 학교 벡터를 고치면 그 스크립트를 다시 돌릴 것.
+ */
+
+/* ── 보정 상수 ─────────────────────────────────────────────── */
+var CALIB = {
+  // 1위 퍼센티지가 놓이는 구간
+  P_MIN: 84,
+  P_RANGE: 13, // 84 ~ 97
+
+  // 1위 퍼센티지를 정하는 두 재료의 비중
+  W_COS: 0.65, // 1위 학교와 방향이 얼마나 맞는가
+  W_DEC: 0.35, // 답변이 얼마나 한쪽으로 뚜렷했는가
+
+  // 각 재료를 0~1로 펴는 구간 (실제 관측 분포 기준)
+  COS_LO: 0.35, COS_HI: 0.92,
+  DEC_LO: 0.15, DEC_HI: 0.55,
+
+  // 2·3위가 1위에서 얼마나 빨리 멀어지는가
+  GAP_K: 0.35,
+  MIN_STEP: 2,  // 순위 간 최소 격차
+  FLOOR: 52,    // 3위 하한
+
+  // u 가 사실상 0일 때(모든 축에서 답이 상쇄) 동점 처리로 넘어가는 기준
+  FLAT_EPS: 0.05,
+};
+
+/* ── 준비: 축 최대치 / 센터링된 학교 행렬 ───────────────────── */
+
+/**
+ * 축별 표준편차. u 를 정규화할 때 이론상 최대치가 아니라 이 값을 쓴다.
+ *
+ * 최대치로 나누면 축마다 영향력이 크게 달라진다. 어떤 축은 주축으로 2번만
+ * 등장하는데 보조 가중치로는 12번 실린다. 그러면 최대치는 커지는데 실제
+ * 합계는 ±1 이 여러 개 상쇄돼서 작게 나오고, 결과적으로 그 축의 사용자
+ * 값이 늘 0 근처에 눌린다. 그 축에 정체성이 걸린 학교(예: 컬럼비아의
+ * '독립적' 성향)는 아무리 답해도 신호가 안 올라온다.
+ *
+ * 각 문항에서 선택지가 균등하게 뽑힌다고 보고 분산을 더해 표준편차를 구하면,
+ * 축마다 "보통 이 정도까지 기운다"는 실제 폭을 기준으로 삼을 수 있다.
+ *
+ * 평균(mean)도 같이 구해서 빼준다. 어떤 축은 네 선택지의 가중치 합이 0이
+ * 아니라 한쪽으로 쏠려 있는데(예: +2, +1, -1, 0 이면 평균이 +0.5),
+ * 그러면 아무렇게나 찍어도 그 축이 양수로 나온다. 그 편향을 빼야
+ * "이 사람이 평균보다 어느 쪽으로 기울었나"를 재게 된다.
+ */
+function computeAxisStats() {
+  var stats = {};
+  AXIS_IDS.forEach(function (id) {
+    var variance = 0, drift = 0;
+    QUESTIONS.forEach(function (q) {
+      var n = q.options.length;
+      var sum = 0, sumSq = 0;
+      q.options.forEach(function (o) {
+        var w = o.weights[id] || 0;
+        sum += w;
+        sumSq += w * w;
+      });
+      var mean = sum / n;
+      drift += mean;                          // 아무렇게나 찍었을 때 기대되는 합계
+      variance += sumSq / n - mean * mean;    // 선택에 따라 실제로 흔들리는 폭
+    });
+    stats[id] = { mean: drift, std: Math.sqrt(variance) || 1 };
+  });
+  return stats;
+}
+
+// 표준편차 몇 배까지를 "완전히 기울었다(±1)"로 볼지.
+// 2.2 면 대략 상·하위 1~2% 지점이 양 끝에 닿는다.
+var Z_SPAN = 2.2;
+
+// 학교 벡터를 [-1,1]로 줄이고, 축마다 8개교 평균을 빼서 상대 차이만 남긴다.
+// 이렇게 해야 "아이비는 대체로 도시적" 같은 공통 성분이 순위에 안 섞인다.
+function computeCenteredSchools() {
+  var raw = SCHOOLS.map(function (s) {
+    return AXIS_IDS.map(function (id) { return (s.vector[id] || 0) / 2; });
+  });
+  AXIS_IDS.forEach(function (id, k) {
+    var mean = raw.reduce(function (a, v) { return a + v[k]; }, 0) / raw.length;
+    raw.forEach(function (v) { v[k] -= mean; });
+  });
+  return SCHOOLS.map(function (s, i) {
+    return { id: s.id, vec: raw[i], norm: vectorNorm(raw[i]) };
+  });
+}
+
+function vectorNorm(v) {
+  return Math.sqrt(v.reduce(function (a, x) { return a + x * x; }, 0));
+}
+
+var AXIS_STATS = computeAxisStats();
+var CENTERED = computeCenteredSchools();
+
+/* ── 사용자 벡터 ───────────────────────────────────────────── */
+
+/**
+ * 답변 인덱스 배열 -> 축별 -1~1 벡터(객체 형태)
+ * 아직 답하지 않은 문항(null/undefined)은 그냥 건너뛴다.
+ */
+function buildUserVector(answers) {
+  var sums = {};
+  AXIS_IDS.forEach(function (id) { sums[id] = 0; });
+
+  QUESTIONS.forEach(function (q, i) {
+    var pick = answers[i];
+    if (pick === null || pick === undefined) return;
+    var opt = q.options[pick];
+    if (!opt) return;
+    Object.keys(opt.weights).forEach(function (id) {
+      if (sums[id] === undefined) return; // 오타로 들어간 축 이름 방어
+      sums[id] += opt.weights[id];
+    });
+  });
+
+  // 답한 문항 수에 비례해 편향도 줄여야 한다. 중간에 그만둔 상태로
+  // 계산하면 18문항치 편향을 통째로 빼서 엉뚱한 쪽으로 쏠린다.
+  var answered = 0;
+  QUESTIONS.forEach(function (q, i) {
+    var pick = answers[i];
+    if (pick !== null && pick !== undefined && q.options[pick]) answered++;
+  });
+  var ratio = QUESTIONS.length ? answered / QUESTIONS.length : 0;
+
+  var u = {};
+  AXIS_IDS.forEach(function (id) {
+    var st = AXIS_STATS[id];
+    var v = (sums[id] - st.mean * ratio) / (Z_SPAN * st.std);
+    u[id] = v < -1 ? -1 : v > 1 ? 1 : v;
+  });
+  return u;
+}
+
+/* ── 보조 함수 ─────────────────────────────────────────────── */
+
+function clamp01(x) { return x < 0 ? 0 : x > 1 ? 1 : x; }
+
+function stretch(x, lo, hi) { return clamp01((x - lo) / (hi - lo)); }
+
+// 답변 배열로부터 결정론적인 정수를 만든다.
+// u 가 0이라 8개교가 전부 동점일 때 순서를 흔드는 용도.
+// 이게 없으면 항상 SCHOOLS 배열 선언 순서대로(brown, columbia...) 나온다.
+function answersHash(answers) {
+  var h = 2166136261;
+  for (var i = 0; i < answers.length; i++) {
+    h ^= ((answers[i] === null || answers[i] === undefined) ? 9 : answers[i]) + i * 31;
+    h = (h * 16777619) >>> 0;
+  }
+  return h;
+}
+
+/* ── 메인 ──────────────────────────────────────────────────── */
+
+/**
+ * @param {Array<number|null>} answers 문항별 선택지 인덱스(0~3)
+ * @returns {{
+ *   ranked: Array<{id, school, percent, cos}>,
+ *   top3: Array<...>,
+ *   axes: Array<{axis, value}>,
+ *   reasons: Array<{axis, side, label, weight}>,
+ *   decisiveness: number,
+ *   isFlat: boolean
+ * }}
+ */
+function scoreAnswers(answers) {
+  var u = buildUserVector(answers);
+  var uVec = AXIS_IDS.map(function (id) { return u[id]; });
+  var uNorm = vectorNorm(uVec);
+  var isFlat = uNorm < CALIB.FLAT_EPS;
+
+  // 동점 방지용 아주 작은 결정론적 흔들림. 순위에만 영향을 주고
+  // 퍼센티지에는 사실상 영향이 없는 크기다.
+  var h = answersHash(answers);
+
+  var scored = CENTERED.map(function (c, i) {
+    var dot = 0;
+    for (var k = 0; k < uVec.length; k++) dot += c.vec[k] * uVec[k];
+    var cos = (uNorm > 0 && c.norm > 0) ? dot / (uNorm * c.norm) : 0;
+    var jitter = (((h >>> (i * 3)) & 7) - 3.5) * 1e-6;
+    return { id: c.id, school: SCHOOLS_BY_ID[c.id], cos: cos, sort: cos + jitter };
+  });
+
+  scored.sort(function (a, b) { return b.sort - a.sort; });
+
+  var cosTop = scored[0].cos;
+  var d = uNorm / Math.sqrt(AXIS_IDS.length);
+
+  var q = clamp01(
+    CALIB.W_COS * stretch(cosTop, CALIB.COS_LO, CALIB.COS_HI) +
+    CALIB.W_DEC * stretch(d, CALIB.DEC_LO, CALIB.DEC_HI)
+  );
+  var p1 = Math.round(CALIB.P_MIN + CALIB.P_RANGE * q);
+
+  var percents = [p1];
+  for (var i = 1; i < scored.length; i++) {
+    var p = Math.round(p1 * (1 - CALIB.GAP_K * (cosTop - scored[i].cos)));
+    p = Math.min(p, percents[i - 1] - CALIB.MIN_STEP);
+    p = Math.max(p, CALIB.FLOOR);
+    percents.push(p);
+  }
+
+  var ranked = scored.map(function (s, i) {
+    return { id: s.id, school: s.school, percent: percents[i], cos: s.cos };
+  });
+
+  return {
+    ranked: ranked,
+    top3: ranked.slice(0, 3),
+    axes: AXIS_IDS.map(function (id, k) {
+      return { axis: AXES[k], value: u[id] };
+    }),
+    reasons: explainMatch(uVec, ranked[0].id),
+    decisiveness: d,
+    isFlat: isFlat,
+  };
+}
+
+/**
+ * 1위 학교가 나온 이유를 축 단위로 뽑는다.
+ * 기여도 = 사용자의 축 값 × 그 학교의 센터링된 축 값.
+ * 양수이고 클수록 "이 축 때문에 이 학교가 올라왔다"는 뜻이다.
+ */
+function explainMatch(uVec, schoolId) {
+  var c = null;
+  for (var i = 0; i < CENTERED.length; i++) {
+    if (CENTERED[i].id === schoolId) { c = CENTERED[i]; break; }
+  }
+  if (!c) return [];
+
+  return AXIS_IDS.map(function (id, k) {
+    var axis = AXES[k];
+    var side = uVec[k] < 0 ? 'neg' : 'pos';
+    return {
+      axis: axis,
+      side: side,
+      label: side === 'neg' ? axis.negShort : axis.posShort,
+      weight: c.vec[k] * uVec[k],
+    };
+  })
+    .filter(function (r) { return r.weight > 0.01; })
+    .sort(function (a, b) { return b.weight - a.weight; })
+    .slice(0, 3);
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = {
+    CALIB: CALIB,
+    AXIS_STATS: AXIS_STATS,
+    CENTERED: CENTERED,
+    buildUserVector: buildUserVector,
+    scoreAnswers: scoreAnswers,
+    explainMatch: explainMatch,
+  };
+}
+</script>
+<script>
+/* === js/share.js === */
+/**
+ * 결과 공유
+ *
+ * 답변 18개를 URL 해시에 담아서, 링크만 받아도 똑같은 결과 화면이 뜨게 한다.
+ *
+ * 왜 쿼리스트링(?r=)이 아니라 해시(#r=)인가
+ *  - 해시는 서버로 전송되지 않아서 정적 호스팅의 리다이렉트/리라이트 규칙에
+ *    영향을 받지 않는다. GitHub Pages / Vercel / Netlify 어디에 올려도 동일하게 동작한다.
+ *  - file:// 로 열었을 때도 그대로 동작한다.
+ *
+ * 형식:  #r=v1.<페이로드 7자><체크섬 1자>
+ *  - 버전: 질문을 고치면 반드시 올린다. 안 올리면 예전 링크가 조용히
+ *    엉뚱한 결과를 보여준다.
+ *  - 체크섬: 카카오톡·인스타 링크 처리 과정에서 뒤가 잘린 링크를 걸러낸다.
+ */
+
+// 질문·선택지·가중치를 수정하면 이 값을 올릴 것.
+var SHARE_VERSION = 'v1';
+
+var B64_SAFE = { '+': '-', '/': '_' };
+var B64_BACK = { '-': '+', _: '/' };
+
+/* ── 인코딩 ────────────────────────────────────────────────── */
+
+// 답변 하나당 2비트씩 눌러 담는다. 18문항 = 36비트 = 5바이트.
+function packAnswers(answers) {
+  var bytes = new Uint8Array(Math.ceil(answers.length / 4));
+  for (var i = 0; i < answers.length; i++) {
+    var v = answers[i] & 3;
+    bytes[i >> 2] |= v << (6 - 2 * (i % 4));
+  }
+  return bytes;
+}
+
+function unpackAnswers(bytes, count) {
+  var out = [];
+  for (var i = 0; i < count; i++) {
+    var byte = bytes[i >> 2];
+    if (byte === undefined) return null;
+    out.push((byte >> (6 - 2 * (i % 4))) & 3);
+  }
+  return out;
+}
+
+function bytesToB64url(bytes) {
+  var s = '';
+  for (var i = 0; i < bytes.length; i++) s += String.fromCharCode(bytes[i]);
+  return btoa(s).replace(/[+/]/g, function (c) { return B64_SAFE[c]; }).replace(/=+$/, '');
+}
+
+function b64urlToBytes(str) {
+  var s = str.replace(/[-_]/g, function (c) { return B64_BACK[c]; });
+  while (s.length % 4) s += '=';
+  var bin;
+  try { bin = atob(s); } catch (e) { return null; }
+  var bytes = new Uint8Array(bin.length);
+  for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return bytes;
+}
+
+function checksumChar(answers) {
+  var sum = 0;
+  for (var i = 0; i < answers.length; i++) sum += answers[i] * (i + 1);
+  return (sum % 36).toString(36);
+}
+
+function encodeAnswers(answers) {
+  return SHARE_VERSION + '.' + bytesToB64url(packAnswers(answers)) + checksumChar(answers);
+}
+
+/**
+ * @returns {{ok:true, answers:number[]} | {ok:false, reason:'none'|'version'|'corrupt'}}
+ */
+function decodeAnswers(code, expectedCount) {
+  if (!code) return { ok: false, reason: 'none' };
+
+  var dot = code.indexOf('.');
+  if (dot < 1) return { ok: false, reason: 'corrupt' };
+
+  var version = code.slice(0, dot);
+  if (version !== SHARE_VERSION) return { ok: false, reason: 'version' };
+
+  var body = code.slice(dot + 1);
+  if (body.length < 2) return { ok: false, reason: 'corrupt' };
+
+  var payload = body.slice(0, -1);
+  var chk = body.slice(-1);
+
+  var bytes = b64urlToBytes(payload);
+  if (!bytes) return { ok: false, reason: 'corrupt' };
+
+  var answers = unpackAnswers(bytes, expectedCount);
+  if (!answers) return { ok: false, reason: 'corrupt' };
+
+  for (var i = 0; i < answers.length; i++) {
+    if (answers[i] < 0 || answers[i] > 3) return { ok: false, reason: 'corrupt' };
+  }
+  if (checksumChar(answers) !== chk) return { ok: false, reason: 'corrupt' };
+
+  return { ok: true, answers: answers };
+}
+
+/* ── URL 다루기 ────────────────────────────────────────────── */
+
+// 배포 후 이 값을 채우면 file:// 로 열었을 때도 공유 링크를 만들 수 있다.
+// 비워두면 file:// 에서는 공유 버튼이 비활성화된다.
+var SITE_URL = '';
+
+function isFileProtocol() {
+  return location.protocol === 'file:';
+}
+
+function canShareLink() {
+  return !isFileProtocol() || !!SITE_URL;
+}
+
+function buildShareUrl(answers) {
+  var base = isFileProtocol()
+    ? SITE_URL
+    : location.origin + location.pathname + location.search;
+  if (!base) return '';
+  return base + '#r=' + encodeAnswers(answers);
+}
+
+function readHashCode() {
+  var m = /[#&]r=([^&]+)/.exec(location.hash || '');
+  return m ? decodeURIComponent(m[1]) : '';
+}
+
+function writeHashCode(answers) {
+  if (isFileProtocol()) return; // file:// 에서 해시를 바꾸면 히스토리만 지저분해진다
+  try {
+    history.replaceState(null, '', location.pathname + location.search + '#r=' + encodeAnswers(answers));
+  } catch (e) { /* 무시 */ }
+}
+
+function clearHash() {
+  if (isFileProtocol()) return;
+  try {
+    history.replaceState(null, '', location.pathname + location.search);
+  } catch (e) { /* 무시 */ }
+}
+
+/**
+ * 링크를 클립보드에 넣는다. navigator.share 가 있으면 그쪽을 먼저 쓴다
+ * (모바일에서 카카오톡 공유 시트가 바로 뜬다).
+ * @returns {Promise<'shared'|'copied'|'failed'>}
+ */
+function shareOrCopy(url, title, text) {
+  if (navigator.share) {
+    return navigator.share({ title: title, text: text, url: url })
+      .then(function () { return 'shared'; })
+      .catch(function (err) {
+        if (err && err.name === 'AbortError') return 'shared'; // 사용자가 닫은 것
+        return copyToClipboard(url);
+      });
+  }
+  return copyToClipboard(url);
+}
+
+function copyToClipboard(text) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    return navigator.clipboard.writeText(text)
+      .then(function () { return 'copied'; })
+      .catch(function () { return legacyCopy(text); });
+  }
+  return Promise.resolve(legacyCopy(text));
+}
+
+// clipboard API 를 못 쓰는 환경(구형 사파리, http, file://) 대비
+function legacyCopy(text) {
+  try {
+    var el = document.createElement('textarea');
+    el.value = text;
+    el.setAttribute('readonly', '');
+    el.style.position = 'fixed';
+    el.style.opacity = '0';
+    document.body.appendChild(el);
+    el.select();
+    el.setSelectionRange(0, text.length);
+    var ok = document.execCommand('copy');
+    document.body.removeChild(el);
+    return ok ? 'copied' : 'failed';
+  } catch (e) {
+    return 'failed';
+  }
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = {
+    SHARE_VERSION: SHARE_VERSION,
+    encodeAnswers: encodeAnswers,
+    decodeAnswers: decodeAnswers,
+  };
+}
+</script>
+<script>
+/* === js/resultImage.js === */
+/**
+ * 결과 이미지 (canvas -> PNG)
+ *
+ * 1080 x 1350 (인스타 4:5 세로). 외부 이미지·폰트를 전혀 안 쓰기 때문에
+ * canvas 가 오염(taint)될 일이 없고 toBlob 이 항상 성공한다.
+ */
+
+var CARD_W = 1080;
+var CARD_H = 1350;
+
+var KO_FONT = '"Apple SD Gothic Neo","Pretendard","Noto Sans KR","Malgun Gothic",system-ui,sans-serif';
+
+function font(weight, size) {
+  return weight + ' ' + size + 'px ' + KO_FONT;
+}
+
+/* ── 한글 줄바꿈 ───────────────────────────────────────────────
+ * canvas 에는 줄바꿈이 없어서 직접 잘라야 한다. 공백 기준으로 자르는
+ * 흔한 방식은 한글에서 그냥 안 먹는다 — 한국어 문장은 공백이 적고,
+ * 음절 단위로 어디서든 줄이 바뀔 수 있기 때문이다.
+ * 그래서 "여기서 끊어도 되는 지점"을 먼저 표시하고 그 단위로 붙여나간다.
+ */
+function canBreakBefore(s, i) {
+  if (i === 0) return false;
+  var prev = s[i - 1], cur = s[i];
+  if (/[)\]}」』.,!?%…·:;]/.test(cur)) return false;   // 닫는 문장부호를 혼자 남기지 않는다
+  if (/[([{「『]/.test(prev)) return false;             // 여는 괄호 바로 뒤에서 안 끊는다
+  if (/[A-Za-z0-9]/.test(prev) && /[A-Za-z0-9]/.test(cur)) return false; // 영문·숫자는 통째로
+  return true;
+}
+
+function tokenize(s) {
+  var tokens = [], cur = '';
+  for (var i = 0; i < s.length; i++) {
+    if (i && canBreakBefore(s, i)) { tokens.push(cur); cur = ''; }
+    cur += s[i];
+  }
+  if (cur) tokens.push(cur);
+  return tokens;
+}
+
+function wrapText(ctx, text, maxWidth, maxLines) {
+  var lines = [];
+  text.split('\n').forEach(function (para) {
+    var line = '';
+    tokenize(para).forEach(function (tok) {
+      var next = line + tok;
+      if (line && ctx.measureText(next).width > maxWidth) {
+        lines.push(line);
+        line = tok.replace(/^\s+/, '');
+      } else {
+        line = next;
+      }
+    });
+    lines.push(line);
+  });
+
+  if (maxLines && lines.length > maxLines) {
+    lines = lines.slice(0, maxLines);
+    var last = lines[maxLines - 1];
+    while (last.length && ctx.measureText(last + '…').width > maxWidth) last = last.slice(0, -1);
+    lines[maxLines - 1] = last + '…';
+  }
+  return lines;
+}
+
+function drawLines(ctx, lines, x, y, lineHeight) {
+  lines.forEach(function (line, i) { ctx.fillText(line, x, y + i * lineHeight); });
+  return y + lines.length * lineHeight;
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+  var rr = Math.min(r, h / 2, w / 2);
+  ctx.beginPath();
+  ctx.moveTo(x + rr, y);
+  ctx.arcTo(x + w, y, x + w, y + h, rr);
+  ctx.arcTo(x + w, y + h, x, y + h, rr);
+  ctx.arcTo(x, y + h, x, y, rr);
+  ctx.arcTo(x, y, x + w, y, rr);
+  ctx.closePath();
+}
+
+/* ── 그리기 ────────────────────────────────────────────────── */
+
+function renderResultCard(canvas, result) {
+  var ctx = canvas.getContext('2d');
+  var top = result.top3[0];
+  var pad = 84;
+  var innerW = CARD_W - pad * 2;
+
+  ctx.clearRect(0, 0, CARD_W, CARD_H);
+
+  // 배경
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, CARD_W, CARD_H);
+  var wash = ctx.createLinearGradient(0, 0, 0, 460);
+  wash.addColorStop(0, '#fdeaf4');
+  wash.addColorStop(1, '#ffffff');
+  ctx.fillStyle = wash;
+  ctx.fillRect(0, 0, CARD_W, 460);
+
+  // 학교 색 상단 띠
+  ctx.fillStyle = top.school.color;
+  ctx.fillRect(0, 0, CARD_W, 12);
+
+  ctx.textBaseline = 'top';
+  var y = 96;
+
+  ctx.fillStyle = '#ec4899';
+  ctx.font = font(700, 30);
+  ctx.fillText('아이비리그 성향 매칭', pad, y);
+  y += 52;
+
+  ctx.fillStyle = '#5b6472';
+  ctx.font = font(600, 40);
+  ctx.fillText('나랑 제일 잘 맞는 아이비는', pad, y);
+  y += 72;
+
+  ctx.fillStyle = top.school.color;
+  ctx.font = font(800, 92);
+  ctx.fillText(top.school.nameKo, pad, y);
+  y += 108;
+
+  ctx.fillStyle = '#9aa3b0';
+  ctx.font = font(500, 32);
+  ctx.fillText(top.school.nameEn, pad, y);
+  y += 60;
+
+  ctx.fillStyle = '#14161a';
+  ctx.font = font(600, 38);
+  y = drawLines(ctx, wrapText(ctx, top.school.tagline, innerW, 2), pad, y, 54);
+  y += 34;
+
+  // 매칭 적합도
+  ctx.fillStyle = top.school.color;
+  ctx.font = font(800, 104);
+  ctx.fillText(top.percent + '%', pad, y);
+  var pctW = ctx.measureText(top.percent + '%').width;
+  ctx.fillStyle = '#9aa3b0';
+  ctx.font = font(600, 30);
+  ctx.fillText('매칭 적합도', pad + pctW + 18, y + 62);
+  y += 150;
+
+  // 구분선
+  ctx.fillStyle = '#e8eaef';
+  ctx.fillRect(pad, y, innerW, 2);
+  y += 46;
+
+  /* 아래쪽 배치
+   * 학교 이름·태그라인 길이에 따라 위쪽이 차지하는 높이가 달라진다.
+   * 그래서 하단 블록(칩 줄들)과 푸터를 바닥에 고정해두고,
+   * 랭킹 세 줄이 그 사이 남는 공간을 나눠 갖게 한다.
+   * 이렇게 안 하면 태그라인이 두 줄인 학교에서 칩이 푸터를 덮는다.
+   */
+  var LABEL_H = 26, CHIP_H = 52, LABEL_GAP = 10, BLOCK_GAP = 18;
+  var chipBlocks = 1 + (result.reasons && result.reasons.length ? 1 : 0);
+  var bottomH = chipBlocks * (LABEL_H + LABEL_GAP + CHIP_H) + (chipBlocks - 1) * BLOCK_GAP;
+
+  var footerTop = CARD_H - 116;
+  var bottomY = footerTop - 28 - bottomH;
+  var ROW_H = Math.max(92, Math.min(128, (bottomY - 26 - y) / 3));
+
+  // TOP 3
+  result.top3.forEach(function (item, i) {
+    var rowY = y + i * ROW_H;
+
+    // 순위 알약
+    ctx.font = font(800, 26);
+    var pillText = (i + 1) + '위';
+    var pillW = ctx.measureText(pillText).width + 34;
+    ctx.fillStyle = '#fdeaf4';
+    roundRect(ctx, pad, rowY, pillW, 42, 21);
+    ctx.fill();
+    ctx.fillStyle = '#be2d75';
+    ctx.fillText(pillText, pad + 17, rowY + 8);
+
+    // 학교 이름
+    ctx.fillStyle = '#14161a';
+    ctx.font = font(800, 44);
+    ctx.fillText(item.school.nameKo, pad + pillW + 22, rowY + 1);
+
+    // 퍼센트 (우측 정렬)
+    ctx.textAlign = 'right';
+    ctx.font = font(800, 48);
+    ctx.fillStyle = i === 0 ? item.school.color : '#5b6472';
+    ctx.fillText(item.percent + '%', CARD_W - pad, rowY - 1);
+    ctx.textAlign = 'left';
+
+    // 막대
+    var barY = rowY + Math.min(68, ROW_H - 34);
+    ctx.fillStyle = '#eef0f4';
+    roundRect(ctx, pad, barY, innerW, 16, 8);
+    ctx.fill();
+
+    var fillW = Math.max(16, innerW * (item.percent / 100));
+    var grad = ctx.createLinearGradient(pad, 0, pad + fillW, 0);
+    grad.addColorStop(0, '#f472b6');
+    grad.addColorStop(1, '#ec4899');
+    ctx.fillStyle = grad;
+    roundRect(ctx, pad, barY, fillW, 16, 8);
+    ctx.fill();
+  });
+  y = bottomY;
+
+  // 칩 한 줄 그리기. 폭이 넘치면 그 뒤는 버린다(잘려 나오는 것보다 낫다).
+  function drawChips(items, yPos, bg, fg) {
+    ctx.font = font(700, 28);
+    var chipX = pad;
+    items.forEach(function (label) {
+      var w = ctx.measureText(label).width + 40;
+      if (chipX + w > CARD_W - pad) return;
+      ctx.fillStyle = bg;
+      roundRect(ctx, chipX, yPos, w, 52, 26);
+      ctx.fill();
+      ctx.fillStyle = fg;
+      ctx.fillText(label, chipX + 20, yPos + 12);
+      chipX += w + 12;
+    });
+  }
+
+  function drawLabel(text, yPos) {
+    ctx.fillStyle = '#9aa3b0';
+    ctx.font = font(700, 26);
+    ctx.fillText(text, pad, yPos);
+  }
+
+  // 결정적이었던 내 성향 (없으면 이 블록을 건너뛴다)
+  if (result.reasons && result.reasons.length) {
+    drawLabel('이런 성향이 결정적이었어요', y);
+    drawChips(result.reasons.map(function (r) { return r.label; }), y + LABEL_H + LABEL_GAP, '#fdeaf4', '#be2d75');
+    y += LABEL_H + LABEL_GAP + CHIP_H + BLOCK_GAP;
+  }
+
+  // 이 학교의 키워드
+  drawLabel('이 학교는', y);
+  drawChips(top.school.keywords, y + LABEL_H + LABEL_GAP, '#f4f5f8', '#5b6472');
+
+  // 하단 면책 문구
+  ctx.fillStyle = '#9aa3b0';
+  ctx.font = font(500, 26);
+  ctx.fillText('재미로 보는 성향 매칭이에요 · 합격 가능성 예측이 아닙니다', pad, footerTop);
+  ctx.font = font(700, 26);
+  ctx.fillStyle = '#c3c9d2';
+  ctx.fillText('18개 질문으로 알아보는 나와 맞는 아이비리그', pad, footerTop + 40);
+
+  return canvas;
+}
+
+/* ── 저장 ──────────────────────────────────────────────────── */
+
+var isIOS = /iP(hone|ad|od)/.test(navigator.userAgent) ||
+  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+/**
+ * @returns {Promise<'shared'|'downloaded'|'longpress'|'failed'>}
+ */
+function saveResultCard(canvas, result) {
+  return new Promise(function (resolve) {
+    if (!canvas.toBlob) { resolve('failed'); return; }
+
+    canvas.toBlob(function (blob) {
+      if (!blob) { resolve('failed'); return; }
+
+      // 파일명은 ASCII 로. 일부 브라우저가 한글 파일명을 깨뜨린다.
+      var name = 'ivy-match-' + result.top3[0].id + '.png';
+
+      // 모바일에서는 공유 시트가 사진 앱 저장까지 한 번에 처리해준다
+      if (navigator.canShare && typeof File === 'function') {
+        try {
+          var file = new File([blob], name, { type: 'image/png' });
+          if (navigator.canShare({ files: [file] })) {
+            navigator.share({ files: [file] })
+              .then(function () { resolve('shared'); })
+              .catch(function (err) {
+                if (err && err.name === 'AbortError') { resolve('shared'); return; }
+                resolve(downloadBlob(blob, name));
+              });
+            return;
+          }
+        } catch (e) { /* 아래 다운로드로 진행 */ }
+      }
+
+      resolve(downloadBlob(blob, name));
+    }, 'image/png');
+  });
+}
+
+function downloadBlob(blob, name) {
+  var url = URL.createObjectURL(blob);
+
+  // iOS 사파리는 download 속성을 무시해서 그냥 새 탭에 이미지를 띄운다.
+  // 이 경우엔 "꾹 눌러서 저장" 안내를 띄우는 게 한국 웹의 표준 패턴이다.
+  if (isIOS) {
+    showLongPressSheet(url);
+    return 'longpress';
+  }
+
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = name;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+  return 'downloaded';
+}
+
+function showLongPressSheet(url) {
+  var back = document.createElement('div');
+  back.className = 'sheet-backdrop';
+  back.innerHTML =
+    '<div class="sheet" role="dialog" aria-modal="true" aria-label="이미지 저장">' +
+    '<p class="sheet-title">이미지를 꾹 눌러서 저장하세요</p>' +
+    '<img class="sheet-img" alt="내 아이비리그 매칭 결과">' +
+    '<button type="button" class="btn btn-ghost btn-block sheet-close">닫기</button>' +
+    '</div>';
+  back.querySelector('.sheet-img').src = url;
+
+  function close() {
+    back.remove();
+    URL.revokeObjectURL(url);
+    document.removeEventListener('keydown', onKey);
+  }
+  function onKey(e) { if (e.key === 'Escape') close(); }
+
+  back.addEventListener('click', function (e) { if (e.target === back) close(); });
+  back.querySelector('.sheet-close').addEventListener('click', close);
+  document.addEventListener('keydown', onKey);
+  document.body.appendChild(back);
+  back.querySelector('.sheet-close').focus();
+}
+</script>
+<script>
+/* === js/app.js === */
+/**
+ * 화면 상태 머신 + 렌더링
+ *
+ * intro -> quiz(18문항) -> loading -> result
+ * 프레임워크 없이 세 개의 <section> 을 hidden 으로 토글한다.
+ */
+(function () {
+  'use strict';
+
+  var LETTERS = ['A', 'B', 'C', 'D'];
+  var STORE_KEY = 'ivy.progress.' + SHARE_VERSION;
+  var LOADING_MS = 900;
+
+  var state = {
+    screen: 'intro',
+    index: 0,
+    answers: new Array(QUESTIONS.length).fill(null),
+    result: null,
+    fromShare: false,
+  };
+
+  var el = {};
+  ['screen-intro', 'screen-quiz', 'screen-loading', 'screen-result',
+    'btn-start', 'btn-resume', 'btn-prev', 'btn-next', 'btn-share', 'btn-image', 'btn-restart',
+    'progress-now', 'progress-total', 'progress-fill', 'q-index', 'dots',
+    'question-text', 'options', 'axis-preview', 'ranking', 'axis-chart',
+    'result-hero', 'result-name', 'result-en', 'result-tagline', 'result-percent',
+    'result-keywords', 'detail-title', 'why-block', 'detail-block', 'share-hint',
+    'export-canvas'].forEach(function (id) {
+      el[id] = document.getElementById(id);
+    });
+
+  var reduceMotion = window.matchMedia &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /**
+   * 조사 선택. 학교 이름이 데이터에서 오기 때문에 "유펜가", "코넬와" 같은
+   * 어색한 조합이 그대로 화면에 나간다. 마지막 글자에 받침이 있는지 보고 고른다.
+   * (한글 음절 U+AC00~U+D7A3 에서 (코드-0xAC00) % 28 이 0이 아니면 받침이 있다)
+   */
+  function hasFinalConsonant(word) {
+    if (!word) return false;
+    var code = word.charCodeAt(word.length - 1);
+    if (code < 0xac00 || code > 0xd7a3) return false;
+    return (code - 0xac00) % 28 !== 0;
+  }
+
+  function josa(word, withBatchim, withoutBatchim) {
+    return word + (hasFinalConsonant(word) ? withBatchim : withoutBatchim);
+  }
+
+  /* ── 저장소 (file:// 에서는 던질 수 있어서 전부 감싼다) ────── */
+  function saveProgress() {
+    try {
+      if (state.answers.every(function (a) { return a === null; })) {
+        localStorage.removeItem(STORE_KEY);
+        return;
+      }
+      localStorage.setItem(STORE_KEY, JSON.stringify({
+        index: state.index, answers: state.answers,
+      }));
+    } catch (e) { /* 시크릿 모드나 file:// — 그냥 저장 안 하고 넘어간다 */ }
+  }
+
+  function loadProgress() {
+    try {
+      var raw = localStorage.getItem(STORE_KEY);
+      if (!raw) return null;
+      var data = JSON.parse(raw);
+      if (!data || !Array.isArray(data.answers) ||
+        data.answers.length !== QUESTIONS.length) return null;
+      return data;
+    } catch (e) { return null; }
+  }
+
+  function clearProgress() {
+    try { localStorage.removeItem(STORE_KEY); } catch (e) { /* 무시 */ }
+  }
+
+  /* ── 화면 전환 ─────────────────────────────────────────────── */
+  function show(screen) {
+    state.screen = screen;
+    ['intro', 'quiz', 'loading', 'result'].forEach(function (s) {
+      el['screen-' + s].classList.toggle('hidden', s !== screen);
+    });
+  }
+
+  function scrollTop() {
+    window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+  }
+
+  /* ── 인트로 ────────────────────────────────────────────────── */
+  function renderIntro() {
+    el['axis-preview'].innerHTML = '';
+    AXES.forEach(function (axis) {
+      var li = document.createElement('li');
+      var a = document.createElement('span');
+      a.className = 'pole';
+      a.textContent = axis.negShort;
+      var vs = document.createElement('span');
+      vs.className = 'vs';
+      vs.textContent = '↔';
+      var b = document.createElement('span');
+      b.className = 'pole';
+      b.textContent = axis.posShort;
+      li.appendChild(a); li.appendChild(vs); li.appendChild(b);
+      el['axis-preview'].appendChild(li);
+    });
+
+    var saved = loadProgress();
+    var answered = saved ? saved.answers.filter(function (a) { return a !== null; }).length : 0;
+    el['btn-resume'].classList.toggle('hidden', answered === 0);
+    if (answered) el['btn-resume'].textContent = '이어서 하기 (' + answered + '/' + QUESTIONS.length + ')';
+  }
+
+  function showNotice(text) {
+    var old = document.getElementById('boot-notice');
+    if (old) old.remove();
+    var p = document.createElement('p');
+    p.id = 'boot-notice';
+    p.className = 'notice';
+    p.textContent = text;
+    el['screen-intro'].insertBefore(p, el['screen-intro'].firstChild);
+  }
+
+  /* ── 질문 ──────────────────────────────────────────────────── */
+  function renderQuiz() {
+    var q = QUESTIONS[state.index];
+    var total = QUESTIONS.length;
+    var answered = state.answers.filter(function (a) { return a !== null; }).length;
+
+    el['progress-total'].textContent = total;
+    el['progress-now'].textContent = answered;
+    el['progress-fill'].style.width = (answered / total * 100) + '%';
+    el['q-index'].textContent = state.index + 1;
+
+    // 도트
+    el.dots.innerHTML = '';
+    for (var i = 0; i < total; i++) {
+      var d = document.createElement('span');
+      d.className = 'dot' +
+        (state.answers[i] !== null ? ' answered' : '') +
+        (i === state.index ? ' current' : '');
+      el.dots.appendChild(d);
+    }
+
+    el['question-text'].textContent = q.text;
+
+    // 선택지
+    var legend = document.createElement('legend');
+    legend.className = 'offscreen';
+    legend.textContent = '질문 ' + (state.index + 1) + ' · 선택지 ' + q.options.length + '개';
+    el.options.innerHTML = '';
+    el.options.appendChild(legend);
+
+    q.options.forEach(function (opt, i) {
+      var label = document.createElement('label');
+      label.className = 'option' + (state.answers[state.index] === i ? ' is-selected' : '');
+
+      var input = document.createElement('input');
+      input.type = 'radio';
+      input.name = 'answer-' + q.id;
+      input.value = String(i);
+      input.checked = state.answers[state.index] === i;
+      input.addEventListener('change', function () { choose(i); });
+
+      var badge = document.createElement('span');
+      badge.className = 'option-badge';
+      badge.setAttribute('aria-hidden', 'true');
+      badge.textContent = LETTERS[i];
+
+      var text = document.createElement('span');
+      text.className = 'option-label';
+      text.textContent = opt.label;
+
+      label.appendChild(input);
+      label.appendChild(badge);
+      label.appendChild(text);
+      el.options.appendChild(label);
+    });
+
+    el['btn-prev'].style.visibility = state.index === 0 ? 'hidden' : 'visible';
+    el['btn-next'].disabled = state.answers[state.index] === null;
+    el['btn-next'].innerHTML = state.index === total - 1
+      ? '결과 보기 <span aria-hidden="true">→</span>'
+      : '다음 <span aria-hidden="true">→</span>';
+  }
+
+  function choose(i) {
+    state.answers[state.index] = i;
+    saveProgress();
+    // 선택 표시만 갱신하면 되므로 전체를 다시 그리지 않는다
+    var labels = el.options.querySelectorAll('.option');
+    for (var k = 0; k < labels.length; k++) labels[k].classList.toggle('is-selected', k === i);
+    var answered = state.answers.filter(function (a) { return a !== null; }).length;
+    el['progress-now'].textContent = answered;
+    el['progress-fill'].style.width = (answered / QUESTIONS.length * 100) + '%';
+    var dots = el.dots.children;
+    if (dots[state.index]) dots[state.index].classList.add('answered');
+    el['btn-next'].disabled = false;
+  }
+
+  function goto(index) {
+    state.index = Math.max(0, Math.min(QUESTIONS.length - 1, index));
+    saveProgress();
+    renderQuiz();
+    scrollTop();
+    el['question-text'].focus({ preventScroll: true });
+  }
+
+  function next() {
+    if (state.answers[state.index] === null) return;
+    if (state.index === QUESTIONS.length - 1) { finish(); return; }
+    goto(state.index + 1);
+  }
+
+  /* ── 결과 ──────────────────────────────────────────────────── */
+  function finish() {
+    show('loading');
+    scrollTop();
+    setTimeout(function () {
+      state.result = scoreAnswers(state.answers);
+      state.fromShare = false;
+      writeHashCode(state.answers);
+      clearProgress();
+      renderResult();
+      show('result');
+      scrollTop();
+    }, reduceMotion ? 0 : LOADING_MS);
+  }
+
+  function renderResult() {
+    var r = state.result;
+    var top = r.top3[0];
+
+    el['result-hero'].style.setProperty('--school-color', top.school.color);
+    el['result-name'].textContent = top.school.nameKo;
+    el['result-en'].textContent = top.school.nameEn + ' · ' + top.school.location;
+    el['result-tagline'].textContent = top.school.tagline;
+    el['result-percent'].textContent = top.percent + '%';
+
+    el['result-keywords'].innerHTML = '';
+    top.school.keywords.forEach(function (kw) {
+      var li = document.createElement('li');
+      li.textContent = kw;
+      el['result-keywords'].appendChild(li);
+    });
+
+    renderRanking(r);
+    renderWhy(r);
+    renderDetail(top.school);
+    renderAxisChart(r);
+
+    el['share-hint'].textContent = '';
+    el['btn-share'].disabled = !canShareLink();
+    if (!canShareLink()) {
+      el['share-hint'].textContent = '파일로 직접 열면 링크 공유는 쓸 수 없어요. 웹에 올리면 켜집니다.';
+    }
+  }
+
+  function renderRanking(r) {
+    el.ranking.innerHTML = '';
+    r.top3.forEach(function (item, i) {
+      var card = document.createElement('div');
+      card.className = 'rank-card' + (i === 0 ? ' is-top' : '');
+
+      var head = document.createElement('div');
+      head.className = 'rank-head';
+      var pill = document.createElement('span');
+      pill.className = 'rank-pill';
+      pill.textContent = (i + 1) + '위';
+      var pct = document.createElement('span');
+      pct.className = 'rank-percent';
+      pct.textContent = item.percent + '%';
+      head.appendChild(pill); head.appendChild(pct);
+
+      var name = document.createElement('p');
+      name.className = 'rank-name';
+      name.textContent = item.school.nameKo;
+
+      var tag = document.createElement('p');
+      tag.className = 'rank-tagline';
+      tag.textContent = item.school.tagline;
+
+      var track = document.createElement('div');
+      track.className = 'rank-track';
+      var fill = document.createElement('div');
+      fill.className = 'rank-fill';
+      track.appendChild(fill);
+
+      card.appendChild(head); card.appendChild(name);
+      card.appendChild(tag); card.appendChild(track);
+      el.ranking.appendChild(card);
+
+      // 다음 프레임에 너비를 줘야 트랜지션이 실제로 돈다
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () { fill.style.width = item.percent + '%'; });
+      });
+    });
+  }
+
+  function renderWhy(r) {
+    var top = r.top3[0];
+    el['detail-title'].textContent = '1위 ' + top.school.nameKo + ' 상세 해설';
+    el['why-block'].innerHTML = '';
+
+    var title = document.createElement('p');
+    title.className = 'why-title';
+    title.textContent = '왜 ' + top.school.nameKo + '가 1위로 나왔냐면';
+    el['why-block'].appendChild(title);
+
+    var list = document.createElement('ul');
+    list.className = 'why-list';
+
+    if (!r.reasons.length) {
+      var li = document.createElement('li');
+      li.textContent = '성향이 어느 쪽으로도 크게 기울지 않아서, 세 학교가 비슷하게 나왔어요. ' +
+        '아래 TOP 3를 다 살펴보는 걸 추천해요.';
+      list.appendChild(li);
+    } else {
+      // 세 줄이 전부 같은 문장으로 끝나면 기계가 찍어낸 티가 난다.
+      // 순서대로 다른 어투를 쓰고, 태그(축 이름)와 문장(극)이 겹치지 않게 한다.
+      var templates = [
+        function (pole, school) {
+          return pole + ' 쪽으로 가장 뚜렷하게 기울었어요. ' +
+            josa(school, '이', '가') + ' 딱 그런 학교예요.';
+        },
+        function (pole, school) {
+          return josa(pole, '을', '를') + ' 중요하게 보는 편인데, ' +
+            school + '의 색깔이 바로 그거예요.';
+        },
+        function (pole, school) {
+          return pole + ' 쪽 답을 여러 번 골랐어요. ' +
+            josa(school, '과', '와') + ' 잘 맞는 지점이에요.';
+        },
+      ];
+
+      r.reasons.forEach(function (reason, i) {
+        var li = document.createElement('li');
+        var tag = document.createElement('span');
+        tag.className = 'why-tag';
+        tag.textContent = reason.axis.name;      // 태그는 축 이름, 문장은 어느 쪽인지
+        var pole = reason.side === 'neg' ? reason.axis.neg : reason.axis.pos;
+        var txt = document.createElement('span');
+        txt.textContent = templates[i % templates.length](pole, top.school.nameKo);
+        li.appendChild(tag); li.appendChild(txt);
+        list.appendChild(li);
+      });
+    }
+    el['why-block'].appendChild(list);
+  }
+
+  function renderDetail(school) {
+    el['detail-block'].innerHTML = '';
+    [
+      ['분위기', school.detail.vibe],
+      ['이 학교가 잘하는 것', school.detail.strength],
+      ['이런 사람이 잘 맞아요', school.detail.fitsWho],
+    ].forEach(function (part) {
+      var wrap = document.createElement('div');
+      wrap.className = 'detail-part';
+      var h = document.createElement('p');
+      h.className = 'detail-head';
+      h.textContent = part[0];
+      var b = document.createElement('p');
+      b.className = 'detail-body';
+      b.textContent = part[1];
+      wrap.appendChild(h); wrap.appendChild(b);
+      el['detail-block'].appendChild(wrap);
+    });
+  }
+
+  function renderAxisChart(r) {
+    var lit = {};
+    r.reasons.forEach(function (reason) { lit[reason.axis.id] = reason.side; });
+
+    el['axis-chart'].innerHTML = '';
+    r.axes.forEach(function (entry) {
+      var axis = entry.axis;
+      var v = Math.max(-1, Math.min(1, entry.value));
+
+      var row = document.createElement('div');
+      row.className = 'axis-row';
+
+      var poles = document.createElement('div');
+      poles.className = 'axis-poles';
+      var left = document.createElement('span');
+      left.textContent = axis.negShort;
+      if (lit[axis.id] === 'neg') left.className = 'lit';
+      var mid = document.createElement('span');
+      mid.className = 'axis-name';
+      mid.textContent = axis.name;
+      var right = document.createElement('span');
+      right.textContent = axis.posShort;
+      if (lit[axis.id] === 'pos') right.className = 'lit';
+      poles.appendChild(left); poles.appendChild(mid); poles.appendChild(right);
+
+      var track = document.createElement('div');
+      track.className = 'axis-track';
+      var center = document.createElement('div');
+      center.className = 'axis-center';
+      var bar = document.createElement('div');
+      bar.className = 'axis-bar';
+      if (v < 0) {
+        bar.style.left = (50 + v * 50) + '%';
+        bar.style.width = (-v * 50) + '%';
+      } else {
+        bar.style.left = '50%';
+        bar.style.width = (v * 50) + '%';
+      }
+      track.appendChild(center);
+      track.appendChild(bar);
+
+      // 스크린리더용 설명 (막대는 눈으로만 보이는 정보라서)
+      var sr = document.createElement('span');
+      sr.className = 'offscreen';
+      var strength = Math.abs(v) < 0.15 ? '거의 중립이에요'
+        : Math.abs(v) < 0.5 ? '약간 기울었어요' : '뚜렷하게 기울었어요';
+      sr.textContent = axis.name + ': ' +
+        (v < 0 ? axis.negShort : axis.posShort) + ' 쪽으로 ' + strength;
+
+      row.appendChild(poles);
+      row.appendChild(track);
+      row.appendChild(sr);
+      el['axis-chart'].appendChild(row);
+    });
+  }
+
+  /* ── 액션 ──────────────────────────────────────────────────── */
+  function hint(msg) {
+    el['share-hint'].textContent = msg;
+    clearTimeout(hint._t);
+    hint._t = setTimeout(function () { el['share-hint'].textContent = ''; }, 3200);
+  }
+
+  function onShare() {
+    var url = buildShareUrl(state.answers);
+    if (!url) { hint('공유 링크를 만들 수 없어요.'); return; }
+    var top = state.result.top3[0];
+    shareOrCopy(
+      url,
+      '나에게 맞는 아이비리그는?',
+      '나는 ' + top.school.nameKo + ' ' + top.percent + '% 나왔어. 너도 해볼래?'
+    ).then(function (outcome) {
+      if (outcome === 'copied') hint('링크를 복사했어요. 붙여넣기 해보세요.');
+      else if (outcome === 'failed') hint('복사에 실패했어요. 주소창을 직접 복사해 주세요.');
+    });
+  }
+
+  function onImage() {
+    el['btn-image'].disabled = true;
+    var prev = el['btn-image'].textContent;
+    el['btn-image'].textContent = '이미지 만드는 중…';
+
+    // 그리기는 동기라서, 버튼 상태가 화면에 반영된 뒤에 시작하도록 한 프레임 미룬다
+    requestAnimationFrame(function () {
+      try {
+        renderResultCard(el['export-canvas'], state.result);
+        saveResultCard(el['export-canvas'], state.result).then(function (outcome) {
+          if (outcome === 'downloaded') hint('이미지를 저장했어요.');
+          else if (outcome === 'failed') hint('이미지 저장에 실패했어요.');
+          el['btn-image'].disabled = false;
+          el['btn-image'].textContent = prev;
+        });
+      } catch (e) {
+        hint('이미지 저장에 실패했어요.');
+        el['btn-image'].disabled = false;
+        el['btn-image'].textContent = prev;
+      }
+    });
+  }
+
+  function restart() {
+    state.index = 0;
+    state.answers = new Array(QUESTIONS.length).fill(null);
+    state.result = null;
+    state.fromShare = false;
+    clearProgress();
+    clearHash();
+    renderIntro();
+    show('intro');
+    scrollTop();
+  }
+
+  /* ── 부팅 ──────────────────────────────────────────────────── */
+  function boot() {
+    renderIntro();
+
+    el['btn-start'].addEventListener('click', function () {
+      state.index = 0;
+      state.answers = new Array(QUESTIONS.length).fill(null);
+      clearProgress();
+      show('quiz');
+      renderQuiz();
+      scrollTop();
+    });
+
+    el['btn-resume'].addEventListener('click', function () {
+      var saved = loadProgress();
+      if (!saved) return;
+      state.answers = saved.answers;
+      // 저장된 위치가 이상해도 첫 미응답 문항으로 보내면 안전하다
+      var firstBlank = state.answers.indexOf(null);
+      state.index = firstBlank === -1 ? QUESTIONS.length - 1 : firstBlank;
+      show('quiz');
+      renderQuiz();
+      scrollTop();
+    });
+
+    el['btn-prev'].addEventListener('click', function () { goto(state.index - 1); });
+    el['btn-next'].addEventListener('click', next);
+    el['btn-share'].addEventListener('click', onShare);
+    el['btn-image'].addEventListener('click', onImage);
+    el['btn-restart'].addEventListener('click', restart);
+
+    // Enter 로 다음. 좌우 방향키는 건드리지 않는다 — radio 그룹의
+    // 기본 이동 동작을 뺏으면 키보드 사용자가 선택을 못 바꾼다.
+    document.addEventListener('keydown', function (e) {
+      if (state.screen !== 'quiz') return;
+      if (e.key === 'Enter' && !el['btn-next'].disabled) {
+        e.preventDefault();
+        next();
+      }
+    });
+
+    // 공유 링크로 들어온 경우
+    var code = readHashCode();
+    if (code) {
+      var decoded = decodeAnswers(code, QUESTIONS.length);
+      if (decoded.ok) {
+        state.answers = decoded.answers;
+        state.result = scoreAnswers(state.answers);
+        state.fromShare = true;
+        renderResult();
+        show('result');
+        return;
+      }
+      showNotice(decoded.reason === 'version'
+        ? '이 링크는 예전 버전 테스트 결과예요. 지금 버전으로 다시 해볼래요?'
+        : '링크가 중간에 잘렸는지 결과를 읽지 못했어요. 직접 해보는 건 어때요?');
+      clearHash();
+    }
+
+    show('intro');
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
+})();
+</script>
+</body>
+</html>

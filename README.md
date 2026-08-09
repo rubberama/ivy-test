@@ -25,6 +25,19 @@ python3 -m http.server 8000
 - **GitHub Pages** — 저장소 Settings → Pages → 브랜치 루트 선택
 - **Vercel / Netlify** — 저장소 연결 후 빌드 명령 비움, 퍼블리시 디렉터리 `/`
 
+### 단일 파일로 합치기
+
+파일 하나로 만들어 두면 메신저로 보내거나 아무 데나 올리기 편합니다.
+
+```bash
+node scripts/build-preview.js
+```
+
+- `preview.html` — doctype 까지 포함한 완전한 단일 파일 (저장소에 커밋됨)
+- `dist/embed.html` — `<body>` 안쪽만. 바깥에서 head/body 를 감싸주는 임베드 환경용
+
+개발은 계속 나눠진 파일로 하고, 내용을 고친 뒤 이 스크립트를 다시 돌리면 됩니다.
+
 ## 구조
 
 ```
