@@ -102,9 +102,11 @@ function decodeAnswers(code, expectedCount) {
 
 /* ── URL 다루기 ────────────────────────────────────────────── */
 
-// 배포 후 이 값을 채우면 file:// 로 열었을 때도 공유 링크를 만들 수 있다.
-// 비워두면 file:// 에서는 공유 버튼이 비활성화된다.
-var SITE_URL = '';
+// 배포 주소. 웹에 올라간 상태에서는 현재 주소를 그대로 쓰기 때문에 이 값이
+// 필요 없고, index.html 을 파일로 직접 열었을 때만 쓰인다
+// (file:///Users/... 주소는 남에게 보내도 안 열리니까).
+// 다른 곳에 배포했다면 여기를 바꿔주세요.
+var SITE_URL = 'https://rubberama.github.io/aidatalab_invest_atlanta_g7/';
 
 function isFileProtocol() {
   return location.protocol === 'file:';
