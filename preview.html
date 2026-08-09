@@ -5,71 +5,88 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>나에게 맞는 아이비리그는? | 성향 매칭 테스트</title>
 <meta name="description" content="18개 질문으로 알아보는 나와 잘 맞는 아이비리그 8개교. 성향 기반 매칭 테스트.">
-<meta name="theme-color" content="#0B0B0F">
+<meta name="theme-color" content="#143c2b">
 <meta property="og:type" content="website">
 <meta property="og:title" content="나에게 맞는 아이비리그는?">
 <meta property="og:description" content="18개 질문으로 알아보는 나와 잘 맞는 아이비리그. 재미로 보는 성향 매칭이에요.">
 <!-- 파비콘을 인라인 SVG 로 넣는다. 별도 파일이 없어도 되고 file:// 에서도 뜬다. -->
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23ec4899'/%3E%3Cpath d='M9 23 L16 9 L23 23' stroke='white' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%231f5b41'/%3E%3Cpath d='M8 24 V13 a8 8 0 0 1 16 0 v11' stroke='%23f4efe3' stroke-width='2.4' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
 <style>
-/* ─────────────────────────────────────────────────────────────
-   디자인 토큰
-   레퍼런스(밝은 회색 배경 + 흰 카드 + 핫핑크 포인트 + 검은 버튼)를 따른다.
-   외부 웹폰트를 안 쓰기 때문에 한글은 시스템 폰트 스택으로 처리한다.
-   ───────────────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   아이비리그 성향 매칭 — 스타일
+
+   방향: 앱 카드를 쌓는 화면이 아니라 대학 안내 책자에 가깝게.
+   둥근 카드 대신 헤어라인 괘선으로 구획을 나누고, 라운드를 크게 줄이고,
+   여백에 큰 세리프 숫자를 둔다.
+
+   색: 아이비 그린을 주색으로. 회색도 중립 회색이 아니라 초록 쪽으로
+   살짝 기울여서 화면 전체가 한 계열로 묶이게 했다.
+
+   서체: 영문·숫자는 고전 세리프, 한글은 산세리프. 한글 명조는 기기마다
+   있고 없고가 갈려서(특히 안드로이드) 본문에 쓰지 않는다. 세리프는
+   영문 학교명·큰 숫자·번호처럼 확실히 살아나는 자리에만 쓴다.
+   ═══════════════════════════════════════════════════════════════ */
+
 :root {
   color-scheme: light;
 
-  --bg: #f4f5f7;
-  --card: #ffffff;
-  --ink: #14161a;
-  --ink-soft: #5b6472;
-  --ink-faint: #9aa3b0;
-  --line: #e8eaef;
-  --line-strong: #d7dbe3;
+  /* 바탕과 먹 */
+  --paper:      #f4f3ee;   /* 본지. 크림보다 차갑게 뺐다 */
+  --card:       #fffefb;
+  --ink:        #16302a;   /* 초록으로 기운 먹색 */
+  --ink-soft:   #5b6b63;
+  --ink-faint:  #93a099;
+  --rule:       #ddddd4;   /* 괘선 */
+  --rule-soft:  #e9e8e1;
 
-  --accent: #ec4899;
-  --accent-soft: #fdeaf4;
-  --accent-deep: #be2d75;
+  /* 브랜드 */
+  --ivy:        #1f5b41;
+  --ivy-deep:   #143c2b;
+  --ivy-wash:   #eaefe9;
+  --brass:      #a8823c;
+  --brass-wash: #f4eddf;
 
-  --r-sm: 10px;
-  --r-md: 16px;
-  --r-lg: 20px;
+  /* 학교색이 들어오는 자리. JS 가 덮어쓴다 */
+  --school:     var(--ivy);
+
+  --r-xs: 2px;
+  --r-sm: 4px;
+  --r-md: 6px;
   --r-pill: 999px;
 
-  --shell: 480px;
-  --pad: 20px;
+  --shell: 460px;
 
-  --font: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard",
-          "Noto Sans KR", "Malgun Gothic", "맑은 고딕", system-ui, sans-serif;
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua",
+           Georgia, "Bitstream Charter", "Times New Roman", serif;
+  --sans:  -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard",
+           "Noto Sans KR", "Malgun Gothic", "맑은 고딕", system-ui, sans-serif;
 }
 
 /* ── 리셋 ─────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; }
-
 html { -webkit-text-size-adjust: 100%; }
 
 body {
   margin: 0;
-  background: var(--bg);
+  background: var(--paper);
   color: var(--ink);
-  font-family: var(--font);
+  font-family: var(--sans);
   font-size: 16px;
-  line-height: 1.6;
-  word-break: keep-all;      /* 한글이 단어 중간에서 안 끊기게 */
+  line-height: 1.62;
+  word-break: keep-all;
   overflow-wrap: break-word;
   -webkit-font-smoothing: antialiased;
 }
 
-h1, h2, h3, p, ul, li, figure { margin: 0; padding: 0; }
+h1, h2, h3, p, ul, li, figure, fieldset, legend { margin: 0; padding: 0; }
 ul { list-style: none; }
-b, strong { font-weight: 700; }
+fieldset { border: 0; }
 
 button {
   font: inherit;
   color: inherit;
   cursor: pointer;
-  touch-action: manipulation;   /* 모바일 300ms 탭 지연 제거 */
+  touch-action: manipulation;
 }
 
 .hidden { display: none !important; }
@@ -83,9 +100,15 @@ button {
 }
 
 :focus-visible {
-  outline: 3px solid var(--accent);
-  outline-offset: 2px;
-  border-radius: 6px;
+  outline: 2px solid var(--ivy);
+  outline-offset: 3px;
+  border-radius: var(--r-xs);
+}
+
+/* 숫자가 세로로 정렬되는 자리는 전부 고정폭 숫자 */
+.pct, .rank-percent, .progress-count, .q-num, .result-percent {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
 }
 
 /* ── 레이아웃 ─────────────────────────────────────────────── */
@@ -93,277 +116,327 @@ button {
   width: 100%;
   max-width: var(--shell);
   margin: 0 auto;
-  padding: 0 16px;
+  padding: 0 22px;
 }
 
 .site-header {
   position: sticky;
   top: 0;
   z-index: 20;
-  background: rgba(255, 255, 255, .88);
-  backdrop-filter: saturate(1.6) blur(12px);
-  border-bottom: 1px solid var(--line);
+  background: color-mix(in srgb, var(--paper) 90%, transparent);
+  backdrop-filter: saturate(1.4) blur(10px);
+  border-bottom: 1px solid var(--rule);
   padding-top: env(safe-area-inset-top);
 }
 
 .header-inner {
   display: flex;
-  align-items: center;
-  gap: 10px;
-  height: 56px;
+  align-items: baseline;
+  gap: 9px;
+  height: 54px;
 }
 
+/* 워드마크는 세리프 + 큰 자간. 로고 이미지 없이 활자로만 만든다 */
 .logo {
-  display: inline-grid;
-  place-items: center;
-  width: 30px; height: 30px;
-  border-radius: 9px;
-  background: linear-gradient(135deg, var(--accent), #a855f7);
-  color: #fff;
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: .02em;
-}
-
-.header-title { font-size: 15px; font-weight: 700; letter-spacing: -.01em; }
-
-main { padding: 20px 16px 40px; }
-
-.screen { display: grid; gap: 14px; }
-
-/* ── 카드 ─────────────────────────────────────────────────── */
-.card {
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: var(--r-lg);
-  padding: var(--pad);
-}
-
-.eyebrow {
-  color: var(--accent);
-  font-size: 12.5px;
+  font-family: var(--serif);
+  font-size: 19px;
   font-weight: 700;
-  letter-spacing: .02em;
-  margin-bottom: 10px;
+  letter-spacing: .16em;
+  color: var(--ivy);
+  line-height: 1;
 }
 
-.section-title { font-size: 17px; font-weight: 800; letter-spacing: -.02em; }
-.section-sub { color: var(--ink-soft); font-size: 13px; margin-top: 4px; }
-
-.disclaimer {
+.header-title {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .01em;
   color: var(--ink-faint);
-  font-size: 12.5px;
-  line-height: 1.7;
-  padding: 2px 4px 0;
 }
-.disclaimer b { color: var(--ink-soft); }
+
+main { padding: 30px 22px 44px; }
+
+.screen { display: grid; gap: 34px; }
+
+/* ── 구획 ─────────────────────────────────────────────────── */
+/* 카드가 아니라 괘선으로 나눈 단락. 이게 이 디자인의 기본 단위다 */
+.block { display: grid; gap: 14px; }
+
+.block + .block { padding-top: 30px; border-top: 1px solid var(--rule); }
+
+/* 배경이 필요한 곳에만 쓰는 얕은 판 */
+.panel {
+  background: var(--card);
+  border: 1px solid var(--rule-soft);
+  border-radius: var(--r-md);
+  padding: 20px 18px;
+}
+
+/* 라벨: 작게, 대문자, 자간 넓게.
+   자간은 .07em 까지만. 영문은 이 정도로도 충분히 벌어져 보이는데,
+   한글은 .14em 쯤 주면 "상 위 세 곳"처럼 글자가 흩어져 읽기 나빠진다. */
+.label {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--brass);
+}
+
+/* 영문 전용 라벨은 자간을 더 줘도 된다 */
+.label-en { letter-spacing: .16em; }
+
+.section-title {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -.02em;
+}
+
+.section-sub { color: var(--ink-soft); font-size: 13px; }
+
+.fine {
+  color: var(--ink-faint);
+  font-size: 12px;
+  line-height: 1.72;
+}
+.fine b { color: var(--ink-soft); font-weight: 600; }
 
 /* ── 인트로 ───────────────────────────────────────────────── */
-.hero-card { padding: 26px 20px 22px; }
-
 .hero-title {
-  font-size: 27px;
-  font-weight: 800;
-  line-height: 1.34;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.36;
   letter-spacing: -.035em;
+  text-wrap: balance;
+}
+
+/* 표제의 영문 한 줄. 세리프가 살아나는 자리 */
+.hero-en {
+  font-family: var(--serif);
+  font-size: 13px;
+  font-style: italic;
+  letter-spacing: .01em;
+  color: var(--brass);
 }
 
 .hero-sub {
   color: var(--ink-soft);
   font-size: 14.5px;
-  margin: 12px 0 20px;
+  max-width: 34em;
 }
 
-.axis-preview { display: grid; gap: 9px; margin-top: 12px; }
+/* 축 미리보기: 양극을 실제로 마주 보게 배치 */
+.axis-preview { display: grid; gap: 0; }
 
 .axis-preview li {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 0;
+  font-size: 13px;
+  border-bottom: 1px solid var(--rule-soft);
+}
+.axis-preview li:first-child { border-top: 1px solid var(--rule-soft); }
+
+.axis-preview .l { text-align: right; color: var(--ink); font-weight: 600; }
+.axis-preview .r { text-align: left; color: var(--ink); font-weight: 600; }
+.axis-preview .mid {
+  font-family: var(--serif);
+  font-size: 11px;
+  color: var(--ink-faint);
+  letter-spacing: .04em;
+}
+
+/* 학교 엠블럼 여덟 개를 한 줄로 */
+.roster {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 18px;
+  padding: 4px 0 2px;
+}
+
+.roster li {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 13.5px;
+  gap: 7px;
+  font-size: 12px;
+  font-weight: 600;
   color: var(--ink-soft);
 }
 
-.axis-preview .pole { color: var(--ink); font-weight: 600; }
-
-.axis-preview .vs {
-  color: var(--ink-faint);
-  font-size: 11px;
-  flex: none;
-}
+.roster .emblem { opacity: .85; }
 
 /* ── 버튼 ─────────────────────────────────────────────────── */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 8px;
   min-height: 52px;
-  padding: 0 20px;
+  padding: 0 22px;
   border: 1px solid transparent;
-  border-radius: 14px;
-  font-size: 15.5px;
+  border-radius: var(--r-sm);
+  font-size: 15px;
   font-weight: 700;
   letter-spacing: -.01em;
-  transition: transform .06s ease, background-color .15s ease, opacity .15s ease;
+  transition: background-color .16s ease, border-color .16s ease,
+              color .16s ease, opacity .16s ease;
 }
-.btn:active { transform: scale(.985); }
+.btn:active { transform: translateY(1px); }
 .btn-block { width: 100%; }
 
-.btn-primary { background: var(--ink); color: #fff; }
-.btn-primary:hover { background: #262a31; }
+.btn-primary { background: var(--ivy); color: #fff; }
+.btn-primary:hover { background: var(--ivy-deep); }
 
 .btn-outline {
-  background: #fff;
+  background: transparent;
   color: var(--ink);
-  border-color: var(--line-strong);
+  border-color: var(--rule);
 }
-.btn-outline:hover { background: #fafbfc; }
+.btn-outline:hover { border-color: var(--ink-soft); }
 
-.btn-ghost { background: transparent; color: var(--ink-soft); }
-.btn-ghost:hover { color: var(--ink); }
+.btn-quiet {
+  background: transparent;
+  color: var(--ink-soft);
+  min-height: 46px;
+  font-weight: 600;
+}
+.btn-quiet:hover { color: var(--ink); }
 
 .btn:disabled {
-  opacity: .38;
+  opacity: .32;
   cursor: not-allowed;
   transform: none;
 }
 
-/* ── 진행률 ───────────────────────────────────────────────── */
-.progress-card { padding: 16px 18px 18px; }
+/* 화살표는 세리프로. 버튼 안에서 작은 활자 대비가 생긴다 */
+.btn .arw { font-family: var(--serif); font-size: 17px; line-height: 1; }
 
+/* ── 진행률 ───────────────────────────────────────────────── */
 .progress-head {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  margin-bottom: 10px;
+  gap: 12px;
 }
 
-.progress-label { font-size: 14px; font-weight: 700; }
-
-.progress-count { color: var(--ink-faint); font-size: 14px; font-weight: 700; }
-.progress-count b { color: var(--accent); font-size: 16px; }
+.progress-count {
+  font-family: var(--serif);
+  font-size: 15px;
+  color: var(--ink-faint);
+  letter-spacing: .02em;
+}
+.progress-count b { color: var(--ivy); font-size: 19px; font-weight: 700; }
 
 .progress-track {
-  height: 6px;
-  background: #eef0f4;
-  border-radius: var(--r-pill);
-  overflow: hidden;
+  height: 2px;
+  background: var(--rule);
+  margin-top: 10px;
 }
 
 .progress-fill {
   height: 100%;
   width: 0;
-  border-radius: var(--r-pill);
-  background: linear-gradient(90deg, var(--accent), #f472b6);
-  transition: width .32s cubic-bezier(.4, 0, .2, 1);
+  background: var(--ivy);
+  transition: width .34s cubic-bezier(.4, 0, .2, 1);
 }
 
 .progress-note {
   color: var(--ink-soft);
-  font-size: 13px;
-  margin-top: 12px;
-  line-height: 1.65;
+  font-size: 12.5px;
+  margin-top: 11px;
 }
 
 /* ── 질문 ─────────────────────────────────────────────────── */
-.question-card { padding: 20px 18px; }
-
+/* 번호를 여백에 큰 세리프로 두고 질문을 그 옆에 붙인다 */
 .question-head {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 18px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  gap: 16px;
+  margin-bottom: 20px;
 }
 
-.q-pill {
-  flex: none;
-  padding: 6px 12px;
-  border-radius: var(--r-pill);
-  background: #f1f3f7;
-  color: var(--ink-soft);
-  font-size: 12px;
-  font-weight: 700;
-  line-height: 1.3;
+.q-num {
+  font-family: var(--serif);
+  font-size: 44px;
+  font-weight: 400;
+  line-height: .84;
+  color: var(--brass);
+  letter-spacing: -.03em;
 }
-.q-pill b { color: var(--ink); }
+
+.question-text {
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1.44;
+  letter-spacing: -.03em;
+  text-wrap: balance;
+  padding-top: 2px;
+}
 
 .dots {
   display: flex;
   flex-wrap: wrap;
-  gap: 5px;
-  flex: 1;
+  gap: 4px;
+  margin-bottom: 22px;
 }
 
 .dot {
-  width: 7px; height: 7px;
-  border-radius: 50%;
-  background: #e2e5ea;
+  width: 100%;
+  max-width: 15px;
+  height: 2px;
+  flex: 1;
+  background: var(--rule);
   transition: background-color .2s ease;
 }
-.dot.answered { background: #f9a8d4; }
-.dot.current { background: var(--accent); transform: scale(1.25); }
+.dot.answered { background: color-mix(in srgb, var(--ivy) 45%, var(--rule)); }
+.dot.current { background: var(--brass); }
 
-.question-text {
-  font-size: 21px;
-  font-weight: 800;
-  line-height: 1.42;
-  letter-spacing: -.03em;
-  margin-bottom: 18px;
-}
-
-.options {
-  display: grid;
-  gap: 9px;
-  margin: 0;
-  padding: 0;
-  border: 0;
-}
+.options { display: grid; gap: 0; }
 
 .option {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr;
   align-items: center;
-  gap: 13px;
+  gap: 14px;
   width: 100%;
-  min-height: 62px;              /* 탭 영역 충분히 */
-  padding: 13px 15px;
+  min-height: 62px;
+  padding: 15px 14px 15px 12px;
   text-align: left;
-  background: #fff;
-  border: 1.5px solid var(--line);
-  border-radius: var(--r-md);
+  border: 1px solid transparent;
+  border-bottom: 1px solid var(--rule-soft);
+  border-radius: var(--r-sm);
   font-size: 15px;
-  line-height: 1.5;
-  font-weight: 500;
+  line-height: 1.52;
   color: var(--ink);
-  transition: border-color .14s ease, background-color .14s ease;
+  transition: background-color .14s ease, border-color .14s ease;
 }
-.option:hover { border-color: var(--line-strong); }
+.option:hover { background: var(--card); }
 
 .option-badge {
-  flex: none;
   display: grid;
   place-items: center;
-  width: 30px; height: 30px;
-  border-radius: 50%;
-  background: #f1f3f7;
-  color: var(--ink-soft);
+  width: 27px; height: 27px;
+  border: 1px solid var(--rule);
+  border-radius: var(--r-pill);
+  font-family: var(--serif);
   font-size: 13px;
-  font-weight: 700;
-  transition: background-color .14s ease, color .14s ease;
+  color: var(--ink-faint);
+  transition: background-color .14s ease, color .14s ease, border-color .14s ease;
 }
 
 .option.is-selected {
-  border-color: var(--accent);
-  background: var(--accent-soft);
+  background: var(--ivy-wash);
+  border-color: color-mix(in srgb, var(--ivy) 26%, transparent);
 }
 .option.is-selected .option-badge {
-  background: var(--accent);
+  background: var(--ivy);
+  border-color: var(--ivy);
   color: #fff;
 }
 .option.is-selected .option-label { font-weight: 600; }
 
-/* radio 자체는 화면에서 숨기지만 접근성 트리에는 남긴다.
-   display:none 을 쓰면 방향키 이동이 사라져서 절대 안 된다. */
 .option input[type="radio"] {
   position: absolute;
   width: 1px; height: 1px;
@@ -371,325 +444,388 @@ main { padding: 20px 16px 40px; }
   pointer-events: none;
 }
 .option:has(input:focus-visible) {
-  outline: 3px solid var(--accent);
+  outline: 2px solid var(--ivy);
   outline-offset: 2px;
 }
 
 .nav-row {
   display: flex;
   gap: 10px;
-  margin-top: 18px;
+  margin-top: 26px;
 }
-.nav-row .btn-ghost { flex: 0 0 34%; border: 1px solid var(--line); }
+.nav-row .btn-quiet { flex: 0 0 30%; }
 .nav-row .btn-primary { flex: 1; }
 
 /* ── 계산중 ───────────────────────────────────────────────── */
-.loading-card {
+.loading-wrap {
   display: grid;
   place-items: center;
-  gap: 16px;
-  padding: 56px 20px;
+  gap: 20px;
+  padding: 92px 20px;
   text-align: center;
 }
 
 .spinner {
-  width: 38px; height: 38px;
-  border: 3px solid #eef0f4;
-  border-top-color: var(--accent);
+  width: 30px; height: 30px;
+  border: 1.5px solid var(--rule);
+  border-top-color: var(--ivy);
   border-radius: 50%;
-  animation: spin .8s linear infinite;
+  animation: spin .9s linear infinite;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-.loading-text { color: var(--ink-soft); font-size: 14.5px; }
+.loading-text { color: var(--ink-soft); font-size: 14px; }
 
 @media (prefers-reduced-motion: reduce) {
-  .spinner { animation-duration: 2.4s; }
-  .progress-fill, .rank-fill { transition: none; }
+  .spinner { animation-duration: 2.6s; }
+  .progress-fill, .rank-fill, .axis-bar { transition: none; }
 }
 
-/* ── 결과: 히어로 ─────────────────────────────────────────── */
-.result-hero {
-  position: relative;
-  overflow: hidden;
-  padding: 26px 20px 22px;
-  border-top: 4px solid var(--school-color, var(--accent));
+/* ── 결과: 표제 ───────────────────────────────────────────── */
+.result-hero { display: grid; gap: 0; }
+
+.result-emblem {
+  margin-bottom: 14px;
+  line-height: 0;
 }
 
 .result-name {
-  font-size: 34px;
-  font-weight: 800;
-  letter-spacing: -.04em;
-  line-height: 1.2;
-  color: var(--school-color, var(--ink));
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: -.045em;
+  line-height: 1.14;
+  color: var(--school);
 }
 
 .result-en {
+  font-family: var(--serif);
+  font-size: 14px;
   color: var(--ink-faint);
-  font-size: 13px;
-  font-weight: 500;
-  margin-top: 2px;
+  letter-spacing: .01em;
+  margin-top: 5px;
 }
 
 .result-tagline {
-  font-size: 15px;
-  color: var(--ink-soft);
-  margin-top: 12px;
-  font-weight: 500;
+  font-size: 15.5px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-top: 14px;
+  text-wrap: balance;
 }
 
+.result-place {
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  margin-top: 5px;
+}
+
+/* 큰 퍼센트. 세리프 숫자가 이 화면의 중심이다 */
 .result-score {
   display: flex;
   align-items: baseline;
-  gap: 8px;
-  margin-top: 18px;
-  padding-top: 16px;
-  border-top: 1px solid var(--line);
+  gap: 11px;
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--rule);
 }
 
 .result-percent {
-  font-size: 40px;
-  font-weight: 800;
-  letter-spacing: -.045em;
-  line-height: 1;
-  color: var(--school-color, var(--accent));
+  font-family: var(--serif);
+  font-size: 62px;
+  font-weight: 400;
+  line-height: .9;
+  letter-spacing: -.04em;
+  color: var(--school);
 }
 
-.result-percent-label { color: var(--ink-faint); font-size: 13px; font-weight: 600; }
+.result-percent-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
 
-.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; }
 
 .chips li {
-  padding: 5px 11px;
+  padding: 4px 10px;
+  border: 1px solid var(--rule);
   border-radius: var(--r-pill);
-  background: #f4f5f8;
   color: var(--ink-soft);
-  font-size: 12.5px;
+  font-size: 12px;
   font-weight: 600;
 }
 
-/* ── 결과: 랭킹 ───────────────────────────────────────────── */
-#ranking { display: grid; gap: 10px; margin-top: 14px; }
+/* ── 결과: 순위 ───────────────────────────────────────────── */
+#ranking { display: grid; gap: 0; }
 
-.rank-card {
-  border: 1px solid var(--line);
-  border-radius: var(--r-md);
-  padding: 15px 16px;
-}
-.rank-card.is-top { border-color: #f9c8e0; background: #fffafc; }
-
-.rank-head {
-  display: flex;
-  justify-content: space-between;
+.rank-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
-  gap: 10px;
+  gap: 14px;
+  padding: 15px 0;
+  border-bottom: 1px solid var(--rule-soft);
+}
+.rank-row:first-child { border-top: 1px solid var(--rule); }
+
+.rank-mark { display: grid; place-items: center; line-height: 0; }
+
+.rank-body { min-width: 0; }
+
+.rank-name {
+  font-size: 16.5px;
+  font-weight: 700;
+  letter-spacing: -.02em;
 }
 
-.rank-pill {
-  padding: 4px 11px;
-  border-radius: var(--r-pill);
-  background: var(--accent-soft);
-  color: var(--accent-deep);
-  font-size: 12.5px;
-  font-weight: 800;
+.rank-ordinal {
+  font-family: var(--serif);
+  font-size: 12px;
+  color: var(--brass);
+  margin-right: 6px;
 }
+
+.rank-tagline {
+  color: var(--ink-soft);
+  font-size: 12.5px;
+  margin-top: 2px;
+}
+
+.rank-right { text-align: right; }
 
 .rank-percent {
-  font-size: 21px;
-  font-weight: 800;
+  font-family: var(--serif);
+  font-size: 25px;
+  line-height: 1;
   letter-spacing: -.03em;
   color: var(--ink);
 }
-
-.rank-name {
-  font-size: 18px;
-  font-weight: 800;
-  letter-spacing: -.025em;
-  margin-top: 10px;
-}
-
-.rank-tagline { color: var(--ink-soft); font-size: 13.5px; margin-top: 3px; }
+.rank-row.is-top .rank-percent { color: var(--school); }
 
 .rank-track {
-  height: 7px;
-  background: #eef0f4;
-  border-radius: var(--r-pill);
-  overflow: hidden;
-  margin-top: 13px;
+  width: 58px;
+  height: 2px;
+  background: var(--rule);
+  margin-top: 8px;
+  margin-left: auto;
 }
 
 .rank-fill {
   height: 100%;
   width: 0;
-  border-radius: var(--r-pill);
-  background: linear-gradient(90deg, var(--accent), #f472b6);
-  transition: width .7s cubic-bezier(.22, 1, .36, 1);
+  background: var(--ink-faint);
+  transition: width .75s cubic-bezier(.22, 1, .36, 1);
 }
+.rank-row.is-top .rank-fill { background: var(--school); }
 
 /* ── 결과: 해설 ───────────────────────────────────────────── */
-.why-block {
-  background: #fafbfc;
-  border: 1px solid var(--line);
-  border-radius: var(--r-md);
-  padding: 15px 16px;
-  margin: 14px 0 16px;
-}
-
-.why-title {
-  font-size: 13px;
-  font-weight: 800;
-  color: var(--accent-deep);
-  margin-bottom: 9px;
-}
-
-.why-list { display: grid; gap: 7px; }
+.why-list { display: grid; gap: 0; }
 
 .why-list li {
-  display: flex;
-  gap: 8px;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+  align-items: baseline;
+  padding: 11px 0;
   font-size: 14px;
   color: var(--ink-soft);
-  line-height: 1.55;
+  line-height: 1.6;
+  border-bottom: 1px solid var(--rule-soft);
 }
+.why-list li:first-child { border-top: 1px solid var(--rule-soft); }
 
-.why-list .why-tag {
-  flex: none;
-  padding: 2px 9px;
-  border-radius: var(--r-pill);
-  background: var(--accent-soft);
-  color: var(--accent-deep);
-  font-size: 12px;
+.why-tag {
+  font-size: 10.5px;
   font-weight: 700;
-  line-height: 1.5;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--brass);
+  white-space: nowrap;
 }
 
-.detail-part + .detail-part { margin-top: 16px; }
+.detail-part + .detail-part { margin-top: 20px; }
 
 .detail-head {
-  font-size: 13.5px;
-  font-weight: 800;
-  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 12px;
+  font-style: italic;
+  color: var(--brass);
   margin-bottom: 6px;
+  letter-spacing: .02em;
 }
 
-.detail-body { color: var(--ink-soft); font-size: 14.5px; line-height: 1.75; }
+.detail-body { color: var(--ink-soft); font-size: 14.5px; line-height: 1.78; }
 
-/* ── 결과: 성향 축 그래프 ─────────────────────────────────── */
-.axis-chart { display: grid; gap: 15px; margin-top: 16px; }
+/* ── 결과: 성향 축 ────────────────────────────────────────── */
+.axis-chart { display: grid; gap: 13px; }
 
-.axis-row { display: grid; gap: 6px; }
+.axis-row { display: grid; gap: 5px; }
 
+/* 양극 라벨은 반드시 양 끝에 붙여야 한다. 가운데로 모으면 막대가
+   어느 쪽으로 뻗은 건지 눈으로 연결이 안 된다. */
 .axis-poles {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: baseline;
   gap: 8px;
-  font-size: 11.5px;
+  font-size: 11px;
   color: var(--ink-faint);
   font-weight: 600;
 }
+.axis-poles .l { text-align: left; }
+.axis-poles .r { text-align: right; }
 
 .axis-poles .axis-name {
-  color: var(--ink);
-  font-size: 12px;
-  font-weight: 800;
+  font-family: var(--serif);
+  font-size: 10.5px;
+  color: var(--ink-soft);
+  letter-spacing: .05em;
+  text-transform: uppercase;
 }
 
-.axis-poles .lit { color: var(--accent-deep); }
+.axis-poles .lit { color: var(--ivy); font-weight: 700; }
 
 .axis-track {
   position: relative;
-  height: 26px;
-  background: #f5f6f9;
-  border-radius: 8px;
-  overflow: hidden;
+  height: 16px;
+  border-top: 1px solid var(--rule-soft);
+  border-bottom: 1px solid var(--rule-soft);
 }
 
 .axis-center {
   position: absolute;
   left: 50%;
-  top: 0; bottom: 0;
+  top: -1px; bottom: -1px;
   width: 1px;
-  background: var(--line-strong);
-  transform: translateX(-.5px);
+  background: var(--rule);
 }
 
 .axis-bar {
   position: absolute;
   top: 5px; bottom: 5px;
-  min-width: 3px;
-  border-radius: 5px;
-  background: linear-gradient(90deg, #f472b6, var(--accent));
+  min-width: 2px;
+  background: var(--ivy);
+  transition: width .6s cubic-bezier(.22, 1, .36, 1);
 }
 
 /* ── 결과: 액션 ───────────────────────────────────────────── */
-.action-grid { display: grid; gap: 9px; margin-top: 14px; }
+.action-grid { display: grid; gap: 8px; }
 
 .share-hint {
-  min-height: 20px;
-  margin-top: 10px;
+  min-height: 19px;
   text-align: center;
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 600;
-  color: var(--accent-deep);
+  color: var(--ivy);
 }
 
-/* ── iOS 이미지 저장 안내 시트 ────────────────────────────── */
+/* ── 커뮤니티 안내 ────────────────────────────────────────── */
+/* 화면에서 유일하게 어두운 판. 여기 한 곳에만 무게를 준다 */
+.community {
+  background: var(--ivy-deep);
+  color: #f1efe8;
+  border-radius: var(--r-md);
+  padding: 26px 22px;
+  display: grid;
+  gap: 14px;
+}
+
+.community .label { color: #c2a978; }
+
+.community-title {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -.03em;
+  line-height: 1.4;
+  color: #fffefb;
+  text-wrap: balance;
+}
+
+.community-sub {
+  font-size: 13.5px;
+  line-height: 1.68;
+  color: #b7c6bd;
+}
+
+.btn-community {
+  background: #f4efe3;
+  color: var(--ivy-deep);
+  border-radius: var(--r-sm);
+  margin-top: 2px;
+}
+.btn-community:hover { background: #fff; }
+
+.community-note {
+  font-size: 11.5px;
+  color: #8ba396;
+  text-align: center;
+}
+
+/* ── 시트 (iOS 이미지 저장 안내) ──────────────────────────── */
 .sheet-backdrop {
   position: fixed;
   inset: 0;
   z-index: 50;
   display: grid;
   place-items: center;
-  padding: 20px;
-  background: rgba(12, 14, 18, .62);
+  padding: 22px;
+  background: rgba(12, 20, 16, .66);
 }
 
 .sheet {
   width: 100%;
-  max-width: 360px;
-  background: #fff;
-  border-radius: var(--r-lg);
+  max-width: 350px;
+  background: var(--card);
+  border-radius: var(--r-md);
   padding: 18px;
   text-align: center;
 }
 
-.sheet-title { font-size: 15px; font-weight: 700; margin-bottom: 12px; }
+.sheet-title { font-size: 14.5px; font-weight: 700; margin-bottom: 12px; }
 
 .sheet-img {
   width: 100%;
   height: auto;
-  border-radius: var(--r-md);
-  border: 1px solid var(--line);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-sm);
   margin-bottom: 12px;
 }
 
-/* ── 안내 배너 (예전 버전 링크 등) ────────────────────────── */
+/* ── 안내 배너 ────────────────────────────────────────────── */
 .notice {
-  border: 1px solid #fbd5e6;
-  background: #fff7fb;
-  border-radius: var(--r-md);
-  padding: 13px 15px;
-  color: var(--accent-deep);
-  font-size: 13.5px;
+  border-left: 2px solid var(--brass);
+  background: var(--brass-wash);
+  border-radius: 0 var(--r-sm) var(--r-sm) 0;
+  padding: 12px 15px;
+  color: #6b5423;
+  font-size: 13px;
   font-weight: 600;
   line-height: 1.6;
 }
 
 /* ── 푸터 ─────────────────────────────────────────────────── */
 .site-footer {
-  padding: 4px 16px 32px;
-  text-align: center;
+  padding: 0 22px 34px;
   color: var(--ink-faint);
-  font-size: 12px;
+  font-size: 11.5px;
+  text-align: center;
+}
+
+.site-footer .mark {
+  font-family: var(--serif);
+  letter-spacing: .14em;
+  color: var(--ink-faint);
 }
 
 /* ── 작은 화면 ────────────────────────────────────────────── */
-@media (max-width: 360px) {
-  .hero-title { font-size: 24px; }
+@media (max-width: 350px) {
+  .hero-title { font-size: 26px; }
   .question-text { font-size: 19px; }
-  .result-name { font-size: 29px; }
+  .q-num { font-size: 36px; }
+  .result-name { font-size: 30px; }
+  .result-percent { font-size: 52px; }
   .option { font-size: 14.5px; }
 }
 </style>
@@ -698,8 +834,8 @@ main { padding: 20px 16px 40px; }
 
 <header class="site-header">
   <div class="shell header-inner">
-    <span class="logo" aria-hidden="true">IVY</span>
-    <span class="header-title">아이비리그 성향 매칭</span>
+    <span class="logo">IVY</span>
+    <span class="header-title">성향 매칭</span>
   </div>
 </header>
 
@@ -707,27 +843,36 @@ main { padding: 20px 16px 40px; }
 
   <!-- ───────────── 인트로 ───────────── -->
   <section id="screen-intro" class="screen">
-    <div class="card hero-card">
-      <p class="eyebrow">18개 질문 · 약 2분</p>
-      <h1 class="hero-title">나랑 결이 맞는<br>아이비리그는 어디일까?</h1>
+
+    <div class="block">
+      <p class="hero-en">Which Ivy fits you?</p>
+      <h1 class="hero-title">나랑 결이 맞는<br>아이비리그는 어디일까</h1>
       <p class="hero-sub">
-        하버드부터 다트머스까지, 아이비리그 8개교는 분위기도 학제도 서로 꽤 달라요.
-        성적이 아니라 <b>성향</b>으로 나와 잘 맞는 학교 세 곳을 찾아드릴게요.
+        하버드부터 다트머스까지, 여덟 학교는 분위기도 학제도 서로 꽤 달라요.
+        성적이 아니라 <b>성향</b>으로 나와 맞는 세 곳을 찾아드릴게요.
       </p>
-      <button type="button" class="btn btn-primary btn-block" id="btn-start">
-        시작하기 <span aria-hidden="true">→</span>
-      </button>
-      <button type="button" class="btn btn-ghost btn-block hidden" id="btn-resume">
-        이어서 하기
-      </button>
+      <p class="fine">질문 18개 · 약 2분</p>
+      <div class="action-grid" style="margin-top:6px">
+        <button type="button" class="btn btn-primary btn-block" id="btn-start">
+          시작하기 <span class="arw" aria-hidden="true">→</span>
+        </button>
+        <button type="button" class="btn btn-outline btn-block hidden" id="btn-resume">
+          이어서 하기
+        </button>
+      </div>
     </div>
 
-    <div class="card">
-      <h2 class="section-title">이런 걸 봐요</h2>
+    <div class="block">
+      <p class="label">여덟 학교</p>
+      <ul class="roster" id="roster"></ul>
+    </div>
+
+    <div class="block">
+      <p class="label">이런 걸 봅니다</p>
       <ul class="axis-preview" id="axis-preview"></ul>
     </div>
 
-    <p class="disclaimer">
+    <p class="fine">
       재미로 보는 <b>성향 매칭</b>이에요. 합격 가능성을 예측하는 도구가 아니고,
       성적·시험 점수·스펙은 하나도 묻지 않아요. 학교 선택은 실제 방문과 상담으로 결정하세요.
     </p>
@@ -735,9 +880,9 @@ main { padding: 20px 16px 40px; }
 
   <!-- ───────────── 질문 ───────────── -->
   <section id="screen-quiz" class="screen hidden">
-    <div class="card progress-card">
+    <div>
       <div class="progress-head">
-        <span class="progress-label">진행률</span>
+        <span class="label">진행률</span>
         <span class="progress-count"><b id="progress-now">0</b> / <span id="progress-total">18</span></span>
       </div>
       <div class="progress-track">
@@ -746,26 +891,26 @@ main { padding: 20px 16px 40px; }
       <p class="progress-note">정답은 없어요. 더 나 같거나, 오래 해도 덜 지칠 것 같은 쪽을 골라주세요.</p>
     </div>
 
-    <div class="card question-card">
-      <div class="question-head">
-        <span class="q-pill">질문 <b id="q-index">1</b></span>
-        <div class="dots" id="dots" aria-hidden="true"></div>
-      </div>
+    <div>
+      <div class="dots" id="dots" aria-hidden="true"></div>
 
-      <h2 class="question-text" id="question-text" tabindex="-1"></h2>
+      <div class="question-head">
+        <span class="q-num" id="q-index" aria-hidden="true">1</span>
+        <h2 class="question-text" id="question-text" tabindex="-1"></h2>
+      </div>
 
       <!-- 진짜 radio input 을 쓴다. 방향키 이동, 스페이스로 선택,
            "4개 중 2번째, 선택됨" 같은 스크린리더 안내가 전부 공짜로 따라온다. -->
       <fieldset class="options" id="options">
-        <legend class="offscreen" id="options-legend">선택지</legend>
+        <legend class="offscreen">선택지</legend>
       </fieldset>
 
       <div class="nav-row">
-        <button type="button" class="btn btn-ghost" id="btn-prev">
-          <span aria-hidden="true">←</span> 이전
+        <button type="button" class="btn btn-quiet" id="btn-prev">
+          <span class="arw" aria-hidden="true">←</span> 이전
         </button>
         <button type="button" class="btn btn-primary" id="btn-next">
-          다음 <span aria-hidden="true">→</span>
+          다음 <span class="arw" aria-hidden="true">→</span>
         </button>
       </div>
     </div>
@@ -773,20 +918,22 @@ main { padding: 20px 16px 40px; }
 
   <!-- ───────────── 계산중 ───────────── -->
   <section id="screen-loading" class="screen hidden">
-    <div class="card loading-card">
+    <div class="loading-wrap">
       <div class="spinner" aria-hidden="true"></div>
-      <p class="loading-text">답변을 8개 학교 성향과 맞춰보는 중…</p>
+      <p class="loading-text">답변을 여덟 학교의 성향과 맞춰보는 중…</p>
     </div>
   </section>
 
   <!-- ───────────── 결과 ───────────── -->
   <section id="screen-result" class="screen hidden">
 
-    <div class="card result-hero" id="result-hero">
-      <p class="eyebrow">나와 가장 잘 맞는 학교</p>
+    <div class="block result-hero" id="result-hero">
+      <p class="label">나와 가장 잘 맞는 학교</p>
+      <div class="result-emblem" id="result-emblem"></div>
       <h1 class="result-name" id="result-name"></h1>
       <p class="result-en" id="result-en"></p>
       <p class="result-tagline" id="result-tagline"></p>
+      <p class="result-place" id="result-place"></p>
       <div class="result-score">
         <span class="result-percent" id="result-percent"></span>
         <span class="result-percent-label">매칭 적합도</span>
@@ -794,34 +941,47 @@ main { padding: 20px 16px 40px; }
       <ul class="chips" id="result-keywords"></ul>
     </div>
 
-    <div class="card">
-      <h2 class="section-title">TOP 3</h2>
+    <div class="block">
+      <p class="label">상위 세 곳</p>
       <div id="ranking"></div>
     </div>
 
-    <div class="card">
-      <h2 class="section-title" id="detail-title">1위 상세 해설</h2>
-      <div id="why-block" class="why-block"></div>
+    <div class="block">
+      <p class="label" id="detail-title">상세 해설</p>
+      <ul class="why-list" id="why-block"></ul>
       <div id="detail-block"></div>
     </div>
 
-    <div class="card">
-      <h2 class="section-title">내 성향 축</h2>
+    <div class="block">
+      <p class="label">내 성향 축</p>
       <p class="section-sub">가운데에서 멀수록 그쪽 성향이 뚜렷하다는 뜻이에요.</p>
       <div id="axis-chart" class="axis-chart"></div>
     </div>
 
-    <div class="card">
-      <h2 class="section-title">결과 저장하고 공유하기</h2>
+    <div class="block">
+      <p class="label">저장하고 공유하기</p>
       <div class="action-grid">
         <button type="button" class="btn btn-primary btn-block" id="btn-share">결과 링크 복사</button>
         <button type="button" class="btn btn-outline btn-block" id="btn-image">결과 이미지 저장</button>
-        <button type="button" class="btn btn-ghost btn-block" id="btn-restart">다시 하기</button>
+        <button type="button" class="btn btn-quiet btn-block" id="btn-restart">다시 하기</button>
       </div>
       <p class="share-hint" id="share-hint" role="status" aria-live="polite"></p>
     </div>
 
-    <p class="disclaimer">
+    <div class="community">
+      <p class="label label-en">Coming soon</p>
+      <p class="community-title">인증된 유학생만 가입할 수 있는 커뮤니티</p>
+      <p class="community-sub">
+        합격증과 재학 증명으로 확인된 사람들만 모이는 곳이에요.
+        학교별 실제 분위기, 전공 선택, 인턴 준비까지 먼저 겪은 선배들에게 직접 물어보세요.
+      </p>
+      <button type="button" class="btn btn-community btn-block" id="btn-community">
+        사전 신청하기 <span class="arw" aria-hidden="true">→</span>
+      </button>
+      <p class="community-note">아직 준비 중이에요</p>
+    </div>
+
+    <p class="fine">
       재미로 보는 <b>성향 매칭</b>이에요. 합격 가능성 예측이 아니고, 이 결과로 지원 여부를
       정하지는 마세요. 학교마다 실제로 가보고 재학생과 이야기해보는 게 제일 정확해요.
     </p>
@@ -830,7 +990,8 @@ main { padding: 20px 16px 40px; }
 </main>
 
 <footer class="site-footer shell">
-  <p>아이비리그 8개교 성향 매칭 · 비공식 · 학교와 무관한 팬 프로젝트</p>
+  <p><span class="mark">IVY</span> · 아이비리그 8개교 성향 매칭</p>
+  <p>비공식 · 각 학교와 무관한 팬 프로젝트입니다</p>
 </footer>
 
 <canvas id="export-canvas" width="1080" height="1350" class="offscreen" aria-hidden="true"></canvas>
@@ -900,7 +1061,7 @@ const AXES = [
   },
   {
     id: 'field',
-    name: '관심 결',
+    name: '관심사',
     neg: '인문·예술·글쓰기',
     pos: 'STEM·수리·응용',
     negShort: '인문·예술',
@@ -912,6 +1073,92 @@ const AXIS_IDS = AXES.map(function (a) { return a.id; });
 
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { AXES: AXES, AXIS_IDS: AXIS_IDS };
+}
+</script>
+<script>
+/* === js/data/emblems.js === */
+/**
+ * 학교 엠블럼
+ *
+ * 실제 학교 로고·문장·워드마크는 전부 등록상표라 쓸 수 없다.
+ * 대신 각 학교를 대표하는 사물을 같은 기하학적 언어로 직접 그렸다.
+ * 전부 24x24 뷰박스, 선 기반(stroke), 굵기 1.7, 둥근 끝.
+ * 여덟 개가 한 세트로 보여야 하므로 이 규칙에서 벗어나지 말 것.
+ *
+ * 모티프는 그 학교의 실제 성격에서 가져왔다:
+ *   하버드   아치      Harvard Yard 의 문
+ *   예일     안뜰      레지덴셜 칼리지의 사각 안뜰
+ *   프린스턴 펜촉      전교생이 쓰는 졸업논문
+ *   컬럼비아 스카이라인 맨해튼
+ *   유펜     번개      벤저민 프랭클린
+ *   브라운   펼친 책   오픈 커리큘럼
+ *   다트머스 소나무    뉴햄프셔 숲
+ *   코넬     다리      이타카의 협곡을 건너는 다리
+ */
+var EMBLEMS = {
+  harvard: [
+    'M3.5 20.5 V12 a8.5 8.5 0 0 1 17 0 v8.5',
+    'M2 20.5 h20',
+    'M12 20.5 v-6',
+  ],
+  // 바깥 사각형 안에 안뜰 하나. 선을 더 넣으면 형태가 뭉쳐서 안 읽힌다.
+  yale: [
+    'M4 4.5 h16 v16 h-16 z',
+    'M9.4 9.9 h5.2 v5.2 h-5.2 z',
+  ],
+  // 펜촉: 위는 각지고 아래로 뾰족하게. 가운데 슬릿과 통기 구멍이 있어야
+  // 마름모가 아니라 펜으로 읽힌다.
+  princeton: [
+    'M7.6 3.2 h8.8 v6.4 L12 21.2 L7.6 9.6 Z',
+    'M12 12.4 V18.4',
+    'M10.9 10.2 a1.1 1.1 0 1 0 2.2 0 a1.1 1.1 0 1 0 -2.2 0',
+  ],
+  columbia: [
+    'M4.5 20.5 V12.5 h4 v8',
+    'M10 20.5 V5.5 h4 v15',
+    'M15.5 20.5 V14.5 h4 v6',
+    'M2.5 20.5 h19',
+  ],
+  penn: [
+    'M13.6 2.6 L6 13.2 h4.9 L9.8 21.4 L18 10.4 h-4.9 Z',
+  ],
+  brown: [
+    'M12 7.2 C9.2 5.3 6.2 5 3 5.8 V17.9 c3.2 -0.8 6.2 -0.5 9 1.4',
+    'M12 7.2 C14.8 5.3 17.8 5 21 5.8 V17.9 c-3.2 -0.8 -6.2 -0.5 -9 1.4',
+    'M12 7.2 V19.3',
+  ],
+  dartmouth: [
+    'M12 2.6 L7.4 10.4 h9.2 Z',
+    'M12 8.4 L5 18 h14 Z',
+    'M12 18 v3.4',
+  ],
+  // 상판 선 아래로 아치가 확실히 내려가야 다리로 읽힌다.
+  // 아치 정점이 상판과 겹치면 그냥 가로선 하나로 뭉쳐 보인다.
+  cornell: [
+    'M2 10 h20',                           // 상판 (아치보다 넓게 빼야 다리로 보인다)
+    'M5.5 21 Q12 9 18.5 21',               // 아치 (정점 y=15, 상판과 5 벌어짐)
+    'M8.6 10 v3.9', 'M15.4 10 v3.9',       // 상판을 받치는 기둥
+  ],
+};
+
+/**
+ * 인라인 SVG 문자열을 만든다.
+ * innerHTML 로 넣기 때문에 여기 들어가는 값은 전부 코드에서 나온 것이어야 한다.
+ * (색은 SCHOOLS 의 고정값, 경로는 위 상수 — 사용자 입력이 섞이지 않는다)
+ */
+function emblemSvg(schoolId, color, size) {
+  var paths = EMBLEMS[schoolId];
+  if (!paths) return '';
+  var d = paths.map(function (p) {
+    return '<path d="' + p + '"/>';
+  }).join('');
+  return '<svg class="emblem" viewBox="0 0 24 24" width="' + size + '" height="' + size + '" ' +
+    'aria-hidden="true" focusable="false" fill="none" stroke="' + color + '" ' +
+    'stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">' + d + '</svg>';
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { EMBLEMS: EMBLEMS };
 }
 </script>
 <script>
@@ -1787,9 +2034,44 @@ var CARD_W = 1080;
 var CARD_H = 1350;
 
 var KO_FONT = '"Apple SD Gothic Neo","Pretendard","Noto Sans KR","Malgun Gothic",system-ui,sans-serif';
+var SERIF = '"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Bitstream Charter",serif';
+
+// 화면과 같은 색을 쓴다. 여기 값을 바꾸면 styles.css 도 같이 바꿀 것.
+var C = {
+  paper: '#f4f3ee',
+  card: '#fffefb',
+  ink: '#16302a',
+  inkSoft: '#5b6b63',
+  inkFaint: '#93a099',
+  rule: '#ddddd4',
+  ruleSoft: '#e9e8e1',
+  ivy: '#1f5b41',
+  ivyDeep: '#143c2b',
+  brass: '#a8823c',
+};
 
 function font(weight, size) {
   return weight + ' ' + size + 'px ' + KO_FONT;
+}
+
+function serifFont(weight, size) {
+  return weight + ' ' + size + 'px ' + SERIF;
+}
+
+// 화면의 엠블럼을 캔버스에도 같은 모양으로 그린다.
+// Path2D 가 SVG path 문자열을 그대로 받는다.
+function drawEmblem(ctx, schoolId, color, x, y, size) {
+  var paths = (typeof EMBLEMS !== 'undefined') ? EMBLEMS[schoolId] : null;
+  if (!paths || typeof Path2D !== 'function') return;
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.scale(size / 24, size / 24);   // 원본 뷰박스가 24x24
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 1.7;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  paths.forEach(function (d) { ctx.stroke(new Path2D(d)); });
+  ctx.restore();
 }
 
 /* ── 한글 줄바꿈 ───────────────────────────────────────────────
@@ -1868,61 +2150,78 @@ function renderResultCard(canvas, result) {
 
   ctx.clearRect(0, 0, CARD_W, CARD_H);
 
-  // 배경
-  ctx.fillStyle = '#ffffff';
+  // 본지 바탕 + 얇은 테두리 괘선 (인쇄물 느낌)
+  ctx.fillStyle = C.paper;
   ctx.fillRect(0, 0, CARD_W, CARD_H);
-  var wash = ctx.createLinearGradient(0, 0, 0, 460);
-  wash.addColorStop(0, '#fdeaf4');
-  wash.addColorStop(1, '#ffffff');
-  ctx.fillStyle = wash;
-  ctx.fillRect(0, 0, CARD_W, 460);
+  ctx.fillStyle = C.card;
+  ctx.fillRect(40, 40, CARD_W - 80, CARD_H - 80);
+  ctx.strokeStyle = C.rule;
+  ctx.lineWidth = 1;
+  ctx.strokeRect(40.5, 40.5, CARD_W - 81, CARD_H - 81);
 
-  // 학교 색 상단 띠
+  // 학교 색 상단 띠 — 화면 상단 띠와 같은 역할
   ctx.fillStyle = top.school.color;
-  ctx.fillRect(0, 0, CARD_W, 12);
+  ctx.fillRect(40, 40, CARD_W - 80, 6);
 
   ctx.textBaseline = 'top';
-  var y = 96;
+  var y = 104;
 
-  ctx.fillStyle = '#ec4899';
-  ctx.font = font(700, 30);
-  ctx.fillText('아이비리그 성향 매칭', pad, y);
-  y += 52;
+  // 워드마크
+  ctx.fillStyle = C.ivy;
+  ctx.font = serifFont(700, 30);
+  ctx.letterSpacing = '5px';
+  ctx.fillText('IVY', pad, y);
+  ctx.letterSpacing = '0px';
 
-  ctx.fillStyle = '#5b6472';
-  ctx.font = font(600, 40);
-  ctx.fillText('나랑 제일 잘 맞는 아이비는', pad, y);
-  y += 72;
+  ctx.fillStyle = C.inkFaint;
+  ctx.font = font(600, 24);
+  ctx.fillText('성향 매칭', pad + 76, y + 7);
+  y += 62;
+
+  ctx.fillStyle = C.brass;
+  ctx.font = serifFont(400, 26);
+  ctx.fillText('Your closest match', pad, y);
+  y += 48;
+
+  // 엠블럼
+  drawEmblem(ctx, top.school.id, top.school.color, pad, y, 66);
+  y += 88;
 
   ctx.fillStyle = top.school.color;
-  ctx.font = font(800, 92);
+  ctx.font = font(700, 88);
   ctx.fillText(top.school.nameKo, pad, y);
-  y += 108;
+  y += 104;
 
-  ctx.fillStyle = '#9aa3b0';
-  ctx.font = font(500, 32);
+  ctx.fillStyle = C.inkFaint;
+  ctx.font = serifFont(400, 30);
   ctx.fillText(top.school.nameEn, pad, y);
-  y += 60;
+  y += 56;
 
-  ctx.fillStyle = '#14161a';
-  ctx.font = font(600, 38);
-  y = drawLines(ctx, wrapText(ctx, top.school.tagline, innerW, 2), pad, y, 54);
-  y += 34;
-
-  // 매칭 적합도
-  ctx.fillStyle = top.school.color;
-  ctx.font = font(800, 104);
-  ctx.fillText(top.percent + '%', pad, y);
-  var pctW = ctx.measureText(top.percent + '%').width;
-  ctx.fillStyle = '#9aa3b0';
-  ctx.font = font(600, 30);
-  ctx.fillText('매칭 적합도', pad + pctW + 18, y + 62);
-  y += 150;
+  ctx.fillStyle = C.ink;
+  ctx.font = font(600, 36);
+  y = drawLines(ctx, wrapText(ctx, top.school.tagline, innerW, 2), pad, y, 52);
+  y += 26;
 
   // 구분선
-  ctx.fillStyle = '#e8eaef';
-  ctx.fillRect(pad, y, innerW, 2);
-  y += 46;
+  ctx.fillStyle = C.rule;
+  ctx.fillRect(pad, y, innerW, 1);
+  y += 30;
+
+  // 매칭 적합도 — 세리프 숫자가 이 카드의 중심
+  ctx.fillStyle = top.school.color;
+  ctx.font = serifFont(400, 116);
+  ctx.fillText(top.percent + '%', pad, y);
+  var pctW = ctx.measureText(top.percent + '%').width;
+  ctx.fillStyle = C.inkFaint;
+  ctx.font = font(700, 22);
+  ctx.letterSpacing = '3px';
+  ctx.fillText('매칭 적합도', pad + pctW + 22, y + 66);
+  ctx.letterSpacing = '0px';
+  y += 150;
+
+  ctx.fillStyle = C.rule;
+  ctx.fillRect(pad, y, innerW, 1);
+  y += 34;
 
   /* 아래쪽 배치
    * 학교 이름·태그라인 길이에 따라 위쪽이 차지하는 높이가 달라진다.
@@ -1938,88 +2237,91 @@ function renderResultCard(canvas, result) {
   var bottomY = footerTop - 28 - bottomH;
   var ROW_H = Math.max(92, Math.min(128, (bottomY - 26 - y) / 3));
 
-  // TOP 3
+  // TOP 3 — 화면과 같은 줄 구성: 엠블럼 / 순번 + 이름 / 퍼센트
   result.top3.forEach(function (item, i) {
     var rowY = y + i * ROW_H;
 
-    // 순위 알약
-    ctx.font = font(800, 26);
-    var pillText = (i + 1) + '위';
-    var pillW = ctx.measureText(pillText).width + 34;
-    ctx.fillStyle = '#fdeaf4';
-    roundRect(ctx, pad, rowY, pillW, 42, 21);
-    ctx.fill();
-    ctx.fillStyle = '#be2d75';
-    ctx.fillText(pillText, pad + 17, rowY + 8);
+    drawEmblem(ctx, item.school.id, item.school.color, pad, rowY + 2, 34);
+
+    // 순번 (세리프)
+    ctx.fillStyle = C.brass;
+    ctx.font = serifFont(400, 26);
+    ctx.fillText(String(i + 1), pad + 54, rowY + 8);
 
     // 학교 이름
-    ctx.fillStyle = '#14161a';
-    ctx.font = font(800, 44);
-    ctx.fillText(item.school.nameKo, pad + pillW + 22, rowY + 1);
+    ctx.fillStyle = C.ink;
+    ctx.font = font(700, 40);
+    ctx.fillText(item.school.nameKo, pad + 82, rowY);
 
-    // 퍼센트 (우측 정렬)
+    // 퍼센트 (우측 정렬, 세리프)
     ctx.textAlign = 'right';
-    ctx.font = font(800, 48);
-    ctx.fillStyle = i === 0 ? item.school.color : '#5b6472';
-    ctx.fillText(item.percent + '%', CARD_W - pad, rowY - 1);
+    ctx.font = serifFont(400, 52);
+    ctx.fillStyle = i === 0 ? item.school.color : C.inkSoft;
+    ctx.fillText(item.percent + '%', CARD_W - pad, rowY - 4);
     ctx.textAlign = 'left';
 
-    // 막대
-    var barY = rowY + Math.min(68, ROW_H - 34);
-    ctx.fillStyle = '#eef0f4';
-    roundRect(ctx, pad, barY, innerW, 16, 8);
-    ctx.fill();
+    // 얇은 막대. 화면과 같이 오른쪽에 짧게
+    var barY = rowY + Math.min(64, ROW_H - 26);
+    var barW = 200;
+    var barX = CARD_W - pad - barW;
+    ctx.fillStyle = C.ruleSoft;
+    ctx.fillRect(barX, barY, barW, 3);
+    ctx.fillStyle = i === 0 ? item.school.color : C.inkFaint;
+    ctx.fillRect(barX, barY, Math.max(4, barW * (item.percent / 100)), 3);
 
-    var fillW = Math.max(16, innerW * (item.percent / 100));
-    var grad = ctx.createLinearGradient(pad, 0, pad + fillW, 0);
-    grad.addColorStop(0, '#f472b6');
-    grad.addColorStop(1, '#ec4899');
-    ctx.fillStyle = grad;
-    roundRect(ctx, pad, barY, fillW, 16, 8);
-    ctx.fill();
+    // 줄 구분선
+    ctx.fillStyle = C.ruleSoft;
+    ctx.fillRect(pad, rowY + ROW_H - 16, innerW, 1);
   });
   y = bottomY;
 
-  // 칩 한 줄 그리기. 폭이 넘치면 그 뒤는 버린다(잘려 나오는 것보다 낫다).
-  function drawChips(items, yPos, bg, fg) {
-    ctx.font = font(700, 28);
+  // 칩 한 줄. 화면과 같이 테두리만 있는 형태. 폭이 넘치면 그 뒤는 버린다.
+  function drawChips(items, yPos, stroke, fg) {
+    ctx.font = font(600, 26);
     var chipX = pad;
     items.forEach(function (label) {
-      var w = ctx.measureText(label).width + 40;
+      var w = ctx.measureText(label).width + 34;
       if (chipX + w > CARD_W - pad) return;
-      ctx.fillStyle = bg;
-      roundRect(ctx, chipX, yPos, w, 52, 26);
-      ctx.fill();
+      ctx.strokeStyle = stroke;
+      ctx.lineWidth = 1;
+      roundRect(ctx, chipX + 0.5, yPos + 0.5, w, CHIP_H, CHIP_H / 2);
+      ctx.stroke();
       ctx.fillStyle = fg;
-      ctx.fillText(label, chipX + 20, yPos + 12);
-      chipX += w + 12;
+      ctx.fillText(label, chipX + 17, yPos + 13);
+      chipX += w + 10;
     });
   }
 
   function drawLabel(text, yPos) {
-    ctx.fillStyle = '#9aa3b0';
-    ctx.font = font(700, 26);
+    ctx.fillStyle = C.brass;
+    ctx.font = font(700, 21);
+    ctx.letterSpacing = '3px';
     ctx.fillText(text, pad, yPos);
+    ctx.letterSpacing = '0px';
   }
 
   // 결정적이었던 내 성향 (없으면 이 블록을 건너뛴다)
   if (result.reasons && result.reasons.length) {
     drawLabel('이런 성향이 결정적이었어요', y);
-    drawChips(result.reasons.map(function (r) { return r.label; }), y + LABEL_H + LABEL_GAP, '#fdeaf4', '#be2d75');
+    drawChips(result.reasons.map(function (r) { return r.label; }),
+      y + LABEL_H + LABEL_GAP, C.brass, C.brass);
     y += LABEL_H + LABEL_GAP + CHIP_H + BLOCK_GAP;
   }
 
   // 이 학교의 키워드
   drawLabel('이 학교는', y);
-  drawChips(top.school.keywords, y + LABEL_H + LABEL_GAP, '#f4f5f8', '#5b6472');
+  drawChips(top.school.keywords, y + LABEL_H + LABEL_GAP, C.rule, C.inkSoft);
 
   // 하단 면책 문구
-  ctx.fillStyle = '#9aa3b0';
-  ctx.font = font(500, 26);
+  ctx.fillStyle = C.rule;
+  ctx.fillRect(pad, footerTop - 26, innerW, 1);
+
+  ctx.fillStyle = C.inkFaint;
+  ctx.font = font(500, 24);
   ctx.fillText('재미로 보는 성향 매칭이에요 · 합격 가능성 예측이 아닙니다', pad, footerTop);
-  ctx.font = font(700, 26);
-  ctx.fillStyle = '#c3c9d2';
-  ctx.fillText('18개 질문으로 알아보는 나와 맞는 아이비리그', pad, footerTop + 40);
+  ctx.font = font(500, 24);
+  ctx.fillStyle = C.inkFaint;
+  ctx.fillText('18개 질문으로 알아보는 나와 맞는 아이비리그', pad, footerTop + 36);
 
   return canvas;
 }
@@ -2133,12 +2435,13 @@ function showLongPressSheet(url) {
 
   var el = {};
   ['screen-intro', 'screen-quiz', 'screen-loading', 'screen-result',
-    'btn-start', 'btn-resume', 'btn-prev', 'btn-next', 'btn-share', 'btn-image', 'btn-restart',
+    'btn-start', 'btn-resume', 'btn-prev', 'btn-next', 'btn-share', 'btn-image',
+    'btn-restart', 'btn-community',
     'progress-now', 'progress-total', 'progress-fill', 'q-index', 'dots',
-    'question-text', 'options', 'axis-preview', 'ranking', 'axis-chart',
-    'result-hero', 'result-name', 'result-en', 'result-tagline', 'result-percent',
-    'result-keywords', 'detail-title', 'why-block', 'detail-block', 'share-hint',
-    'export-canvas'].forEach(function (id) {
+    'question-text', 'options', 'axis-preview', 'roster', 'ranking', 'axis-chart',
+    'result-hero', 'result-emblem', 'result-name', 'result-en', 'result-tagline',
+    'result-place', 'result-percent', 'result-keywords', 'detail-title',
+    'why-block', 'detail-block', 'share-hint', 'export-canvas'].forEach(function (id) {
       el[id] = document.getElementById(id);
     });
 
@@ -2207,16 +2510,27 @@ function showLongPressSheet(url) {
     AXES.forEach(function (axis) {
       var li = document.createElement('li');
       var a = document.createElement('span');
-      a.className = 'pole';
+      a.className = 'l';
       a.textContent = axis.negShort;
-      var vs = document.createElement('span');
-      vs.className = 'vs';
-      vs.textContent = '↔';
+      var mid = document.createElement('span');
+      mid.className = 'mid';
+      mid.textContent = 'vs';
       var b = document.createElement('span');
-      b.className = 'pole';
+      b.className = 'r';
       b.textContent = axis.posShort;
-      li.appendChild(a); li.appendChild(vs); li.appendChild(b);
+      li.appendChild(a); li.appendChild(mid); li.appendChild(b);
       el['axis-preview'].appendChild(li);
+    });
+
+    // 여덟 학교 엠블럼. 결과에서 처음 보는 것보다 미리 보여주는 편이 낫다
+    el.roster.innerHTML = '';
+    SCHOOLS.forEach(function (school) {
+      var li = document.createElement('li');
+      li.innerHTML = emblemSvg(school.id, school.color, 19);
+      var name = document.createElement('span');
+      name.textContent = school.nameKo;
+      li.appendChild(name);
+      el.roster.appendChild(li);
     });
 
     var saved = loadProgress();
@@ -2293,9 +2607,8 @@ function showLongPressSheet(url) {
 
     el['btn-prev'].style.visibility = state.index === 0 ? 'hidden' : 'visible';
     el['btn-next'].disabled = state.answers[state.index] === null;
-    el['btn-next'].innerHTML = state.index === total - 1
-      ? '결과 보기 <span aria-hidden="true">→</span>'
-      : '다음 <span aria-hidden="true">→</span>';
+    el['btn-next'].innerHTML = (state.index === total - 1 ? '결과 보기' : '다음') +
+      ' <span class="arw" aria-hidden="true">→</span>';
   }
 
   function choose(i) {
@@ -2345,10 +2658,13 @@ function showLongPressSheet(url) {
     var r = state.result;
     var top = r.top3[0];
 
-    el['result-hero'].style.setProperty('--school-color', top.school.color);
+    // 학교색은 결과 화면 전체에 퍼진다(이름·퍼센트·막대). 한 곳에서만 정한다.
+    el['screen-result'].style.setProperty('--school', top.school.color);
+    el['result-emblem'].innerHTML = emblemSvg(top.school.id, top.school.color, 40);
     el['result-name'].textContent = top.school.nameKo;
-    el['result-en'].textContent = top.school.nameEn + ' · ' + top.school.location;
+    el['result-en'].textContent = top.school.nameEn;
     el['result-tagline'].textContent = top.school.tagline;
+    el['result-place'].textContent = top.school.location;
     el['result-percent'].textContent = top.percent + '%';
 
     el['result-keywords'].innerHTML = '';
@@ -2373,36 +2689,41 @@ function showLongPressSheet(url) {
   function renderRanking(r) {
     el.ranking.innerHTML = '';
     r.top3.forEach(function (item, i) {
-      var card = document.createElement('div');
-      card.className = 'rank-card' + (i === 0 ? ' is-top' : '');
+      var row = document.createElement('div');
+      row.className = 'rank-row' + (i === 0 ? ' is-top' : '');
 
-      var head = document.createElement('div');
-      head.className = 'rank-head';
-      var pill = document.createElement('span');
-      pill.className = 'rank-pill';
-      pill.textContent = (i + 1) + '위';
-      var pct = document.createElement('span');
-      pct.className = 'rank-percent';
-      pct.textContent = item.percent + '%';
-      head.appendChild(pill); head.appendChild(pct);
+      var mark = document.createElement('div');
+      mark.className = 'rank-mark';
+      mark.innerHTML = emblemSvg(item.school.id, item.school.color, 26);
 
+      var body = document.createElement('div');
+      body.className = 'rank-body';
       var name = document.createElement('p');
       name.className = 'rank-name';
-      name.textContent = item.school.nameKo;
-
+      var ord = document.createElement('span');
+      ord.className = 'rank-ordinal';
+      ord.textContent = String(i + 1);
+      name.appendChild(ord);
+      name.appendChild(document.createTextNode(item.school.nameKo));
       var tag = document.createElement('p');
       tag.className = 'rank-tagline';
       tag.textContent = item.school.tagline;
+      body.appendChild(name); body.appendChild(tag);
 
+      var right = document.createElement('div');
+      right.className = 'rank-right';
+      var pct = document.createElement('div');
+      pct.className = 'rank-percent';
+      pct.textContent = item.percent + '%';
       var track = document.createElement('div');
       track.className = 'rank-track';
       var fill = document.createElement('div');
       fill.className = 'rank-fill';
       track.appendChild(fill);
+      right.appendChild(pct); right.appendChild(track);
 
-      card.appendChild(head); card.appendChild(name);
-      card.appendChild(tag); card.appendChild(track);
-      el.ranking.appendChild(card);
+      row.appendChild(mark); row.appendChild(body); row.appendChild(right);
+      el.ranking.appendChild(row);
 
       // 다음 프레임에 너비를 줘야 트랜지션이 실제로 돈다
       requestAnimationFrame(function () {
@@ -2413,21 +2734,18 @@ function showLongPressSheet(url) {
 
   function renderWhy(r) {
     var top = r.top3[0];
-    el['detail-title'].textContent = '1위 ' + top.school.nameKo + ' 상세 해설';
-    el['why-block'].innerHTML = '';
+    el['detail-title'].textContent = top.school.nameKo + '가 1위인 이유';
 
-    var title = document.createElement('p');
-    title.className = 'why-title';
-    title.textContent = '왜 ' + top.school.nameKo + '가 1위로 나왔냐면';
-    el['why-block'].appendChild(title);
-
-    var list = document.createElement('ul');
-    list.className = 'why-list';
+    var list = el['why-block'];
+    list.innerHTML = '';
 
     if (!r.reasons.length) {
       var li = document.createElement('li');
-      li.textContent = '성향이 어느 쪽으로도 크게 기울지 않아서, 세 학교가 비슷하게 나왔어요. ' +
-        '아래 TOP 3를 다 살펴보는 걸 추천해요.';
+      var span = document.createElement('span');
+      span.style.gridColumn = '1 / -1';
+      span.textContent = '성향이 어느 쪽으로도 크게 기울지 않아서 세 학교가 비슷하게 나왔어요. ' +
+        '아래 세 곳을 다 살펴보는 걸 추천해요.';
+      li.appendChild(span);
       list.appendChild(li);
     } else {
       // 세 줄이 전부 같은 문장으로 끝나면 기계가 찍어낸 티가 난다.
@@ -2459,7 +2777,6 @@ function showLongPressSheet(url) {
         list.appendChild(li);
       });
     }
-    el['why-block'].appendChild(list);
   }
 
   function renderDetail(school) {
@@ -2497,14 +2814,14 @@ function showLongPressSheet(url) {
       var poles = document.createElement('div');
       poles.className = 'axis-poles';
       var left = document.createElement('span');
+      left.className = 'l' + (lit[axis.id] === 'neg' ? ' lit' : '');
       left.textContent = axis.negShort;
-      if (lit[axis.id] === 'neg') left.className = 'lit';
       var mid = document.createElement('span');
       mid.className = 'axis-name';
       mid.textContent = axis.name;
       var right = document.createElement('span');
+      right.className = 'r' + (lit[axis.id] === 'pos' ? ' lit' : '');
       right.textContent = axis.posShort;
-      if (lit[axis.id] === 'pos') right.className = 'lit';
       poles.appendChild(left); poles.appendChild(mid); poles.appendChild(right);
 
       var track = document.createElement('div');
@@ -2513,15 +2830,16 @@ function showLongPressSheet(url) {
       center.className = 'axis-center';
       var bar = document.createElement('div');
       bar.className = 'axis-bar';
-      if (v < 0) {
-        bar.style.left = (50 + v * 50) + '%';
-        bar.style.width = (-v * 50) + '%';
-      } else {
-        bar.style.left = '50%';
-        bar.style.width = (v * 50) + '%';
-      }
+      var barLeft = v < 0 ? (50 + v * 50) : 50;
+      var barWidth = Math.abs(v) * 50;
+      bar.style.left = barLeft + '%';
+      bar.style.width = '0%';
       track.appendChild(center);
       track.appendChild(bar);
+      // 순위 막대와 마찬가지로 다음 프레임에 너비를 줘야 트랜지션이 돈다
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () { bar.style.width = barWidth + '%'; });
+      });
 
       // 스크린리더용 설명 (막대는 눈으로만 보이는 정보라서)
       var sr = document.createElement('span');
@@ -2624,6 +2942,18 @@ function showLongPressSheet(url) {
     el['btn-share'].addEventListener('click', onShare);
     el['btn-image'].addEventListener('click', onImage);
     el['btn-restart'].addEventListener('click', restart);
+
+    // 커뮤니티는 아직 붙일 곳이 없다. 눌러도 아무 일도 안 일어나면
+    // 고장난 걸로 보이니 준비 중이라는 것만 알려준다.
+    el['btn-community'].addEventListener('click', function () {
+      var note = el['btn-community'].nextElementSibling;
+      if (!note) return;
+      note.textContent = '아직 준비 중이에요. 열리면 여기서 바로 신청할 수 있어요.';
+      clearTimeout(el['btn-community']._t);
+      el['btn-community']._t = setTimeout(function () {
+        note.textContent = '아직 준비 중이에요';
+      }, 3200);
+    });
 
     // Enter 로 다음. 좌우 방향키는 건드리지 않는다 — radio 그룹의
     // 기본 이동 동작을 뺏으면 키보드 사용자가 선택을 못 바꾼다.

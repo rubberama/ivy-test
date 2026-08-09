@@ -59,7 +59,7 @@ const AXES = [
   },
   {
     id: 'field',
-    name: '관심 결',
+    name: '관심사',
     neg: '인문·예술·글쓰기',
     pos: 'STEM·수리·응용',
     negShort: '인문·예술',

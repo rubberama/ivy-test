@@ -9,9 +9,44 @@ var CARD_W = 1080;
 var CARD_H = 1350;
 
 var KO_FONT = '"Apple SD Gothic Neo","Pretendard","Noto Sans KR","Malgun Gothic",system-ui,sans-serif';
+var SERIF = '"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Bitstream Charter",serif';
+
+// 화면과 같은 색을 쓴다. 여기 값을 바꾸면 styles.css 도 같이 바꿀 것.
+var C = {
+  paper: '#f4f3ee',
+  card: '#fffefb',
+  ink: '#16302a',
+  inkSoft: '#5b6b63',
+  inkFaint: '#93a099',
+  rule: '#ddddd4',
+  ruleSoft: '#e9e8e1',
+  ivy: '#1f5b41',
+  ivyDeep: '#143c2b',
+  brass: '#a8823c',
+};
 
 function font(weight, size) {
   return weight + ' ' + size + 'px ' + KO_FONT;
+}
+
+function serifFont(weight, size) {
+  return weight + ' ' + size + 'px ' + SERIF;
+}
+
+// 화면의 엠블럼을 캔버스에도 같은 모양으로 그린다.
+// Path2D 가 SVG path 문자열을 그대로 받는다.
+function drawEmblem(ctx, schoolId, color, x, y, size) {
+  var paths = (typeof EMBLEMS !== 'undefined') ? EMBLEMS[schoolId] : null;
+  if (!paths || typeof Path2D !== 'function') return;
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.scale(size / 24, size / 24);   // 원본 뷰박스가 24x24
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 1.7;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  paths.forEach(function (d) { ctx.stroke(new Path2D(d)); });
+  ctx.restore();
 }
 
 /* ── 한글 줄바꿈 ───────────────────────────────────────────────
@@ -90,61 +125,78 @@ function renderResultCard(canvas, result) {
 
   ctx.clearRect(0, 0, CARD_W, CARD_H);
 
-  // 배경
-  ctx.fillStyle = '#ffffff';
+  // 본지 바탕 + 얇은 테두리 괘선 (인쇄물 느낌)
+  ctx.fillStyle = C.paper;
   ctx.fillRect(0, 0, CARD_W, CARD_H);
-  var wash = ctx.createLinearGradient(0, 0, 0, 460);
-  wash.addColorStop(0, '#fdeaf4');
-  wash.addColorStop(1, '#ffffff');
-  ctx.fillStyle = wash;
-  ctx.fillRect(0, 0, CARD_W, 460);
+  ctx.fillStyle = C.card;
+  ctx.fillRect(40, 40, CARD_W - 80, CARD_H - 80);
+  ctx.strokeStyle = C.rule;
+  ctx.lineWidth = 1;
+  ctx.strokeRect(40.5, 40.5, CARD_W - 81, CARD_H - 81);
 
-  // 학교 색 상단 띠
+  // 학교 색 상단 띠 — 화면 상단 띠와 같은 역할
   ctx.fillStyle = top.school.color;
-  ctx.fillRect(0, 0, CARD_W, 12);
+  ctx.fillRect(40, 40, CARD_W - 80, 6);
 
   ctx.textBaseline = 'top';
-  var y = 96;
+  var y = 104;
 
-  ctx.fillStyle = '#ec4899';
-  ctx.font = font(700, 30);
-  ctx.fillText('아이비리그 성향 매칭', pad, y);
-  y += 52;
+  // 워드마크
+  ctx.fillStyle = C.ivy;
+  ctx.font = serifFont(700, 30);
+  ctx.letterSpacing = '5px';
+  ctx.fillText('IVY', pad, y);
+  ctx.letterSpacing = '0px';
 
-  ctx.fillStyle = '#5b6472';
-  ctx.font = font(600, 40);
-  ctx.fillText('나랑 제일 잘 맞는 아이비는', pad, y);
-  y += 72;
+  ctx.fillStyle = C.inkFaint;
+  ctx.font = font(600, 24);
+  ctx.fillText('성향 매칭', pad + 76, y + 7);
+  y += 62;
+
+  ctx.fillStyle = C.brass;
+  ctx.font = serifFont(400, 26);
+  ctx.fillText('Your closest match', pad, y);
+  y += 48;
+
+  // 엠블럼
+  drawEmblem(ctx, top.school.id, top.school.color, pad, y, 66);
+  y += 88;
 
   ctx.fillStyle = top.school.color;
-  ctx.font = font(800, 92);
+  ctx.font = font(700, 88);
   ctx.fillText(top.school.nameKo, pad, y);
-  y += 108;
+  y += 104;
 
-  ctx.fillStyle = '#9aa3b0';
-  ctx.font = font(500, 32);
+  ctx.fillStyle = C.inkFaint;
+  ctx.font = serifFont(400, 30);
   ctx.fillText(top.school.nameEn, pad, y);
-  y += 60;
+  y += 56;
 
-  ctx.fillStyle = '#14161a';
-  ctx.font = font(600, 38);
-  y = drawLines(ctx, wrapText(ctx, top.school.tagline, innerW, 2), pad, y, 54);
-  y += 34;
-
-  // 매칭 적합도
-  ctx.fillStyle = top.school.color;
-  ctx.font = font(800, 104);
-  ctx.fillText(top.percent + '%', pad, y);
-  var pctW = ctx.measureText(top.percent + '%').width;
-  ctx.fillStyle = '#9aa3b0';
-  ctx.font = font(600, 30);
-  ctx.fillText('매칭 적합도', pad + pctW + 18, y + 62);
-  y += 150;
+  ctx.fillStyle = C.ink;
+  ctx.font = font(600, 36);
+  y = drawLines(ctx, wrapText(ctx, top.school.tagline, innerW, 2), pad, y, 52);
+  y += 26;
 
   // 구분선
-  ctx.fillStyle = '#e8eaef';
-  ctx.fillRect(pad, y, innerW, 2);
-  y += 46;
+  ctx.fillStyle = C.rule;
+  ctx.fillRect(pad, y, innerW, 1);
+  y += 30;
+
+  // 매칭 적합도 — 세리프 숫자가 이 카드의 중심
+  ctx.fillStyle = top.school.color;
+  ctx.font = serifFont(400, 116);
+  ctx.fillText(top.percent + '%', pad, y);
+  var pctW = ctx.measureText(top.percent + '%').width;
+  ctx.fillStyle = C.inkFaint;
+  ctx.font = font(700, 22);
+  ctx.letterSpacing = '3px';
+  ctx.fillText('매칭 적합도', pad + pctW + 22, y + 66);
+  ctx.letterSpacing = '0px';
+  y += 150;
+
+  ctx.fillStyle = C.rule;
+  ctx.fillRect(pad, y, innerW, 1);
+  y += 34;
 
   /* 아래쪽 배치
    * 학교 이름·태그라인 길이에 따라 위쪽이 차지하는 높이가 달라진다.
@@ -160,88 +212,91 @@ function renderResultCard(canvas, result) {
   var bottomY = footerTop - 28 - bottomH;
   var ROW_H = Math.max(92, Math.min(128, (bottomY - 26 - y) / 3));
 
-  // TOP 3
+  // TOP 3 — 화면과 같은 줄 구성: 엠블럼 / 순번 + 이름 / 퍼센트
   result.top3.forEach(function (item, i) {
     var rowY = y + i * ROW_H;
 
-    // 순위 알약
-    ctx.font = font(800, 26);
-    var pillText = (i + 1) + '위';
-    var pillW = ctx.measureText(pillText).width + 34;
-    ctx.fillStyle = '#fdeaf4';
-    roundRect(ctx, pad, rowY, pillW, 42, 21);
-    ctx.fill();
-    ctx.fillStyle = '#be2d75';
-    ctx.fillText(pillText, pad + 17, rowY + 8);
+    drawEmblem(ctx, item.school.id, item.school.color, pad, rowY + 2, 34);
+
+    // 순번 (세리프)
+    ctx.fillStyle = C.brass;
+    ctx.font = serifFont(400, 26);
+    ctx.fillText(String(i + 1), pad + 54, rowY + 8);
 
     // 학교 이름
-    ctx.fillStyle = '#14161a';
-    ctx.font = font(800, 44);
-    ctx.fillText(item.school.nameKo, pad + pillW + 22, rowY + 1);
+    ctx.fillStyle = C.ink;
+    ctx.font = font(700, 40);
+    ctx.fillText(item.school.nameKo, pad + 82, rowY);
 
-    // 퍼센트 (우측 정렬)
+    // 퍼센트 (우측 정렬, 세리프)
     ctx.textAlign = 'right';
-    ctx.font = font(800, 48);
-    ctx.fillStyle = i === 0 ? item.school.color : '#5b6472';
-    ctx.fillText(item.percent + '%', CARD_W - pad, rowY - 1);
+    ctx.font = serifFont(400, 52);
+    ctx.fillStyle = i === 0 ? item.school.color : C.inkSoft;
+    ctx.fillText(item.percent + '%', CARD_W - pad, rowY - 4);
     ctx.textAlign = 'left';
 
-    // 막대
-    var barY = rowY + Math.min(68, ROW_H - 34);
-    ctx.fillStyle = '#eef0f4';
-    roundRect(ctx, pad, barY, innerW, 16, 8);
-    ctx.fill();
+    // 얇은 막대. 화면과 같이 오른쪽에 짧게
+    var barY = rowY + Math.min(64, ROW_H - 26);
+    var barW = 200;
+    var barX = CARD_W - pad - barW;
+    ctx.fillStyle = C.ruleSoft;
+    ctx.fillRect(barX, barY, barW, 3);
+    ctx.fillStyle = i === 0 ? item.school.color : C.inkFaint;
+    ctx.fillRect(barX, barY, Math.max(4, barW * (item.percent / 100)), 3);
 
-    var fillW = Math.max(16, innerW * (item.percent / 100));
-    var grad = ctx.createLinearGradient(pad, 0, pad + fillW, 0);
-    grad.addColorStop(0, '#f472b6');
-    grad.addColorStop(1, '#ec4899');
-    ctx.fillStyle = grad;
-    roundRect(ctx, pad, barY, fillW, 16, 8);
-    ctx.fill();
+    // 줄 구분선
+    ctx.fillStyle = C.ruleSoft;
+    ctx.fillRect(pad, rowY + ROW_H - 16, innerW, 1);
   });
   y = bottomY;
 
-  // 칩 한 줄 그리기. 폭이 넘치면 그 뒤는 버린다(잘려 나오는 것보다 낫다).
-  function drawChips(items, yPos, bg, fg) {
-    ctx.font = font(700, 28);
+  // 칩 한 줄. 화면과 같이 테두리만 있는 형태. 폭이 넘치면 그 뒤는 버린다.
+  function drawChips(items, yPos, stroke, fg) {
+    ctx.font = font(600, 26);
     var chipX = pad;
     items.forEach(function (label) {
-      var w = ctx.measureText(label).width + 40;
+      var w = ctx.measureText(label).width + 34;
       if (chipX + w > CARD_W - pad) return;
-      ctx.fillStyle = bg;
-      roundRect(ctx, chipX, yPos, w, 52, 26);
-      ctx.fill();
+      ctx.strokeStyle = stroke;
+      ctx.lineWidth = 1;
+      roundRect(ctx, chipX + 0.5, yPos + 0.5, w, CHIP_H, CHIP_H / 2);
+      ctx.stroke();
       ctx.fillStyle = fg;
-      ctx.fillText(label, chipX + 20, yPos + 12);
-      chipX += w + 12;
+      ctx.fillText(label, chipX + 17, yPos + 13);
+      chipX += w + 10;
     });
   }
 
   function drawLabel(text, yPos) {
-    ctx.fillStyle = '#9aa3b0';
-    ctx.font = font(700, 26);
+    ctx.fillStyle = C.brass;
+    ctx.font = font(700, 21);
+    ctx.letterSpacing = '3px';
     ctx.fillText(text, pad, yPos);
+    ctx.letterSpacing = '0px';
   }
 
   // 결정적이었던 내 성향 (없으면 이 블록을 건너뛴다)
   if (result.reasons && result.reasons.length) {
     drawLabel('이런 성향이 결정적이었어요', y);
-    drawChips(result.reasons.map(function (r) { return r.label; }), y + LABEL_H + LABEL_GAP, '#fdeaf4', '#be2d75');
+    drawChips(result.reasons.map(function (r) { return r.label; }),
+      y + LABEL_H + LABEL_GAP, C.brass, C.brass);
     y += LABEL_H + LABEL_GAP + CHIP_H + BLOCK_GAP;
   }
 
   // 이 학교의 키워드
   drawLabel('이 학교는', y);
-  drawChips(top.school.keywords, y + LABEL_H + LABEL_GAP, '#f4f5f8', '#5b6472');
+  drawChips(top.school.keywords, y + LABEL_H + LABEL_GAP, C.rule, C.inkSoft);
 
   // 하단 면책 문구
-  ctx.fillStyle = '#9aa3b0';
-  ctx.font = font(500, 26);
+  ctx.fillStyle = C.rule;
+  ctx.fillRect(pad, footerTop - 26, innerW, 1);
+
+  ctx.fillStyle = C.inkFaint;
+  ctx.font = font(500, 24);
   ctx.fillText('재미로 보는 성향 매칭이에요 · 합격 가능성 예측이 아닙니다', pad, footerTop);
-  ctx.font = font(700, 26);
-  ctx.fillStyle = '#c3c9d2';
-  ctx.fillText('18개 질문으로 알아보는 나와 맞는 아이비리그', pad, footerTop + 40);
+  ctx.font = font(500, 24);
+  ctx.fillStyle = C.inkFaint;
+  ctx.fillText('18개 질문으로 알아보는 나와 맞는 아이비리그', pad, footerTop + 36);
 
   return canvas;
 }

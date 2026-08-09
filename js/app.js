@@ -21,12 +21,13 @@
 
   var el = {};
   ['screen-intro', 'screen-quiz', 'screen-loading', 'screen-result',
-    'btn-start', 'btn-resume', 'btn-prev', 'btn-next', 'btn-share', 'btn-image', 'btn-restart',
+    'btn-start', 'btn-resume', 'btn-prev', 'btn-next', 'btn-share', 'btn-image',
+    'btn-restart', 'btn-community',
     'progress-now', 'progress-total', 'progress-fill', 'q-index', 'dots',
-    'question-text', 'options', 'axis-preview', 'ranking', 'axis-chart',
-    'result-hero', 'result-name', 'result-en', 'result-tagline', 'result-percent',
-    'result-keywords', 'detail-title', 'why-block', 'detail-block', 'share-hint',
-    'export-canvas'].forEach(function (id) {
+    'question-text', 'options', 'axis-preview', 'roster', 'ranking', 'axis-chart',
+    'result-hero', 'result-emblem', 'result-name', 'result-en', 'result-tagline',
+    'result-place', 'result-percent', 'result-keywords', 'detail-title',
+    'why-block', 'detail-block', 'share-hint', 'export-canvas'].forEach(function (id) {
       el[id] = document.getElementById(id);
     });
 
@@ -95,16 +96,27 @@
     AXES.forEach(function (axis) {
       var li = document.createElement('li');
       var a = document.createElement('span');
-      a.className = 'pole';
+      a.className = 'l';
       a.textContent = axis.negShort;
-      var vs = document.createElement('span');
-      vs.className = 'vs';
-      vs.textContent = '↔';
+      var mid = document.createElement('span');
+      mid.className = 'mid';
+      mid.textContent = 'vs';
       var b = document.createElement('span');
-      b.className = 'pole';
+      b.className = 'r';
       b.textContent = axis.posShort;
-      li.appendChild(a); li.appendChild(vs); li.appendChild(b);
+      li.appendChild(a); li.appendChild(mid); li.appendChild(b);
       el['axis-preview'].appendChild(li);
+    });
+
+    // 여덟 학교 엠블럼. 결과에서 처음 보는 것보다 미리 보여주는 편이 낫다
+    el.roster.innerHTML = '';
+    SCHOOLS.forEach(function (school) {
+      var li = document.createElement('li');
+      li.innerHTML = emblemSvg(school.id, school.color, 19);
+      var name = document.createElement('span');
+      name.textContent = school.nameKo;
+      li.appendChild(name);
+      el.roster.appendChild(li);
     });
 
     var saved = loadProgress();
@@ -181,9 +193,8 @@
 
     el['btn-prev'].style.visibility = state.index === 0 ? 'hidden' : 'visible';
     el['btn-next'].disabled = state.answers[state.index] === null;
-    el['btn-next'].innerHTML = state.index === total - 1
-      ? '결과 보기 <span aria-hidden="true">→</span>'
-      : '다음 <span aria-hidden="true">→</span>';
+    el['btn-next'].innerHTML = (state.index === total - 1 ? '결과 보기' : '다음') +
+      ' <span class="arw" aria-hidden="true">→</span>';
   }
 
   function choose(i) {
@@ -233,10 +244,13 @@
     var r = state.result;
     var top = r.top3[0];
 
-    el['result-hero'].style.setProperty('--school-color', top.school.color);
+    // 학교색은 결과 화면 전체에 퍼진다(이름·퍼센트·막대). 한 곳에서만 정한다.
+    el['screen-result'].style.setProperty('--school', top.school.color);
+    el['result-emblem'].innerHTML = emblemSvg(top.school.id, top.school.color, 40);
     el['result-name'].textContent = top.school.nameKo;
-    el['result-en'].textContent = top.school.nameEn + ' · ' + top.school.location;
+    el['result-en'].textContent = top.school.nameEn;
     el['result-tagline'].textContent = top.school.tagline;
+    el['result-place'].textContent = top.school.location;
     el['result-percent'].textContent = top.percent + '%';
 
     el['result-keywords'].innerHTML = '';
@@ -261,36 +275,41 @@
   function renderRanking(r) {
     el.ranking.innerHTML = '';
     r.top3.forEach(function (item, i) {
-      var card = document.createElement('div');
-      card.className = 'rank-card' + (i === 0 ? ' is-top' : '');
+      var row = document.createElement('div');
+      row.className = 'rank-row' + (i === 0 ? ' is-top' : '');
 
-      var head = document.createElement('div');
-      head.className = 'rank-head';
-      var pill = document.createElement('span');
-      pill.className = 'rank-pill';
-      pill.textContent = (i + 1) + '위';
-      var pct = document.createElement('span');
-      pct.className = 'rank-percent';
-      pct.textContent = item.percent + '%';
-      head.appendChild(pill); head.appendChild(pct);
+      var mark = document.createElement('div');
+      mark.className = 'rank-mark';
+      mark.innerHTML = emblemSvg(item.school.id, item.school.color, 26);
 
+      var body = document.createElement('div');
+      body.className = 'rank-body';
       var name = document.createElement('p');
       name.className = 'rank-name';
-      name.textContent = item.school.nameKo;
-
+      var ord = document.createElement('span');
+      ord.className = 'rank-ordinal';
+      ord.textContent = String(i + 1);
+      name.appendChild(ord);
+      name.appendChild(document.createTextNode(item.school.nameKo));
       var tag = document.createElement('p');
       tag.className = 'rank-tagline';
       tag.textContent = item.school.tagline;
+      body.appendChild(name); body.appendChild(tag);
 
+      var right = document.createElement('div');
+      right.className = 'rank-right';
+      var pct = document.createElement('div');
+      pct.className = 'rank-percent';
+      pct.textContent = item.percent + '%';
       var track = document.createElement('div');
       track.className = 'rank-track';
       var fill = document.createElement('div');
       fill.className = 'rank-fill';
       track.appendChild(fill);
+      right.appendChild(pct); right.appendChild(track);
 
-      card.appendChild(head); card.appendChild(name);
-      card.appendChild(tag); card.appendChild(track);
-      el.ranking.appendChild(card);
+      row.appendChild(mark); row.appendChild(body); row.appendChild(right);
+      el.ranking.appendChild(row);
 
       // 다음 프레임에 너비를 줘야 트랜지션이 실제로 돈다
       requestAnimationFrame(function () {
@@ -301,21 +320,18 @@
 
   function renderWhy(r) {
     var top = r.top3[0];
-    el['detail-title'].textContent = '1위 ' + top.school.nameKo + ' 상세 해설';
-    el['why-block'].innerHTML = '';
+    el['detail-title'].textContent = top.school.nameKo + '가 1위인 이유';
 
-    var title = document.createElement('p');
-    title.className = 'why-title';
-    title.textContent = '왜 ' + top.school.nameKo + '가 1위로 나왔냐면';
-    el['why-block'].appendChild(title);
-
-    var list = document.createElement('ul');
-    list.className = 'why-list';
+    var list = el['why-block'];
+    list.innerHTML = '';
 
     if (!r.reasons.length) {
       var li = document.createElement('li');
-      li.textContent = '성향이 어느 쪽으로도 크게 기울지 않아서, 세 학교가 비슷하게 나왔어요. ' +
-        '아래 TOP 3를 다 살펴보는 걸 추천해요.';
+      var span = document.createElement('span');
+      span.style.gridColumn = '1 / -1';
+      span.textContent = '성향이 어느 쪽으로도 크게 기울지 않아서 세 학교가 비슷하게 나왔어요. ' +
+        '아래 세 곳을 다 살펴보는 걸 추천해요.';
+      li.appendChild(span);
       list.appendChild(li);
     } else {
       // 세 줄이 전부 같은 문장으로 끝나면 기계가 찍어낸 티가 난다.
@@ -347,7 +363,6 @@
         list.appendChild(li);
       });
     }
-    el['why-block'].appendChild(list);
   }
 
   function renderDetail(school) {
@@ -385,14 +400,14 @@
       var poles = document.createElement('div');
       poles.className = 'axis-poles';
       var left = document.createElement('span');
+      left.className = 'l' + (lit[axis.id] === 'neg' ? ' lit' : '');
       left.textContent = axis.negShort;
-      if (lit[axis.id] === 'neg') left.className = 'lit';
       var mid = document.createElement('span');
       mid.className = 'axis-name';
       mid.textContent = axis.name;
       var right = document.createElement('span');
+      right.className = 'r' + (lit[axis.id] === 'pos' ? ' lit' : '');
       right.textContent = axis.posShort;
-      if (lit[axis.id] === 'pos') right.className = 'lit';
       poles.appendChild(left); poles.appendChild(mid); poles.appendChild(right);
 
       var track = document.createElement('div');
@@ -401,15 +416,16 @@
       center.className = 'axis-center';
       var bar = document.createElement('div');
       bar.className = 'axis-bar';
-      if (v < 0) {
-        bar.style.left = (50 + v * 50) + '%';
-        bar.style.width = (-v * 50) + '%';
-      } else {
-        bar.style.left = '50%';
-        bar.style.width = (v * 50) + '%';
-      }
+      var barLeft = v < 0 ? (50 + v * 50) : 50;
+      var barWidth = Math.abs(v) * 50;
+      bar.style.left = barLeft + '%';
+      bar.style.width = '0%';
       track.appendChild(center);
       track.appendChild(bar);
+      // 순위 막대와 마찬가지로 다음 프레임에 너비를 줘야 트랜지션이 돈다
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () { bar.style.width = barWidth + '%'; });
+      });
 
       // 스크린리더용 설명 (막대는 눈으로만 보이는 정보라서)
       var sr = document.createElement('span');
@@ -512,6 +528,18 @@
     el['btn-share'].addEventListener('click', onShare);
     el['btn-image'].addEventListener('click', onImage);
     el['btn-restart'].addEventListener('click', restart);
+
+    // 커뮤니티는 아직 붙일 곳이 없다. 눌러도 아무 일도 안 일어나면
+    // 고장난 걸로 보이니 준비 중이라는 것만 알려준다.
+    el['btn-community'].addEventListener('click', function () {
+      var note = el['btn-community'].nextElementSibling;
+      if (!note) return;
+      note.textContent = '아직 준비 중이에요. 열리면 여기서 바로 신청할 수 있어요.';
+      clearTimeout(el['btn-community']._t);
+      el['btn-community']._t = setTimeout(function () {
+        note.textContent = '아직 준비 중이에요';
+      }, 3200);
+    });
 
     // Enter 로 다음. 좌우 방향키는 건드리지 않는다 — radio 그룹의
     // 기본 이동 동작을 뺏으면 키보드 사용자가 선택을 못 바꾼다.
