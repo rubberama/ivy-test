@@ -11,7 +11,9 @@
   'use strict';
 
   var LETTERS = ['A', 'B', 'C', 'D'];
-  var STORE_KEY = 'ivy.progress.' + SHARE_VERSION;
+  // 같은 도메인의 다른 테스트와 진행 상황이 섞이면 안 된다.
+  var STORE_KEY = 'quiz.' + (typeof TEST_ID !== 'undefined' ? TEST_ID : 'default') +
+    '.' + SHARE_VERSION;
   var LOADING_MS = 900;
 
   var state = {
@@ -457,6 +459,7 @@
   // 학부모가 실제로 먼저 묻는 것들 — 학비 지원, 어디서 어떻게 사는지, 졸업 후.
   // 학생 모드에서는 통째로 숨긴다.
   function renderParentFacts(school) {
+    if (!el['parent-facts-block'] || !el['parent-facts']) return;
     var show = state.mode === 'parent' && school.forParents;
     el['parent-facts-block'].classList.toggle('hidden', !show);
     if (!show) return;
@@ -616,7 +619,8 @@
 
     // 커뮤니티는 아직 붙일 곳이 없다. 눌러도 아무 일도 안 일어나면
     // 고장난 걸로 보이니 준비 중이라는 것만 알려준다.
-    el['btn-community'].addEventListener('click', function () {
+    // 이 블록이 없는 테스트도 있을 수 있다
+    if (el['btn-community']) el['btn-community'].addEventListener('click', function () {
       var note = el['btn-community'].nextElementSibling;
       if (!note) return;
       note.textContent = '아직 준비 중이에요. 열리면 여기서 바로 신청할 수 있어요.';

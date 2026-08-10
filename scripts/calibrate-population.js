@@ -29,11 +29,13 @@ var load = function (p) { return require(path.join(ROOT, p)); };
 var axes = load('js/data/axes.js');
 var schools = load('js/data/schools.js');
 var questions = load('js/data/questions.js');
+var tuning = load('js/data/tuning.js');
 global.AXES = axes.AXES;
 global.AXIS_IDS = axes.AXIS_IDS;
 global.SCHOOLS = schools.SCHOOLS;
 global.SCHOOLS_BY_ID = schools.SCHOOLS_BY_ID;
 global.QUESTIONS = questions.QUESTIONS;
+global.TUNING = tuning.TUNING;
 var scoring = load('js/scoring.js');
 
 var Q = questions.QUESTIONS;

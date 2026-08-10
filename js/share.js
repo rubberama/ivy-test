@@ -118,7 +118,7 @@ function decodeAnswers(code, expectedCount) {
 // 필요 없고, index.html 을 파일로 직접 열었을 때만 쓰인다
 // (file:///Users/... 주소는 남에게 보내도 안 열리니까).
 // 다른 곳에 배포했다면 여기를 바꿔주세요.
-var SITE_URL = 'https://ivy-test.vercel.app/';
+var SITE_URL = 'https://ivy-test-two.vercel.app/';
 
 function isFileProtocol() {
   return location.protocol === 'file:';
