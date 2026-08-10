@@ -29,10 +29,29 @@ python3 -m http.server 8000
 
 ## 배포
 
-정적 파일뿐이라 설정 없이 그대로 올라갑니다.
+정적 파일뿐이라 빌드 없이 그대로 올라갑니다.
 
-- **GitHub Pages** — 저장소 Settings → Pages → 브랜치 루트 선택
-- **Vercel / Netlify** — 저장소 연결 후 빌드 명령 비움, 퍼블리시 디렉터리 `/`
+### Vercel (권장)
+
+1. [vercel.com/new](https://vercel.com/new) → GitHub 연결 → 이 저장소 Import
+2. **Framework Preset: Other**, **Build Command 비움**, **Output Directory 비움**(루트)
+3. Deploy
+
+`vercel.json` 에 캐시·보안 헤더가 들어 있습니다. HTML·CSS·JS 는 파일명에 해시가 없어서 `must-revalidate` 로 두었습니다 — 오래 캐시하면 수정해도 예전 화면이 남습니다.
+
+**배포 주소가 정해지면 반드시 반영하세요.** 링크 미리보기의 `og:image` 는 절대 주소여야 해서, 도메인이 다르면 카드가 안 뜹니다.
+
+```bash
+node scripts/set-site-url.js https://실제-주소.vercel.app
+node scripts/build-preview.js
+git commit -am "배포 주소 변경" && git push
+```
+
+확인: `https://실제-주소/og.png` 가 브라우저에서 열려야 합니다.
+
+### GitHub Pages
+
+Settings → Pages → 브랜치와 `/ (root)` 선택. `.nojekyll` 이 있어서 Jekyll 처리를 건너뜁니다. 이 경우에도 위의 `set-site-url` 을 Pages 주소로 한 번 돌려주세요.
 
 ### 단일 파일로 합치기
 

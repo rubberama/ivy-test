@@ -1,0 +1,6 @@
+# 배포에 올릴 필요 없는 것들. 빌드·검증용 스크립트와 문서다.
+scripts/
+README.md
+
+# 서브셋 원본 폰트 (혹시 로컬에 받아둔 경우). 610KB 이고 런타임엔 안 쓴다.
+fonts/SUIT-Variable.woff2

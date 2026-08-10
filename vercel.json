@@ -1,0 +1,29 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Permissions-Policy", "value": "geolocation=(), microphone=(), camera=()" }
+      ]
+    },
+    {
+      "//": "파일 이름에 해시가 없어서 오래 캐시하면 수정해도 예전 화면이 남는다. ETag 로 304 를 받게 하고 내용은 항상 최신으로 유지한다.",
+      "source": "/(.*).(html|css|js)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
+      ]
+    },
+    {
+      "//": "링크 미리보기 이미지. 메신저가 어차피 자기 쪽에 캐시하므로 짧게 잡아도 손해가 없고, 바꿨을 때 빨리 반영된다.",
+      "source": "/og.png",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=3600, must-revalidate" }
+      ]
+    }
+  ]
+}
