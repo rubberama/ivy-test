@@ -42,6 +42,18 @@
 
   function copy() { return MODE_COPY[state.mode] || MODE_COPY.student; }
 
+  // 결과 이미지를 그리기 전에 SUIT 가 실제로 준비됐는지 확인한다.
+  // document.fonts 가 없는 구형 브라우저에서는 그냥 진행한다.
+  function fontsReady() {
+    if (!document.fonts || !document.fonts.load) {
+      return new Promise(function (r) { requestAnimationFrame(function () { r(); }); });
+    }
+    var weights = [400, 600, 700];
+    return Promise.all(weights.map(function (w) {
+      return document.fonts.load(w + ' 40px SUIT', '가나다ABC0123%');
+    })).catch(function () { /* 실패해도 대체 폰트로 그린다 */ });
+  }
+
   // 질문/선택지 문구는 모드별로 두 벌이다. 한쪽이 비어 있으면 학생용으로 떨어진다.
   function pick(bundle) {
     if (typeof bundle === 'string') return bundle;
@@ -512,8 +524,10 @@
     var prev = el['btn-image'].textContent;
     el['btn-image'].textContent = '이미지 만드는 중…';
 
-    // 그리기는 동기라서, 버튼 상태가 화면에 반영된 뒤에 시작하도록 한 프레임 미룬다
-    requestAnimationFrame(function () {
+    // 캔버스는 CSS 폰트를 참조만 할 뿐 로딩을 기다려주지 않는다.
+    // SUIT 가 아직 안 올라왔으면 대체 폰트로 그려져서 화면과 다른 이미지가
+    // 나오므로, 폰트가 준비된 뒤에 그린다.
+    fontsReady().then(function () {
       try {
         renderResultCard(el['export-canvas'], state.result, copy());
         saveResultCard(el['export-canvas'], state.result).then(function (outcome) {

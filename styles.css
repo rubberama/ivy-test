@@ -3,14 +3,13 @@
 
    방향: 앱 카드를 쌓는 화면이 아니라 대학 안내 책자에 가깝게.
    둥근 카드 대신 헤어라인 괘선으로 구획을 나누고, 라운드를 크게 줄이고,
-   여백에 큰 세리프 숫자를 둔다.
+   여백에 큰 숫자를 둔다.
 
    색: 아이비 그린을 주색으로. 회색도 중립 회색이 아니라 초록 쪽으로
    살짝 기울여서 화면 전체가 한 계열로 묶이게 했다.
 
-   서체: 영문·숫자는 고전 세리프, 한글은 산세리프. 한글 명조는 기기마다
-   있고 없고가 갈려서(특히 안드로이드) 본문에 쓰지 않는다. 세리프는
-   영문 학교명·큰 숫자·번호처럼 확실히 살아나는 자리에만 쓴다.
+   서체: SUIT 한 벌만 쓴다. 굵기(400-800)와 크기, 자간으로만 위계를
+   만든다. 이탤릭은 쓰지 않는다.
    ═══════════════════════════════════════════════════════════════ */
 
 :root {
@@ -42,10 +41,13 @@
 
   --shell: 460px;
 
-  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua",
-           Georgia, "Bitstream Charter", "Times New Roman", serif;
-  --sans:  -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard",
-           "Noto Sans KR", "Malgun Gothic", "맑은 고딕", system-ui, sans-serif;
+  /* 전부 SUIT 한 벌로 간다. fonts/suit.css 가 서브셋을 심어준다.
+     폰트가 안 뜨는 환경을 위한 대체 스택만 뒤에 붙여둔다. */
+  --sans: 'SUIT', -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
+          "Pretendard", "Noto Sans KR", "Malgun Gothic", system-ui, sans-serif;
+  /* 예전에 숫자·영문에 세리프를 쓰던 자리. 이제 같은 SUIT 를 가리키지만
+     선택자를 그대로 두려고 변수는 남겨둔다. */
+  --serif: var(--sans);
 }
 
 /* ── 리셋 ─────────────────────────────────────────────────── */
@@ -122,7 +124,7 @@ button {
   height: 54px;
 }
 
-/* 워드마크는 세리프 + 큰 자간. 로고 이미지 없이 활자로만 만든다 */
+/* 워드마크는 큰 자간으로만 만든다. 로고 이미지는 쓰지 않는다 */
 .logo {
   font-family: var(--serif);
   font-size: 19px;
@@ -195,12 +197,12 @@ main { padding: 30px 22px 44px; }
   text-wrap: balance;
 }
 
-/* 표제의 영문 한 줄. 세리프가 살아나는 자리 */
+/* 표제 위의 영문 한 줄 */
 .hero-en {
-  font-family: var(--serif);
-  font-size: 13px;
-  font-style: italic;
-  letter-spacing: .01em;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
   color: var(--brass);
 }
 
@@ -658,13 +660,13 @@ main { padding: 30px 22px 44px; }
 
 .detail-part + .detail-part { margin-top: 20px; }
 
+/* 이탤릭을 뺐으니 굵기와 자간으로 구분한다 */
 .detail-head {
-  font-family: var(--serif);
-  font-size: 12px;
-  font-style: italic;
+  font-size: 11px;
+  font-weight: 700;
   color: var(--brass);
-  margin-bottom: 6px;
-  letter-spacing: .02em;
+  margin-bottom: 7px;
+  letter-spacing: .07em;
 }
 
 .detail-body { color: var(--ink-soft); font-size: 14.5px; line-height: 1.78; }
@@ -679,11 +681,10 @@ main { padding: 30px 22px 44px; }
 }
 
 .facts dt {
-  font-family: var(--serif);
-  font-size: 12px;
-  font-style: italic;
+  font-size: 11px;
+  font-weight: 700;
   color: var(--brass);
-  letter-spacing: .02em;
+  letter-spacing: .07em;
   padding-top: 13px;
   border-top: 1px solid var(--rule-soft);
 }

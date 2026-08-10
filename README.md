@@ -52,6 +52,8 @@ node scripts/build-preview.js
 ```
 index.html                     인트로 / 질문 / 계산중 / 결과 화면을 JS 로 토글
 styles.css                     디자인 토큰 + 전체 스타일
+fonts/suit.css                 SUIT 서브셋 (data URI, 스크립트가 생성)
+og.png                         링크 미리보기 카드 1200x630
 js/data/axes.js                성향 축 7개 정의
 js/data/copy.js                모드별 화면 문구 (학생 / 학부모)
 js/data/schools.js             8개교 프로필 (벡터 + 모드별 해설 + 학부모용 현실 조건)
@@ -62,9 +64,41 @@ js/resultImage.js              canvas 결과 이미지 (1080x1350)
 js/app.js                      상태 머신 · 렌더링 · 이벤트
 scripts/check-reachability.js  매칭 엔진 검증 (node 로 실행)
 scripts/build-preview.js       단일 파일로 합치기
+scripts/build-font.py          SUIT 서브셋 생성
+scripts/build-og.js            링크 미리보기 이미지 생성
 ```
 
 학교 로고·문장·워드마크는 전부 등록상표라 쓰지 않습니다. 화면에는 활자와 학교 상징색만 씁니다.
+
+## 폰트
+
+전부 [SUIT](https://sun.fo/suit) 한 벌만 씁니다 (SUNN, SIL Open Font License 1.1). 이탤릭은 쓰지 않고, 굵기(400–800)와 크기·자간으로만 위계를 만듭니다.
+
+CDN 을 못 씁니다 — 아티팩트는 CSP 로 외부 요청을 막고, `index.html` 을 더블클릭해서 여는 경우에도 CDN 은 동작하지 않습니다. 그래서 폰트를 파일 안에 data URI 로 심되, **앱 소스에 실제로 등장하는 글자만 남겨** 크기를 줄입니다.
+
+```bash
+# 원본 폰트를 받아 fonts/ 에 둔 뒤
+curl -L -o fonts/SUIT-Variable.woff2 \
+  https://raw.githubusercontent.com/sun-typeface/SUIT/main/fonts/variable/woff2/SUIT-Variable.woff2
+
+python3 scripts/build-font.py     # 필요: pip install fonttools brotli
+```
+
+610KB → **112KB** (한글 662자, 가변축 wght 400–800 유지). 가변축을 100–900 그대로 두면 154KB, 정적 두 벌로 만들면 90KB 지만 500·600 굵기가 가장 가까운 값으로 튀어서 400–800 부분 인스턴싱을 택했습니다.
+
+> **문구를 수정했으면 이 스크립트를 다시 돌리세요.** 서브셋에 없는 글자를 새로 쓰면 그 글자만 시스템 폰트로 떨어집니다.
+
+## 링크 미리보기
+
+카카오톡·인스타 등에 링크를 붙였을 때 뜨는 카드는 `index.html` 의 OG 메타 태그와 `og.png` 로 만들어집니다.
+
+```bash
+node scripts/build-og.js          # 필요: npm i -D playwright
+```
+
+`og:image` 는 크롤러가 직접 받아가야 해서 **절대 https 주소**여야 합니다. data URI 나 상대 경로로는 미리보기가 뜨지 않습니다. **배포 도메인이 바뀌면 `index.html` 의 `og:url` 과 `og:image` 주소를 같이 바꾸세요.**
+
+카카오톡은 미리보기를 오래 캐시합니다. 바꿔도 그대로면 [카카오 디버거](https://developers.kakao.com/tool/debugger/sharing)에서 캐시를 초기화하세요.
 
 `<script type="module">` 을 쓰지 않고 일반 `<script>` 로 순서대로 로드합니다. ES 모듈은 `file://` 에서 CORS 때문에 막혀서 더블클릭 실행이 안 되기 때문입니다. 외부 CDN·웹폰트·라이브러리도 쓰지 않습니다.
 

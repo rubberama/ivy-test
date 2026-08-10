@@ -21,10 +21,14 @@ var read = function (p) { return fs.readFileSync(path.join(ROOT, p), 'utf8'); };
 var html = read('index.html');
 
 /* ── CSS 인라인 ────────────────────────────────────────────── */
+// /g 가 있어야 한다. 폰트(fonts/suit.css)와 본 스타일 두 장이 걸려 있는데
+// 하나만 처리하면 나머지가 외부 참조로 남아서 단일 파일이 깨진다.
+var inlinedCss = [];
 html = html.replace(
-  /[ \t]*<link rel="stylesheet" href="([^"]+)">/,
+  /[ \t]*<link rel="stylesheet" href="([^"]+)">/g,
   function (_, href) {
-    return '<style>\n' + read(href).trim() + '\n</style>';
+    inlinedCss.push(href);
+    return '<style>\n/* === ' + href + ' === */\n' + read(href).trim() + '\n</style>';
   }
 );
 
@@ -61,9 +65,9 @@ var bodyInner = html.slice(
 ).trim();
 
 var title = (/<title>([^<]*)<\/title>/.exec(html) || [, ''])[1];
-var styleBlock = (/<style>[\s\S]*?<\/style>/.exec(html) || [''])[0];
+var styleBlocks = (html.match(/<style>[\s\S]*?<\/style>/g) || []).join('\n');
 
-var embed = '<title>' + title + '</title>\n' + styleBlock + '\n' + bodyInner + '\n';
+var embed = '<title>' + title + '</title>\n' + styleBlocks + '\n' + bodyInner + '\n';
 
 fs.mkdirSync(path.join(ROOT, 'dist'), { recursive: true });
 fs.writeFileSync(path.join(ROOT, 'dist/embed.html'), embed);
@@ -71,6 +75,8 @@ fs.writeFileSync(path.join(ROOT, 'dist/embed.html'), embed);
 /* ── 보고 ──────────────────────────────────────────────────── */
 function kb(p) { return (fs.statSync(path.join(ROOT, p)).size / 1024).toFixed(1) + 'KB'; }
 
+console.log('인라인한 스타일 ' + inlinedCss.length + '개:');
+inlinedCss.forEach(function (s) { console.log('  · ' + s); });
 console.log('인라인한 스크립트 ' + inlined.length + '개:');
 inlined.forEach(function (s) { console.log('  · ' + s); });
 console.log('');

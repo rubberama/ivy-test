@@ -1,3 +1,7 @@
 # 빌드 산출물. preview.html 은 배포용이라 커밋하지만,
 # embed 용 조각은 필요할 때 다시 만들면 된다.
 dist/
+
+# 서브셋 원본 폰트. fonts/suit.css 에 이미 심어져 있어 런타임엔 필요 없다.
+# 다시 빌드하려면 scripts/build-font.py 주석의 주소에서 받으면 된다.
+fonts/SUIT-Variable.woff2

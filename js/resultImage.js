@@ -8,8 +8,10 @@
 var CARD_W = 1080;
 var CARD_H = 1350;
 
-var KO_FONT = '"Apple SD Gothic Neo","Pretendard","Noto Sans KR","Malgun Gothic",system-ui,sans-serif';
-var SERIF = '"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Bitstream Charter",serif';
+// 화면과 같은 SUIT 한 벌만 쓴다. 캔버스는 CSS 의 @font-face 를 그대로
+// 참조하므로, 폰트가 로드된 뒤에 그려야 대체 폰트로 안 그려진다.
+var KO_FONT = "'SUIT','Apple SD Gothic Neo','Pretendard','Noto Sans KR','Malgun Gothic',system-ui,sans-serif";
+var SERIF = KO_FONT;
 
 // 화면과 같은 색을 쓴다. 여기 값을 바꾸면 styles.css 도 같이 바꿀 것.
 var C = {
