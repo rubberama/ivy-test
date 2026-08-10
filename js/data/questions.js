@@ -245,7 +245,7 @@ const QUESTIONS = [
       },
       {
         label: {
-          student: '그 시간에 내 일정을 소화해요',
+          student: '그 시간에 내 할 일을 해요',
           parent: '그 시간에 자기 할 일을 해요',
         },
         weights: { community: 2, setting: -1 },
@@ -674,35 +674,35 @@ const QUESTIONS = [
     id: 'q18',
     primary: 'pace',
     text: {
-      student: '무엇을 이뤘을 때 가장 뿌듯할 것 같나요?',
-      parent: '아이는 무엇을 이뤘을 때 가장 뿌듯해할까요?',
+      student: '언제 가장 뿌듯할 것 같나요?',
+      parent: '아이는 언제 가장 뿌듯해할까요?',
     },
     options: [
       {
         label: {
-          student: '누가 봐도 인정하는 자리에 올라가는 것이요',
-          parent: '누가 봐도 인정하는 자리에 올라가는 것이요',
+          student: '누가 봐도 인정하는 자리에 올라갔을 때요',
+          parent: '누가 봐도 인정하는 자리에 올라갔을 때요',
         },
         weights: { pace: -2, community: 1 },
       },
       {
         label: {
-          student: '내 분야에서 실력으로 증명하는 것이요',
-          parent: '자기 분야에서 실력으로 증명하는 것이요',
+          student: '내 분야에서 실력으로 증명했을 때요',
+          parent: '자기 분야에서 실력으로 증명했을 때요',
         },
         weights: { pace: -1, field: 1 },
       },
       {
         label: {
-          student: '좋은 사람들과 오래 함께하는 것이요',
-          parent: '좋은 사람들과 오래 함께하는 것이요',
+          student: '좋은 사람들과 오래 함께했을 때요',
+          parent: '좋은 사람들과 오래 함께했을 때요',
         },
         weights: { pace: 1, community: -1 },
       },
       {
         label: {
-          student: '하루하루가 나에게 만족스러운 것이요',
-          parent: '하루하루가 본인에게 만족스러운 것이요',
+          student: '하루하루가 나에게 만족스러울 때요',
+          parent: '하루하루가 본인에게 만족스러울 때요',
         },
         weights: { pace: 2, setting: 1 },
       },

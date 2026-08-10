@@ -43,7 +43,7 @@ var MODE_COPY = {
     cardEyebrow: 'Your closest match',
     cardLead: '나랑 제일 잘 맞는 아이비는',
     cardTraits: '이런 성향이 결정적이었어요',
-    cardFoot: '18개 질문으로 알아보는 나와 맞는 아이비리그',
+    cardFoot: '18개 질문으로 찾는 나의 아이비리그',
     taglineOf: function (school) { return school.tagline; },
   },
 
@@ -79,7 +79,7 @@ var MODE_COPY = {
     cardEyebrow: 'Closest match for your child',
     cardLead: '우리 아이와 맞는 아이비는',
     cardTraits: '아이의 이런 성향이 결정적이었어요',
-    cardFoot: '18개 질문으로 알아보는 우리 아이와 맞는 아이비리그',
+    cardFoot: '18개 질문으로 찾는 우리 아이의 아이비리그',
     taglineOf: function (school) { return school.taglineParent || school.tagline; },
   },
 };
