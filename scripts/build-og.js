@@ -128,7 +128,7 @@ h1{
       <span class="bar"><i style="width:85%"></i></span></div>
     <div class="row"><span class="n">3</span><span class="nm">코넬</span><span class="pc">79%</span>
       <span class="bar"><i style="width:79%"></i></span></div>
-    <p class="foot">재미로 보는 성향 매칭이에요<br>합격 가능성 예측이 아닙니다</p>
+    <p class="foot">재미로 보는 성향 매칭이에요<br>합격 가능성 예측이 아니에요</p>
   </div>
 </div>`;
 

@@ -280,7 +280,7 @@ function renderResultCard(canvas, result, copy) {
 
   ctx.fillStyle = C.inkFaint;
   ctx.font = font(500, 24);
-  ctx.fillText('재미로 보는 성향 매칭이에요 · 합격 가능성 예측이 아닙니다', pad, footerTop);
+  ctx.fillText('재미로 보는 성향 매칭이에요 · 합격 가능성 예측이 아니에요', pad, footerTop);
   ctx.font = font(500, 24);
   ctx.fillStyle = C.inkFaint;
   ctx.fillText(c.cardFoot || '18개 질문으로 알아보는 나와 맞는 아이비리그', pad, footerTop + 36);

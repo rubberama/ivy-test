@@ -354,7 +354,7 @@
     el['share-hint'].textContent = '';
     el['btn-share'].disabled = !canShareLink();
     if (!canShareLink()) {
-      el['share-hint'].textContent = '파일로 직접 열면 링크 공유는 쓸 수 없어요. 웹에 올리면 켜집니다.';
+      el['share-hint'].textContent = '파일로 직접 열면 링크 공유는 쓸 수 없어요. 웹에 올리면 켜져요.';
     }
   }
 
@@ -425,7 +425,11 @@
       var tag = document.createElement('span');
       tag.className = 'why-tag';
       tag.textContent = reason.axis.name;      // 태그는 축 이름, 문장은 어느 쪽인지
-      var pole = reason.side === 'neg' ? reason.axis.neg : reason.axis.pos;
+      // 긴 라벨(neg/pos)이 아니라 짧은 라벨을 쓴다. 긴 쪽은 차트 양끝에 세워두려고
+      // 만든 문구라 문장 안에 넣으면 "협력·여유·내 페이스 쪽으로…" 처럼 늘어지고,
+      // 1인칭이 섞여 있어서 학부모 모드에서는 주어까지 어긋난다.
+      // 짧은 라벨은 축 그래프에 그대로 보이는 말이라 결과를 읽을 때도 이어진다.
+      var pole = reason.label;
       var txt = document.createElement('span');
       txt.textContent = c.reasons[i % c.reasons.length](pole) + ' ' +
         josa(top.school.nameKo, '이', '가') + ' 딱 그런 학교예요.';
@@ -521,12 +525,16 @@
       });
 
       // 스크린리더용 설명 (막대는 눈으로만 보이는 정보라서)
+      // 거의 중립일 때는 방향을 말하면 안 된다. "독립적 쪽으로 거의 중립이에요"는
+      // 앞뒤가 안 맞고, 사실 그 방향 자체가 반올림 오차 수준이라 의미도 없다.
       var sr = document.createElement('span');
       sr.className = 'offscreen';
-      var strength = Math.abs(v) < 0.15 ? '거의 중립이에요'
-        : Math.abs(v) < 0.5 ? '약간 기울었어요' : '뚜렷하게 기울었어요';
-      sr.textContent = axis.name + ': ' +
-        (v < 0 ? axis.negShort : axis.posShort) + ' 쪽으로 ' + strength;
+      var side = v < 0 ? axis.negShort : axis.posShort;
+      sr.textContent = axis.name + ': ' + (
+        Math.abs(v) < 0.15 ? '어느 쪽으로도 크게 기울지 않았어요'
+          : Math.abs(v) < 0.5 ? side + ' 쪽으로 약간 기울었어요'
+            : side + ' 쪽으로 뚜렷하게 기울었어요'
+      );
 
       row.appendChild(poles);
       row.appendChild(track);
