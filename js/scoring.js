@@ -25,12 +25,15 @@ var CALIB = {
   W_COS: 0.65, // 1위 학교와 방향이 얼마나 맞는가
   W_DEC: 0.35, // 답변이 얼마나 한쪽으로 뚜렷했는가
 
-  // 각 재료를 0~1로 펴는 구간 (실제 관측 분포 기준)
-  COS_LO: 0.35, COS_HI: 0.92,
+  // 각 재료를 0~1로 펴는 구간 (실제 관측 분포 기준).
+  // 점수가 코사인이 아니라 학교별 표준화 점수(z)라서 척도가 다르다.
+  // scripts/calibrate-population.js 가 출력하는 p05/p95 에 맞춘다.
+  COS_LO: 0.76, COS_HI: 2.07,
   DEC_LO: 0.15, DEC_HI: 0.55,
 
-  // 2·3위가 1위에서 얼마나 빨리 멀어지는가
-  GAP_K: 0.35,
+  // 2·3위가 1위에서 얼마나 빨리 멀어지는가.
+  // 표준화 점수의 격차는 코사인 격차보다 크기 때문에 계수는 작아야 한다.
+  GAP_K: 0.11,
   MIN_STEP: 2,  // 순위 간 최소 격차
   FLOOR: 52,    // 3위 하한
 
@@ -81,6 +84,55 @@ function computeAxisStats() {
 // 표준편차 몇 배까지를 "완전히 기울었다(±1)"로 볼지.
 // 2.2 면 대략 상·하위 1~2% 지점이 양 끝에 닿는다.
 var Z_SPAN = 2.2;
+
+/**
+ * 응답자 집단의 기준점.
+ *
+ * 앞의 두 보정(학교 행렬 센터링, 문항 편향 제거)까지 마쳐도 실제 서비스에서는
+ * 유펜과 코넬이 결과의 70% 가까이를 가져갔다. 질문이 편향된 게 아니라
+ * 응답자가 편향된 것이다 — 유학 테스트를 하는 한국 학생·학부모는 실용·커리어와
+ * STEM·응용 쪽으로 뚜렷하게 쏠려 있고, 그 방향을 소유한 학교가 정확히 그 둘이다.
+ *
+ * 그래서 "이론적 중립"이 아니라 "보통의 응답자"를 원점으로 삼는다. 이러면
+ * 매칭이 절대 위치가 아니라 또래 대비 어느 쪽으로 특이한지를 재게 된다.
+ * 성향 검사가 변별력을 가지려면 이쪽이 맞다 — 모두가 실용적이면 실용은
+ * 그 사람을 설명하는 정보가 아니다.
+ *
+ * 이 값은 scripts/calibrate-population.js 가 뽑는다. 실제 응답 데이터가
+ * 쌓이면 그 평균으로 바꾸는 게 가장 정확하다.
+ */
+var POPULATION_BIAS = {
+  curriculum: 0.004,
+  orientation: 0.584,
+  setting: -0.066,
+  scale: 0.291,
+  pace: -0.187,
+  community: 0.122,
+  field: 0.499,
+};
+
+/**
+ * 학교별 원점수 분포. 순위를 매길 때 코사인을 그대로 쓰지 않고
+ * 이 값으로 표준화해서 z점수로 비교한다.
+ *
+ * 기준점을 옮기는 것(POPULATION_BIAS)만으로는 부족했다. 평균은 맞춰지지만
+ * 축끼리 상관이 있어서(실용을 고르는 사람이 STEM 도 고른다) 그 방향에 놓인
+ * 학교가 여전히 더 자주 이긴다. 학교마다 "이 집단에서 이 학교가 보통 받는
+ * 점수"로 나눠주면 그 이점이 사라진다. 시험 성적을 과목별 평균·표준편차로
+ * 표준화해 비교하는 것과 같은 처리다.
+ *
+ * 이 값도 scripts/calibrate-population.js 가 뽑는다.
+ */
+var SCHOOL_CALIB = {
+  brown: { mean: -0.0570, std: 0.4338 },
+  columbia: { mean: 0.0134, std: 0.4708 },
+  dartmouth: { mean: -0.0244, std: 0.5178 },
+  cornell: { mean: 0.0930, std: 0.3620 },
+  penn: { mean: 0.1128, std: 0.4612 },
+  princeton: { mean: -0.0705, std: 0.4182 },
+  yale: { mean: -0.0987, std: 0.4209 },
+  harvard: { mean: 0.0290, std: 0.4127 },
+};
 
 // 학교 벡터를 [-1,1]로 줄이고, 축마다 8개교 평균을 빼서 상대 차이만 남긴다.
 // 이렇게 해야 "아이비는 대체로 도시적" 같은 공통 성분이 순위에 안 섞인다.
@@ -138,6 +190,8 @@ function buildUserVector(answers) {
   AXIS_IDS.forEach(function (id) {
     var st = AXIS_STATS[id];
     var v = (sums[id] - st.mean * ratio) / (Z_SPAN * st.std);
+    // 보통의 응답자를 원점으로 옮긴다. 중간에 그만둔 상태라면 답한 만큼만 뺀다.
+    v -= (POPULATION_BIAS[id] || 0) * ratio;
     u[id] = v < -1 ? -1 : v > 1 ? 1 : v;
   });
   return u;
@@ -188,8 +242,14 @@ function scoreAnswers(answers) {
     var dot = 0;
     for (var k = 0; k < uVec.length; k++) dot += c.vec[k] * uVec[k];
     var cos = (uNorm > 0 && c.norm > 0) ? dot / (uNorm * c.norm) : 0;
+    // 학교별 분포로 표준화한 뒤에 비교한다. 이 값이 순위와 퍼센트를 모두 정한다.
+    var cal = SCHOOL_CALIB[c.id] || { mean: 0, std: 1 };
+    var z = (cos - cal.mean) / (cal.std || 1);
     var jitter = (((h >>> (i * 3)) & 7) - 3.5) * 1e-6;
-    return { id: c.id, school: SCHOOLS_BY_ID[c.id], cos: cos, sort: cos + jitter };
+    return {
+      id: c.id, school: SCHOOLS_BY_ID[c.id],
+      raw: cos, cos: z, sort: z + jitter,
+    };
   });
 
   scored.sort(function (a, b) { return b.sort - a.sort; });
@@ -212,7 +272,12 @@ function scoreAnswers(answers) {
   }
 
   var ranked = scored.map(function (s, i) {
-    return { id: s.id, school: s.school, percent: percents[i], cos: s.cos };
+    return {
+      id: s.id, school: s.school, percent: percents[i],
+      score: s.cos,   // 표준화 점수 (순위·퍼센트의 근거)
+      raw: s.raw,     // 표준화 전 코사인 (보정값을 다시 뽑을 때 쓴다)
+      cos: s.cos,
+    };
   });
 
   return {
