@@ -37,7 +37,15 @@ python3 -m http.server 8000
 2. **Framework Preset: Other**, **Build Command 비움**, **Output Directory 비움**(루트)
 3. Deploy
 
-`vercel.json` 에 캐시·보안 헤더가 들어 있습니다. HTML·CSS·JS 는 파일명에 해시가 없어서 `must-revalidate` 로 두었습니다 — 오래 캐시하면 수정해도 예전 화면이 남습니다.
+#### vercel.json 에 대해
+
+캐시·보안 헤더가 들어 있습니다.
+
+- **HTML·CSS·JS 는 `max-age=0, must-revalidate`** — 파일명에 해시가 없어서 오래 캐시하면 수정해도 예전 화면이 남습니다. ETag 로 304 를 받으므로 실제 전송량은 거의 없습니다.
+- **`og.png` 는 1시간** — 메신저가 어차피 자기 쪽에 캐시하므로 짧게 잡아도 손해가 없고, 바꿨을 때 빨리 반영됩니다.
+- `nosniff`, `Referrer-Policy`, `Permissions-Policy` 를 전체 경로에 적용합니다.
+
+> **이 파일에 주석을 넣지 마세요.** JSON 에는 주석이 없어서 흔히 `"//"` 키를 쓰지만, Vercel 은 스키마에 없는 속성을 거부하고 배포가 통째로 실패합니다 (`headers[1] should NOT have additional property "//"`). 설명이 필요하면 이 README 에 적으세요.
 
 **배포 주소가 정해지면 반드시 반영하세요.** 링크 미리보기의 `og:image` 는 절대 주소여야 해서, 도메인이 다르면 카드가 안 뜹니다.
 
