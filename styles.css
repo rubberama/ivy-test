@@ -107,29 +107,40 @@ button {
   padding: 0 22px;
 }
 
+/* 배경을 불투명하게 둔다. 반투명 + backdrop-filter 로 두면 스크롤할 때
+   아래 글자가 헤더를 비쳐 올라와서 유령처럼 겹쳐 보인다. 종이 느낌의
+   디자인에 프로스티드 글래스도 어울리지 않는다. */
 .site-header {
   position: sticky;
   top: 0;
   z-index: 20;
-  background: color-mix(in srgb, var(--paper) 90%, transparent);
-  backdrop-filter: saturate(1.4) blur(10px);
+  background: var(--paper);
   border-bottom: 1px solid var(--rule);
   padding-top: env(safe-area-inset-top);
 }
 
+/* align-items:baseline 만 주면 글자 뭉치가 바 위쪽에 붙는다.
+   바깥은 center 로 세로 중앙을 잡고, 안쪽에서 베이스라인을 맞춘다. */
 .header-inner {
   display: flex;
-  align-items: baseline;
-  gap: 9px;
+  align-items: center;
   height: 54px;
 }
 
-/* 워드마크는 큰 자간으로만 만든다. 로고 이미지는 쓰지 않는다 */
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+}
+
+/* 워드마크는 큰 자간으로만 만든다. 로고 이미지는 쓰지 않는다.
+   자간은 마지막 글자 뒤에도 붙기 때문에 그만큼 빼줘야 옆 글자와의
+   간격이 눈에 보이는 대로 나온다. */
 .logo {
-  font-family: var(--serif);
   font-size: 19px;
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: .16em;
+  margin-right: -.16em;
   color: var(--ivy);
   line-height: 1;
 }
@@ -560,6 +571,33 @@ main { padding: 30px 22px 44px; }
   text-transform: uppercase;
   color: var(--ink-faint);
 }
+
+/* 학교 이름 -> 그 학교 홈페이지. 밑줄 대신 얇은 밑선을 써서
+   본문 활자를 해치지 않게 하고, ↗ 로 바깥 링크임을 알린다. */
+.school-link {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid color-mix(in srgb, currentColor 28%, transparent);
+  transition: border-color .15s ease, opacity .15s ease;
+}
+.school-link:hover { border-bottom-color: currentColor; }
+.school-link:active { opacity: .7; }
+
+.school-link .ext {
+  display: inline-block;
+  margin-left: .22em;
+  font-size: .62em;
+  vertical-align: .28em;
+  opacity: .55;
+  border: 0;
+}
+
+/* 큰 표제에서는 밑선이 두꺼워 보여서 조금 더 옅게 */
+.school-link.is-hero {
+  border-bottom-width: 2px;
+  border-bottom-color: color-mix(in srgb, currentColor 20%, transparent);
+}
+.school-link.is-hero .ext { font-size: .38em; vertical-align: .95em; }
 
 .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; }
 

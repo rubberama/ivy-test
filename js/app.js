@@ -76,6 +76,37 @@
     return word + (hasFinalConsonant(word) ? withBatchim : withoutBatchim);
   }
 
+  /**
+   * 학교 이름을 그 학교 홈페이지로 가는 링크로 만든다.
+   * 바깥으로 나가는 링크라 새 탭으로 열고, 화살표로 표시해준다.
+   * (noopener 없이 target=_blank 를 쓰면 열린 페이지가 이쪽 창을 건드릴 수 있다)
+   */
+  function schoolLink(school, text, className) {
+    if (!school.url) {
+      var span = document.createElement('span');
+      span.className = className || '';
+      span.textContent = text;
+      return span;
+    }
+    var a = document.createElement('a');
+    a.className = 'school-link ' + (className || '');
+    a.href = school.url;
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+    a.title = school.nameEn + ' 홈페이지 (새 탭)';
+    a.appendChild(document.createTextNode(text));
+    var ext = document.createElement('span');
+    ext.className = 'ext';
+    ext.setAttribute('aria-hidden', 'true');
+    ext.textContent = '↗';
+    a.appendChild(ext);
+    var sr = document.createElement('span');
+    sr.className = 'offscreen';
+    sr.textContent = ' 홈페이지, 새 탭에서 열림';
+    a.appendChild(sr);
+    return a;
+  }
+
   /* ── 저장소 (file:// 에서는 던질 수 있어서 전부 감싼다) ────── */
   function saveProgress() {
     try {
@@ -294,7 +325,8 @@
     // 학교색은 결과 화면 전체에 퍼진다(이름·퍼센트·막대). 한 곳에서만 정한다.
     el['screen-result'].style.setProperty('--school', top.school.color);
     el['result-label'].textContent = c.resultLabel;
-    el['result-name'].textContent = top.school.nameKo;
+    el['result-name'].innerHTML = '';
+    el['result-name'].appendChild(schoolLink(top.school, top.school.nameKo, 'is-hero'));
     el['result-en'].textContent = top.school.nameEn;
     el['result-tagline'].textContent = state.mode === 'parent'
       ? (top.school.taglineParent || top.school.tagline)
@@ -338,7 +370,7 @@
       ord.className = 'rank-ordinal';
       ord.textContent = String(i + 1);
       name.appendChild(ord);
-      name.appendChild(document.createTextNode(item.school.nameKo));
+      name.appendChild(schoolLink(item.school, item.school.nameKo));
       var tag = document.createElement('p');
       tag.className = 'rank-tagline';
       tag.textContent = state.mode === 'parent'

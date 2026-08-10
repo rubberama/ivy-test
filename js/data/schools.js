@@ -23,6 +23,7 @@
 const SCHOOLS = [
   {
     id: 'brown',
+    url: 'https://www.brown.edu/',
     nameKo: '브라운',
     nameEn: 'Brown University',
     location: '미국 로드아일랜드주 프로비던스',
@@ -54,6 +55,7 @@ const SCHOOLS = [
   },
   {
     id: 'columbia',
+    url: 'https://www.columbia.edu/',
     nameKo: '컬럼비아',
     nameEn: 'Columbia University',
     location: '미국 뉴욕주 뉴욕시 맨해튼',
@@ -85,6 +87,7 @@ const SCHOOLS = [
   },
   {
     id: 'dartmouth',
+    url: 'https://www.dartmouth.edu/',
     nameKo: '다트머스',
     nameEn: 'Dartmouth College',
     location: '미국 뉴햄프셔주 하노버',
@@ -116,6 +119,7 @@ const SCHOOLS = [
   },
   {
     id: 'cornell',
+    url: 'https://www.cornell.edu/',
     nameKo: '코넬',
     nameEn: 'Cornell University',
     location: '미국 뉴욕주 이타카',
@@ -147,6 +151,7 @@ const SCHOOLS = [
   },
   {
     id: 'penn',
+    url: 'https://www.upenn.edu/',
     nameKo: '유펜',
     nameEn: 'University of Pennsylvania',
     location: '미국 펜실베이니아주 필라델피아',
@@ -178,6 +183,7 @@ const SCHOOLS = [
   },
   {
     id: 'princeton',
+    url: 'https://www.princeton.edu/',
     nameKo: '프린스턴',
     nameEn: 'Princeton University',
     location: '미국 뉴저지주 프린스턴',
@@ -209,6 +215,7 @@ const SCHOOLS = [
   },
   {
     id: 'yale',
+    url: 'https://www.yale.edu/',
     nameKo: '예일',
     nameEn: 'Yale University',
     location: '미국 코네티컷주 뉴헤이븐',
@@ -240,6 +247,7 @@ const SCHOOLS = [
   },
   {
     id: 'harvard',
+    url: 'https://www.harvard.edu/',
     nameKo: '하버드',
     nameEn: 'Harvard University',
     location: '미국 매사추세츠주 케임브리지',
