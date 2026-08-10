@@ -10,10 +10,32 @@
  */
 var MODES = ['student', 'parent'];
 
+/**
+ * 근거 세 줄의 꼬리말.
+ *
+ * reasons 는 앞부분 어투를 일부러 세 가지로 갈라놨는데, 예전에는 app.js 가
+ * 뒤에 "OO가 딱 그런 학교예요."를 고정으로 붙여서 세 줄이 결국 같은 문장으로
+ * 끝났다. 한 화면에 같은 말이 세 번 나오는 자리라 티가 제일 크게 났다.
+ * 꼬리말도 세 벌로 나눠 여기에 둔다.
+ *
+ * 학교 이름은 데이터에서 오므로 조사를 붙일 때 받침을 봐야 한다("유펜가").
+ * 그래서 app.js 의 josa 를 두 번째 인자로 받는다. '도'와 '에서'는 받침과
+ * 상관없이 그대로 붙으므로 josa 가 필요 없다.
+ * 꼬리말은 학교 얘기라 두 모드가 같은 것을 쓴다.
+ */
+var REASON_TAILS = [
+  function (name, josa) { return josa(name, '이', '가') + ' 딱 그런 학교예요.'; },
+  function (name) { return name + '도 그쪽에 가까워요.'; },
+  function (name) { return name + '에서 그 부분이 잘 맞아요.'; },
+];
+
 var MODE_COPY = {
   student: {
     pickLabel: '학생이에요',
     pickSub: '제가 직접 답할게요',
+    // pickLabel 은 인트로 선택 버튼용 완결 문장이다. 진행률·이어서 하기처럼
+    // 라벨 조각 사이에 끼우는 자리에는 종결어미가 없는 이 짧은 말을 쓴다.
+    shortLabel: '학생용',
 
     quizNote: '정답은 없어요. 더 나답게 느껴지고, 오래 해도 덜 지칠 것 같은 쪽을 골라주세요.',
     loading: '답변을 여덟 학교의 성향과 맞춰보고 있어요…',
@@ -34,10 +56,11 @@ var MODE_COPY = {
       function (pole) { return pole + ' 쪽에 무게를 두는 편이에요.'; },
       function (pole) { return pole + ' 쪽 답을 여러 번 골랐어요.'; },
     ],
+    reasonTails: REASON_TAILS,
 
     shareTitle: '나에게 맞는 아이비리그는?',
     shareText: function (name, pct) {
-      return '저는 ' + name + ' ' + pct + '% 나왔어요. 같이 해볼래요?';
+      return '나는 ' + name + ' ' + pct + '% 나왔어요. 같이 해볼래요?';
     },
 
     cardEyebrow: 'Your closest match',
@@ -50,6 +73,7 @@ var MODE_COPY = {
   parent: {
     pickLabel: '학부모예요',
     pickSub: '아이를 떠올리며 답할게요',
+    shortLabel: '학부모용',
 
     quizNote: '정답은 없어요. 아이를 떠올리면서 더 가까운 쪽을 골라주세요. ' +
       '바라는 모습이 아니라 실제 모습으로 답하실수록 결과가 정확해요.',
@@ -70,6 +94,7 @@ var MODE_COPY = {
       function (pole) { return pole + ' 쪽에 무게를 두는 아이예요.'; },
       function (pole) { return pole + ' 쪽 답을 여러 번 고르셨어요.'; },
     ],
+    reasonTails: REASON_TAILS,
 
     shareTitle: '내 아이에게 맞는 아이비리그는?',
     shareText: function (name, pct) {
@@ -85,5 +110,5 @@ var MODE_COPY = {
 };
 
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { MODES: MODES, MODE_COPY: MODE_COPY };
+  module.exports = { MODES: MODES, MODE_COPY: MODE_COPY, REASON_TAILS: REASON_TAILS };
 }

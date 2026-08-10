@@ -294,9 +294,11 @@ var isIOS = /iP(hone|ad|od)/.test(navigator.userAgent) ||
   (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
 /**
+ * @param {string} [alt] iOS 저장 시트의 이미지 대체 텍스트. 모드별로 달라야 해서
+ *   호출하는 쪽(app.js)이 copy 에서 꺼내 넘긴다. 안 넘기면 중립 문구로 떨어진다.
  * @returns {Promise<'shared'|'downloaded'|'longpress'|'failed'>}
  */
-function saveResultCard(canvas, result) {
+function saveResultCard(canvas, result, alt) {
   return new Promise(function (resolve) {
     if (!canvas.toBlob) { resolve('failed'); return; }
 
@@ -315,25 +317,25 @@ function saveResultCard(canvas, result) {
               .then(function () { resolve('shared'); })
               .catch(function (err) {
                 if (err && err.name === 'AbortError') { resolve('shared'); return; }
-                resolve(downloadBlob(blob, name));
+                resolve(downloadBlob(blob, name, alt));
               });
             return;
           }
         } catch (e) { /* 아래 다운로드로 진행 */ }
       }
 
-      resolve(downloadBlob(blob, name));
+      resolve(downloadBlob(blob, name, alt));
     }, 'image/png');
   });
 }
 
-function downloadBlob(blob, name) {
+function downloadBlob(blob, name, alt) {
   var url = URL.createObjectURL(blob);
 
   // iOS 사파리는 download 속성을 무시해서 그냥 새 탭에 이미지를 띄운다.
   // 이 경우엔 "꾹 눌러서 저장" 안내를 띄우는 게 한국 웹의 표준 패턴이다.
   if (isIOS) {
-    showLongPressSheet(url);
+    showLongPressSheet(url, alt);
     return 'longpress';
   }
 
@@ -347,13 +349,15 @@ function downloadBlob(blob, name) {
   return 'downloaded';
 }
 
-function showLongPressSheet(url) {
+function showLongPressSheet(url, alt) {
   var back = document.createElement('div');
   back.className = 'sheet-backdrop';
   back.innerHTML =
     '<div class="sheet" role="dialog" aria-modal="true" aria-label="이미지 저장">' +
     '<p class="sheet-title">이미지를 꾹 눌러서 저장하세요</p>' +
-    '<img class="sheet-img" alt="내 아이비리그 매칭 결과">' +
+    // 학부모 모드에서도 '내 아이비리그'로 읽히면 안 된다. 카드의 다른 문구는
+    // 전부 copy.js 로 모드를 가르는데 여기만 1인칭이 박혀 있었다.
+    '<img class="sheet-img" alt="' + (alt || '아이비리그 매칭 결과') + '">' +
     '<button type="button" class="btn btn-ghost btn-block sheet-close">닫기</button>' +
     '</div>';
   back.querySelector('.sheet-img').src = url;

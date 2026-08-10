@@ -187,7 +187,7 @@ const QUESTIONS = [
       {
         label: {
           student: '내가 제일 잘하고 싶어요. 결과가 눈에 보여야 해요',
-          parent: '본인이 제일 잘하고 싶어 해요',
+          parent: '자기가 제일 잘하고 싶어 해요. 결과가 눈에 보여야 해요',
         },
         weights: { pace: -2, orientation: 1 },
       },
@@ -283,7 +283,7 @@ const QUESTIONS = [
       },
       {
         label: {
-          student: '직접 조립하고 코딩해서 굴러가게 만들어요',
+          student: '부품, 코드, 회로. 직접 만들어서 굴러가게 하는 게 좋아요',
           parent: '직접 만들고 코딩해서 굴러가게 하는 걸 좋아해요',
         },
         weights: { field: 2, orientation: 1 },
@@ -428,8 +428,8 @@ const QUESTIONS = [
       },
       {
         label: {
-          student: '여러 개 걸쳐두고 상황 따라 오가는 곳이요',
-          parent: '여러 개 걸쳐두고 상황 따라 오가는 곳이요',
+          student: '여러 곳에 걸쳐두고 상황 따라 오갈 수 있는 데요',
+          parent: '여러 곳에 걸쳐두고 상황 따라 오갈 수 있는 데요',
         },
         weights: { scale: 1, curriculum: -1 },
       },
@@ -656,8 +656,8 @@ const QUESTIONS = [
       },
       {
         label: {
-          student: '춥긴 해도 실내에서 잘 지내면 돼요',
-          parent: '춥긴 해도 실내에서 잘 지내요',
+          student: '추운 건 추운 거고, 그것 때문에 학교를 거르진 않아요',
+          parent: '추워도 크게 개의치 않아요',
         },
         weights: { setting: 1, scale: -1 },
       },

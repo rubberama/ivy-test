@@ -104,7 +104,7 @@
     a.appendChild(ext);
     var sr = document.createElement('span');
     sr.className = 'offscreen';
-    sr.textContent = ' 홈페이지, 새 탭에서 열림';
+    sr.textContent = ' 홈페이지, 새 탭에서 열려요';
     a.appendChild(sr);
     return a;
   }
@@ -182,12 +182,20 @@
       el.roster.appendChild(li);
     });
 
+    // 깨진 링크로 들어와서 안내를 본 사람이 테스트를 끝내고 '다시 하기'를 누르면
+    // 인트로에 그 안내가 그대로 남아 있다. 방금 최신 버전으로 다 해봤는데
+    // "이 링크는 예전 버전이에요"가 또 보이는 셈이라, 인트로를 그릴 때 치운다.
+    var stale = document.getElementById('boot-notice');
+    if (stale) stale.remove();
+
     var saved = loadProgress();
     var answered = saved ? saved.answers.filter(function (a) { return a !== null; }).length : 0;
     el['btn-resume'].classList.toggle('hidden', answered === 0);
     if (answered) {
-      var who = MODE_COPY[saved.mode].pickLabel;
-      el['btn-resume'].textContent = '이어서 하기 · ' + who + ' ' + answered + '/' + QUESTIONS.length;
+      // pickLabel('학생이에요')은 인트로 선택 버튼용 완결 문장이라 여기 쓰면
+      // "이어서 하기 · 학생이에요 12/18"이 된다. 라벨 자리에는 shortLabel 을 쓴다.
+      el['btn-resume'].textContent = '이어서 하기 · ' + MODE_COPY[saved.mode].shortLabel +
+        ' ' + answered + '/' + QUESTIONS.length;
     }
   }
 
@@ -207,7 +215,7 @@
     var total = QUESTIONS.length;
     var answered = state.answers.filter(function (a) { return a !== null; }).length;
 
-    el['quiz-mode-label'].textContent = state.mode === 'parent' ? '학부모용 · 진행률' : '진행률';
+    el['quiz-mode-label'].textContent = MODE_COPY[state.mode].shortLabel + ' · 진행률';
     el['progress-note'].textContent = copy().quizNote;
     el['progress-total'].textContent = total;
     el['progress-now'].textContent = answered;
@@ -354,8 +362,14 @@
     el['share-hint'].textContent = '';
     el['btn-share'].disabled = !canShareLink();
     if (!canShareLink()) {
+      // SITE_URL 이 비어 있고 file:// 로 연 경우에만 여기 온다. 배포된 주소를
+      // 모르면 공유 링크를 만들 수가 없다.
       el['share-hint'].textContent = '파일로 직접 열면 링크 공유는 쓸 수 없어요. 웹에 올리면 켜져요.';
     }
+
+    // 링크를 받고 들어온 사람은 이 테스트를 한 적이 없다. 그 사람에게
+    // '다시 하기'라고 하면 안 한 걸 다시 하라는 말이 된다.
+    el['btn-restart'].textContent = state.fromShare ? '나도 해보기' : '다시 하기';
   }
 
   function renderRanking(r) {
@@ -431,8 +445,9 @@
       // 짧은 라벨은 축 그래프에 그대로 보이는 말이라 결과를 읽을 때도 이어진다.
       var pole = reason.label;
       var txt = document.createElement('span');
+      var tail = c.reasonTails[i % c.reasonTails.length];
       txt.textContent = c.reasons[i % c.reasons.length](pole) + ' ' +
-        josa(top.school.nameKo, '이', '가') + ' 딱 그런 학교예요.';
+        tail(top.school.nameKo, josa);
       li.appendChild(tag); li.appendChild(txt);
       list.appendChild(li);
     });
@@ -573,7 +588,7 @@
     fontsReady().then(function () {
       try {
         renderResultCard(el['export-canvas'], state.result, copy());
-        saveResultCard(el['export-canvas'], state.result).then(function (outcome) {
+        saveResultCard(el['export-canvas'], state.result, copy().cardLead).then(function (outcome) {
           if (outcome === 'downloaded') hint('이미지를 저장했어요.');
           else if (outcome === 'failed') hint('이미지 저장에 실패했어요.');
           el['btn-image'].disabled = false;
