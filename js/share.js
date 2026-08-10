@@ -8,14 +8,19 @@
  *    영향을 받지 않는다. GitHub Pages / Vercel / Netlify 어디에 올려도 동일하게 동작한다.
  *  - file:// 로 열었을 때도 그대로 동작한다.
  *
- * 형식:  #r=v1.<페이로드 7자><체크섬 1자>
+ * 형식:  #r=v2.<모드 1자><페이로드 7자><체크섬 1자>
  *  - 버전: 질문을 고치면 반드시 올린다. 안 올리면 예전 링크가 조용히
  *    엉뚱한 결과를 보여준다.
+ *  - 모드: s(학생) 또는 p(학부모). 링크를 받은 사람도 같은 화면을 봐야 한다.
  *  - 체크섬: 카카오톡·인스타 링크 처리 과정에서 뒤가 잘린 링크를 걸러낸다.
  */
 
 // 질문·선택지·가중치를 수정하면 이 값을 올릴 것.
-var SHARE_VERSION = 'v1';
+// v2: 학부모 모드가 생기면서 모드 문자가 붙었다.
+var SHARE_VERSION = 'v2';
+
+var MODE_CHAR = { student: 's', parent: 'p' };
+var CHAR_MODE = { s: 'student', p: 'parent' };
 
 var B64_SAFE = { '+': '-', '/': '_' };
 var B64_BACK = { '-': '+', _: '/' };
@@ -64,12 +69,13 @@ function checksumChar(answers) {
   return (sum % 36).toString(36);
 }
 
-function encodeAnswers(answers) {
-  return SHARE_VERSION + '.' + bytesToB64url(packAnswers(answers)) + checksumChar(answers);
+function encodeAnswers(mode, answers) {
+  var m = MODE_CHAR[mode] || 's';
+  return SHARE_VERSION + '.' + m + bytesToB64url(packAnswers(answers)) + checksumChar(answers);
 }
 
 /**
- * @returns {{ok:true, answers:number[]} | {ok:false, reason:'none'|'version'|'corrupt'}}
+ * @returns {{ok:true, mode:string, answers:number[]} | {ok:false, reason:'none'|'version'|'corrupt'}}
  */
 function decodeAnswers(code, expectedCount) {
   if (!code) return { ok: false, reason: 'none' };
@@ -81,8 +87,12 @@ function decodeAnswers(code, expectedCount) {
   if (version !== SHARE_VERSION) return { ok: false, reason: 'version' };
 
   var body = code.slice(dot + 1);
-  if (body.length < 2) return { ok: false, reason: 'corrupt' };
+  if (body.length < 3) return { ok: false, reason: 'corrupt' };
 
+  var mode = CHAR_MODE[body.charAt(0)];
+  if (!mode) return { ok: false, reason: 'corrupt' };
+
+  body = body.slice(1);
   var payload = body.slice(0, -1);
   var chk = body.slice(-1);
 
@@ -97,7 +107,7 @@ function decodeAnswers(code, expectedCount) {
   }
   if (checksumChar(answers) !== chk) return { ok: false, reason: 'corrupt' };
 
-  return { ok: true, answers: answers };
+  return { ok: true, mode: mode, answers: answers };
 }
 
 /* ── URL 다루기 ────────────────────────────────────────────── */
@@ -116,12 +126,12 @@ function canShareLink() {
   return !isFileProtocol() || !!SITE_URL;
 }
 
-function buildShareUrl(answers) {
+function buildShareUrl(mode, answers) {
   var base = isFileProtocol()
     ? SITE_URL
     : location.origin + location.pathname + location.search;
   if (!base) return '';
-  return base + '#r=' + encodeAnswers(answers);
+  return base + '#r=' + encodeAnswers(mode, answers);
 }
 
 function readHashCode() {
@@ -129,10 +139,11 @@ function readHashCode() {
   return m ? decodeURIComponent(m[1]) : '';
 }
 
-function writeHashCode(answers) {
+function writeHashCode(mode, answers) {
   if (isFileProtocol()) return; // file:// 에서 해시를 바꾸면 히스토리만 지저분해진다
   try {
-    history.replaceState(null, '', location.pathname + location.search + '#r=' + encodeAnswers(answers));
+    history.replaceState(null, '', location.pathname + location.search +
+      '#r=' + encodeAnswers(mode, answers));
   } catch (e) { /* 무시 */ }
 }
 

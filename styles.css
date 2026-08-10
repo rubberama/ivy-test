@@ -233,24 +233,55 @@ main { padding: 30px 22px 44px; }
   letter-spacing: .04em;
 }
 
-/* 학교 엠블럼 여덟 개를 한 줄로 */
-.roster {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px 18px;
-  padding: 4px 0 2px;
-}
+/* 여덟 학교를 활자로만 나열한다 */
+.roster { display: grid; gap: 0; }
 
 .roster li {
   display: flex;
-  align-items: center;
-  gap: 7px;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--ink-soft);
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--rule-soft);
+}
+.roster li:first-child { border-top: 1px solid var(--rule-soft); }
+
+.roster-ko { font-size: 13.5px; font-weight: 700; color: var(--ink); }
+
+.roster-en {
+  font-family: var(--serif);
+  font-size: 11.5px;
+  color: var(--ink-faint);
+  text-align: right;
 }
 
-.roster .emblem { opacity: .85; }
+/* ── 모드 선택 ────────────────────────────────────────────── */
+/* 시작 버튼 하나 대신 누가 답하는지를 먼저 고르게 한다 */
+.mode-pick { display: grid; gap: 9px; }
+
+.mode-btn {
+  display: grid;
+  gap: 2px;
+  text-align: left;
+  padding: 16px 18px;
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-sm);
+  transition: border-color .16s ease, background-color .16s ease;
+}
+.mode-btn:hover {
+  border-color: var(--ivy);
+  background: var(--ivy-wash);
+}
+
+.mode-name {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  color: var(--ink);
+}
+
+.mode-sub { font-size: 12.5px; color: var(--ink-soft); }
 
 /* ── 버튼 ─────────────────────────────────────────────────── */
 .btn {
@@ -470,12 +501,8 @@ main { padding: 30px 22px 44px; }
 /* ── 결과: 표제 ───────────────────────────────────────────── */
 .result-hero { display: grid; gap: 0; }
 
-.result-emblem {
-  margin-bottom: 14px;
-  line-height: 0;
-}
-
 .result-name {
+  margin-top: 10px;
   font-size: 36px;
   font-weight: 700;
   letter-spacing: -.045em;
@@ -548,15 +575,13 @@ main { padding: 30px 22px 44px; }
 
 .rank-row {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: 1fr auto;
   align-items: center;
   gap: 14px;
   padding: 15px 0;
   border-bottom: 1px solid var(--rule-soft);
 }
 .rank-row:first-child { border-top: 1px solid var(--rule); }
-
-.rank-mark { display: grid; place-items: center; line-height: 0; }
 
 .rank-body { min-width: 0; }
 
@@ -643,6 +668,34 @@ main { padding: 30px 22px 44px; }
 }
 
 .detail-body { color: var(--ink-soft); font-size: 14.5px; line-height: 1.78; }
+
+/* ── 결과: 학부모용 현실 조건 ─────────────────────────────── */
+/* 재정지원·환경·진로. 학부모가 실제로 먼저 묻는 것들이라
+   해설 뒤가 아니라 성향 그래프 앞에 둔다. */
+.facts {
+  display: grid;
+  gap: 0;
+  margin: 0 0 12px;
+}
+
+.facts dt {
+  font-family: var(--serif);
+  font-size: 12px;
+  font-style: italic;
+  color: var(--brass);
+  letter-spacing: .02em;
+  padding-top: 13px;
+  border-top: 1px solid var(--rule-soft);
+}
+.facts dt:first-child { border-top: 0; padding-top: 0; }
+
+.facts dd {
+  margin: 4px 0 13px;
+  font-size: 14px;
+  line-height: 1.72;
+  color: var(--ink-soft);
+}
+.facts dd:last-child { margin-bottom: 0; }
 
 /* ── 결과: 성향 축 ────────────────────────────────────────── */
 .axis-chart { display: grid; gap: 13px; }

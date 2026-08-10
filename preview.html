@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>나에게 맞는 아이비리그는? | 성향 매칭 테스트</title>
-<meta name="description" content="18개 질문으로 알아보는 나와 잘 맞는 아이비리그 8개교. 성향 기반 매칭 테스트.">
+<meta name="description" content="18개 질문으로 알아보는 나와 잘 맞는 아이비리그 8개교. 학생용과 학부모용 두 가지 버전.">
 <meta name="theme-color" content="#143c2b">
 <meta property="og:type" content="website">
 <meta property="og:title" content="나에게 맞는 아이비리그는?">
 <meta property="og:description" content="18개 질문으로 알아보는 나와 잘 맞는 아이비리그. 재미로 보는 성향 매칭이에요.">
 <!-- 파비콘을 인라인 SVG 로 넣는다. 별도 파일이 없어도 되고 file:// 에서도 뜬다. -->
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%231f5b41'/%3E%3Cpath d='M8 24 V13 a8 8 0 0 1 16 0 v11' stroke='%23f4efe3' stroke-width='2.4' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%231f5b41'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='19' fill='%23f4efe3' text-anchor='middle'%3EI%3C/text%3E%3C/svg%3E">
 <style>
 /* ═══════════════════════════════════════════════════════════════
    아이비리그 성향 매칭 — 스타일
@@ -247,24 +247,55 @@ main { padding: 30px 22px 44px; }
   letter-spacing: .04em;
 }
 
-/* 학교 엠블럼 여덟 개를 한 줄로 */
-.roster {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px 18px;
-  padding: 4px 0 2px;
-}
+/* 여덟 학교를 활자로만 나열한다 */
+.roster { display: grid; gap: 0; }
 
 .roster li {
   display: flex;
-  align-items: center;
-  gap: 7px;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--ink-soft);
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--rule-soft);
+}
+.roster li:first-child { border-top: 1px solid var(--rule-soft); }
+
+.roster-ko { font-size: 13.5px; font-weight: 700; color: var(--ink); }
+
+.roster-en {
+  font-family: var(--serif);
+  font-size: 11.5px;
+  color: var(--ink-faint);
+  text-align: right;
 }
 
-.roster .emblem { opacity: .85; }
+/* ── 모드 선택 ────────────────────────────────────────────── */
+/* 시작 버튼 하나 대신 누가 답하는지를 먼저 고르게 한다 */
+.mode-pick { display: grid; gap: 9px; }
+
+.mode-btn {
+  display: grid;
+  gap: 2px;
+  text-align: left;
+  padding: 16px 18px;
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-sm);
+  transition: border-color .16s ease, background-color .16s ease;
+}
+.mode-btn:hover {
+  border-color: var(--ivy);
+  background: var(--ivy-wash);
+}
+
+.mode-name {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  color: var(--ink);
+}
+
+.mode-sub { font-size: 12.5px; color: var(--ink-soft); }
 
 /* ── 버튼 ─────────────────────────────────────────────────── */
 .btn {
@@ -484,12 +515,8 @@ main { padding: 30px 22px 44px; }
 /* ── 결과: 표제 ───────────────────────────────────────────── */
 .result-hero { display: grid; gap: 0; }
 
-.result-emblem {
-  margin-bottom: 14px;
-  line-height: 0;
-}
-
 .result-name {
+  margin-top: 10px;
   font-size: 36px;
   font-weight: 700;
   letter-spacing: -.045em;
@@ -562,15 +589,13 @@ main { padding: 30px 22px 44px; }
 
 .rank-row {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: 1fr auto;
   align-items: center;
   gap: 14px;
   padding: 15px 0;
   border-bottom: 1px solid var(--rule-soft);
 }
 .rank-row:first-child { border-top: 1px solid var(--rule); }
-
-.rank-mark { display: grid; place-items: center; line-height: 0; }
 
 .rank-body { min-width: 0; }
 
@@ -657,6 +682,34 @@ main { padding: 30px 22px 44px; }
 }
 
 .detail-body { color: var(--ink-soft); font-size: 14.5px; line-height: 1.78; }
+
+/* ── 결과: 학부모용 현실 조건 ─────────────────────────────── */
+/* 재정지원·환경·진로. 학부모가 실제로 먼저 묻는 것들이라
+   해설 뒤가 아니라 성향 그래프 앞에 둔다. */
+.facts {
+  display: grid;
+  gap: 0;
+  margin: 0 0 12px;
+}
+
+.facts dt {
+  font-family: var(--serif);
+  font-size: 12px;
+  font-style: italic;
+  color: var(--brass);
+  letter-spacing: .02em;
+  padding-top: 13px;
+  border-top: 1px solid var(--rule-soft);
+}
+.facts dt:first-child { border-top: 0; padding-top: 0; }
+
+.facts dd {
+  margin: 4px 0 13px;
+  font-size: 14px;
+  line-height: 1.72;
+  color: var(--ink-soft);
+}
+.facts dd:last-child { margin-bottom: 0; }
 
 /* ── 결과: 성향 축 ────────────────────────────────────────── */
 .axis-chart { display: grid; gap: 13px; }
@@ -845,21 +898,32 @@ main { padding: 30px 22px 44px; }
   <section id="screen-intro" class="screen">
 
     <div class="block">
-      <p class="hero-en">Which Ivy fits you?</p>
-      <h1 class="hero-title">나랑 결이 맞는<br>아이비리그는 어디일까</h1>
+      <p class="hero-en">Which Ivy fits?</p>
+      <h1 class="hero-title">결이 맞는 아이비리그는<br>어디일까</h1>
       <p class="hero-sub">
         하버드부터 다트머스까지, 여덟 학교는 분위기도 학제도 서로 꽤 달라요.
-        성적이 아니라 <b>성향</b>으로 나와 맞는 세 곳을 찾아드릴게요.
+        성적이 아니라 <b>성향</b>으로 맞는 세 곳을 찾아드릴게요.
       </p>
       <p class="fine">질문 18개 · 약 2분</p>
-      <div class="action-grid" style="margin-top:6px">
-        <button type="button" class="btn btn-primary btn-block" id="btn-start">
-          시작하기 <span class="arw" aria-hidden="true">→</span>
+    </div>
+
+    <!-- 시작 전에 누가 답하는지부터 고른다. 같은 18문항이지만
+         학생은 자기 얘기로, 학부모는 아이를 떠올리며 답하게 된다. -->
+    <div class="block">
+      <p class="label">누가 답하시나요?</p>
+      <div class="mode-pick">
+        <button type="button" class="mode-btn" id="mode-student" data-mode="student">
+          <span class="mode-name">학생이에요</span>
+          <span class="mode-sub">제가 직접 답할게요</span>
         </button>
-        <button type="button" class="btn btn-outline btn-block hidden" id="btn-resume">
-          이어서 하기
+        <button type="button" class="mode-btn" id="mode-parent" data-mode="parent">
+          <span class="mode-name">학부모예요</span>
+          <span class="mode-sub">아이를 떠올리며 답할게요</span>
         </button>
       </div>
+      <button type="button" class="btn btn-outline btn-block hidden" id="btn-resume">
+        이어서 하기
+      </button>
     </div>
 
     <div class="block">
@@ -882,13 +946,13 @@ main { padding: 30px 22px 44px; }
   <section id="screen-quiz" class="screen hidden">
     <div>
       <div class="progress-head">
-        <span class="label">진행률</span>
+        <span class="label" id="quiz-mode-label">진행률</span>
         <span class="progress-count"><b id="progress-now">0</b> / <span id="progress-total">18</span></span>
       </div>
       <div class="progress-track">
         <div class="progress-fill" id="progress-fill"></div>
       </div>
-      <p class="progress-note">정답은 없어요. 더 나 같거나, 오래 해도 덜 지칠 것 같은 쪽을 골라주세요.</p>
+      <p class="progress-note" id="progress-note"></p>
     </div>
 
     <div>
@@ -920,7 +984,7 @@ main { padding: 30px 22px 44px; }
   <section id="screen-loading" class="screen hidden">
     <div class="loading-wrap">
       <div class="spinner" aria-hidden="true"></div>
-      <p class="loading-text">답변을 여덟 학교의 성향과 맞춰보는 중…</p>
+      <p class="loading-text" id="loading-text"></p>
     </div>
   </section>
 
@@ -928,8 +992,7 @@ main { padding: 30px 22px 44px; }
   <section id="screen-result" class="screen hidden">
 
     <div class="block result-hero" id="result-hero">
-      <p class="label">나와 가장 잘 맞는 학교</p>
-      <div class="result-emblem" id="result-emblem"></div>
+      <p class="label" id="result-label">나와 가장 잘 맞는 학교</p>
       <h1 class="result-name" id="result-name"></h1>
       <p class="result-en" id="result-en"></p>
       <p class="result-tagline" id="result-tagline"></p>
@@ -952,9 +1015,18 @@ main { padding: 30px 22px 44px; }
       <div id="detail-block"></div>
     </div>
 
+    <!-- 학부모 모드에서만 보인다 -->
+    <div class="block hidden" id="parent-facts-block">
+      <p class="label">학부모가 먼저 보는 것</p>
+      <dl class="facts" id="parent-facts"></dl>
+      <p class="fine">
+        재정지원 정책은 바뀔 수 있어요. 지원 전에 각 학교 재정지원 페이지에서 다시 확인하세요.
+      </p>
+    </div>
+
     <div class="block">
-      <p class="label">내 성향 축</p>
-      <p class="section-sub">가운데에서 멀수록 그쪽 성향이 뚜렷하다는 뜻이에요.</p>
+      <p class="label" id="axis-label">내 성향 축</p>
+      <p class="section-sub" id="axis-note"></p>
       <div id="axis-chart" class="axis-chart"></div>
     </div>
 
@@ -1076,89 +1148,88 @@ if (typeof module !== 'undefined' && module.exports) {
 }
 </script>
 <script>
-/* === js/data/emblems.js === */
+/* === js/data/copy.js === */
 /**
- * 학교 엠블럼
+ * 모드별 화면 문구
  *
- * 실제 학교 로고·문장·워드마크는 전부 등록상표라 쓸 수 없다.
- * 대신 각 학교를 대표하는 사물을 같은 기하학적 언어로 직접 그렸다.
- * 전부 24x24 뷰박스, 선 기반(stroke), 굵기 1.7, 둥근 끝.
- * 여덟 개가 한 세트로 보여야 하므로 이 규칙에서 벗어나지 말 것.
- *
- * 모티프는 그 학교의 실제 성격에서 가져왔다:
- *   하버드   아치      Harvard Yard 의 문
- *   예일     안뜰      레지덴셜 칼리지의 사각 안뜰
- *   프린스턴 펜촉      전교생이 쓰는 졸업논문
- *   컬럼비아 스카이라인 맨해튼
- *   유펜     번개      벤저민 프랭클린
- *   브라운   펼친 책   오픈 커리큘럼
- *   다트머스 소나무    뉴햄프셔 숲
- *   코넬     다리      이타카의 협곡을 건너는 다리
+ * 학생이 직접 답하는 경우와 학부모가 아이를 떠올리며 답하는 경우는
+ * 같은 화면이라도 주어와 말투가 달라야 한다. 그 차이를 여기 모아둔다.
+ * 문구를 고칠 일이 있으면 app.js 를 뒤지지 말고 이 파일만 보면 된다.
  */
-var EMBLEMS = {
-  harvard: [
-    'M3.5 20.5 V12 a8.5 8.5 0 0 1 17 0 v8.5',
-    'M2 20.5 h20',
-    'M12 20.5 v-6',
-  ],
-  // 바깥 사각형 안에 안뜰 하나. 선을 더 넣으면 형태가 뭉쳐서 안 읽힌다.
-  yale: [
-    'M4 4.5 h16 v16 h-16 z',
-    'M9.4 9.9 h5.2 v5.2 h-5.2 z',
-  ],
-  // 펜촉: 위는 각지고 아래로 뾰족하게. 가운데 슬릿과 통기 구멍이 있어야
-  // 마름모가 아니라 펜으로 읽힌다.
-  princeton: [
-    'M7.6 3.2 h8.8 v6.4 L12 21.2 L7.6 9.6 Z',
-    'M12 12.4 V18.4',
-    'M10.9 10.2 a1.1 1.1 0 1 0 2.2 0 a1.1 1.1 0 1 0 -2.2 0',
-  ],
-  columbia: [
-    'M4.5 20.5 V12.5 h4 v8',
-    'M10 20.5 V5.5 h4 v15',
-    'M15.5 20.5 V14.5 h4 v6',
-    'M2.5 20.5 h19',
-  ],
-  penn: [
-    'M13.6 2.6 L6 13.2 h4.9 L9.8 21.4 L18 10.4 h-4.9 Z',
-  ],
-  brown: [
-    'M12 7.2 C9.2 5.3 6.2 5 3 5.8 V17.9 c3.2 -0.8 6.2 -0.5 9 1.4',
-    'M12 7.2 C14.8 5.3 17.8 5 21 5.8 V17.9 c-3.2 -0.8 -6.2 -0.5 -9 1.4',
-    'M12 7.2 V19.3',
-  ],
-  dartmouth: [
-    'M12 2.6 L7.4 10.4 h9.2 Z',
-    'M12 8.4 L5 18 h14 Z',
-    'M12 18 v3.4',
-  ],
-  // 상판 선 아래로 아치가 확실히 내려가야 다리로 읽힌다.
-  // 아치 정점이 상판과 겹치면 그냥 가로선 하나로 뭉쳐 보인다.
-  cornell: [
-    'M2 10 h20',                           // 상판 (아치보다 넓게 빼야 다리로 보인다)
-    'M5.5 21 Q12 9 18.5 21',               // 아치 (정점 y=15, 상판과 5 벌어짐)
-    'M8.6 10 v3.9', 'M15.4 10 v3.9',       // 상판을 받치는 기둥
-  ],
+var MODES = ['student', 'parent'];
+
+var MODE_COPY = {
+  student: {
+    pickLabel: '학생이에요',
+    pickSub: '제가 직접 답할게요',
+
+    quizNote: '정답은 없어요. 더 나 같거나, 오래 해도 덜 지칠 것 같은 쪽을 골라주세요.',
+    loading: '답변을 여덟 학교의 성향과 맞춰보는 중…',
+
+    resultLabel: '나와 가장 잘 맞는 학교',
+    axisLabel: '내 성향 축',
+    axisNote: '가운데에서 멀수록 그쪽 성향이 뚜렷하다는 뜻이에요.',
+    detailHeads: ['분위기', '이 학교가 잘하는 것', '이런 사람이 잘 맞아요'],
+
+    flatReason: '성향이 어느 쪽으로도 크게 기울지 않아서 세 학교가 비슷하게 나왔어요. ' +
+      '아래 세 곳을 다 살펴보는 걸 추천해요.',
+
+    // 세 줄이 전부 같은 문장으로 끝나면 기계가 찍어낸 티가 난다. 순서대로 다른 어투를 쓴다.
+    reasons: [
+      function (pole) { return pole + ' 쪽으로 가장 뚜렷하게 기울었어요.'; },
+      function (pole) { return pole + '을 중요하게 보는 편이에요.'; },
+      function (pole) { return pole + ' 쪽 답을 여러 번 골랐어요.'; },
+    ],
+
+    shareTitle: '나에게 맞는 아이비리그는?',
+    shareText: function (name, pct) {
+      return '나는 ' + name + ' ' + pct + '% 나왔어. 너도 해볼래?';
+    },
+
+    cardEyebrow: 'Your closest match',
+    cardLead: '나랑 제일 잘 맞는 아이비는',
+    cardTraits: '이런 성향이 결정적이었어요',
+    cardFoot: '18개 질문으로 알아보는 나와 맞는 아이비리그',
+    taglineOf: function (school) { return school.tagline; },
+  },
+
+  parent: {
+    pickLabel: '학부모예요',
+    pickSub: '아이를 떠올리며 답할게요',
+
+    quizNote: '정답은 없어요. 아이를 떠올리면서 더 가까운 쪽을 골라주세요. ' +
+      '바라는 모습이 아니라 실제 모습으로 답할수록 결과가 정확해요.',
+    loading: '답변을 여덟 학교의 성향과 맞춰보는 중…',
+
+    resultLabel: '아이와 가장 잘 맞는 학교',
+    axisLabel: '아이의 성향 축',
+    axisNote: '가운데에서 멀수록 그쪽 성향이 뚜렷하다는 뜻이에요.',
+    detailHeads: ['분위기', '이 학교가 잘하는 것', '이런 아이가 잘 맞아요'],
+
+    flatReason: '성향이 어느 쪽으로도 크게 기울지 않아서 세 학교가 비슷하게 나왔어요. ' +
+      '아래 세 곳을 함께 살펴보시길 권합니다.',
+
+    reasons: [
+      function (pole) { return '아이가 ' + pole + ' 쪽으로 가장 뚜렷하게 기울어 있어요.'; },
+      function (pole) { return pole + '을 중요하게 보는 아이예요.'; },
+      function (pole) { return pole + ' 쪽 답을 여러 번 고르셨어요.'; },
+    ],
+
+    shareTitle: '내 아이에게 맞는 아이비리그는?',
+    shareText: function (name, pct) {
+      return '우리 아이는 ' + name + ' ' + pct + '% 나왔어요.';
+    },
+
+    cardEyebrow: 'Closest match for your child',
+    cardLead: '우리 아이와 맞는 아이비는',
+    cardTraits: '아이의 이런 성향이 결정적이었어요',
+    cardFoot: '18개 질문으로 알아보는 우리 아이와 맞는 아이비리그',
+    taglineOf: function (school) { return school.taglineParent || school.tagline; },
+  },
 };
 
-/**
- * 인라인 SVG 문자열을 만든다.
- * innerHTML 로 넣기 때문에 여기 들어가는 값은 전부 코드에서 나온 것이어야 한다.
- * (색은 SCHOOLS 의 고정값, 경로는 위 상수 — 사용자 입력이 섞이지 않는다)
- */
-function emblemSvg(schoolId, color, size) {
-  var paths = EMBLEMS[schoolId];
-  if (!paths) return '';
-  var d = paths.map(function (p) {
-    return '<path d="' + p + '"/>';
-  }).join('');
-  return '<svg class="emblem" viewBox="0 0 24 24" width="' + size + '" height="' + size + '" ' +
-    'aria-hidden="true" focusable="false" fill="none" stroke="' + color + '" ' +
-    'stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">' + d + '</svg>';
-}
-
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { EMBLEMS: EMBLEMS };
+  module.exports = { MODES: MODES, MODE_COPY: MODE_COPY };
 }
 </script>
 <script>
@@ -1173,6 +1244,17 @@ if (typeof module !== 'undefined' && module.exports) {
  * 이 매트릭스는 scripts/check-reachability.js 로 검증된 상태다.
  * 값을 수정하면 반드시 그 스크립트를 다시 돌려서
  * 8개교가 모두 1위로 도달 가능한지 확인할 것.
+ *
+ * detail 은 학생용(반말)과 학부모용(존댓말) 두 벌이다.
+ * forParents 는 학부모 모드에서만 보여주는 현실 조건 요약이다.
+ *
+ * ── 재정지원 정보 (2026년 8월 확인) ─────────────────────────────
+ * 국제학생에게 need-blind(재정 상황이 합격 판단에 영향을 주지 않음)인
+ * 아이비는 하버드·예일·프린스턴·다트머스 네 곳뿐이다.
+ * (다트머스는 2022년에 전환했다.)
+ * 브라운·컬럼비아·코넬·유펜은 국제학생에게 need-aware 다.
+ * 다만 여덟 곳 모두 합격한 학생에게는 산정된 필요액의 100%를 지원한다.
+ * 정책은 바뀔 수 있으므로 지원 전 각 학교 재정지원 페이지에서 확인할 것.
  */
 const SCHOOLS = [
   {
@@ -1182,15 +1264,28 @@ const SCHOOLS = [
     location: '미국 로드아일랜드주 프로비던스',
     color: '#8C5A3C',
     tagline: '내 커리큘럼을 내가 설계하는 자유형',
+    taglineParent: '스스로 방향을 잡는 아이에게 맞는 자유형',
     keywords: ['오픈 커리큘럼', '필수과목 0개', '협력적'],
     vector: {
       curriculum: -2, orientation: -1, setting: 0, scale: -1,
       pace: 2, community: 1, field: -1,
     },
     detail: {
-      vibe: '아이비 중에 제일 "네 맘대로 해"에 가까운 학교야. 오픈 커리큘럼(Open Curriculum)이라고 해서 전교생이 들어야 하는 필수 교양이 아예 없어. 뭘 들을지 처음부터 끝까지 네가 정하고, 심지어 원하는 과목은 학점 대신 이수/미이수(S/NC)로 들을 수도 있어서 "망할까 봐 무서워서 안 듣는" 일이 잘 없어. 그래서 분위기가 경쟁적이라기보다 서로 뭐 듣는지 물어보고 같이 파는 쪽에 가까워.',
-      strength: '기존 전공에 내가 원하는 게 없으면 직접 만들어서 졸업하는 독립 전공(Independent Concentration) 제도가 있어. 문예창작이랑 컴퓨터과학이 특히 세고, 길 건너 로드아일랜드 디자인스쿨(RISD)이랑 수업을 서로 들을 수 있어서 디자인·예술 쪽으로 넘나드는 학생이 많아. 사회 문제에 목소리 내는 학생들이 많은 것도 브라운의 오래된 색깔이야.',
-      fitsWho: '하고 싶은 게 여러 개인데 하나로 못 줄이겠는 사람. 남이 짜준 시간표를 그대로 따라가는 게 답답한 사람. 옆자리 친구를 이겨야 하는 분위기보다 같이 뭔가 만드는 분위기에서 더 힘이 나는 사람.',
+      student: {
+        vibe: '아이비 중에 제일 "네 맘대로 해"에 가까운 학교야. 오픈 커리큘럼(Open Curriculum)이라고 해서 전교생이 들어야 하는 필수 교양이 아예 없어. 뭘 들을지 처음부터 끝까지 네가 정하고, 심지어 원하는 과목은 학점 대신 이수/미이수(S/NC)로 들을 수도 있어서 "망할까 봐 무서워서 안 듣는" 일이 잘 없어. 그래서 분위기가 경쟁적이라기보다 서로 뭐 듣는지 물어보고 같이 파는 쪽에 가까워.',
+        strength: '기존 전공에 내가 원하는 게 없으면 직접 만들어서 졸업하는 독립 전공(Independent Concentration) 제도가 있어. 문예창작이랑 컴퓨터과학이 특히 세고, 길 건너 로드아일랜드 디자인스쿨(RISD)이랑 수업을 서로 들을 수 있어서 디자인·예술 쪽으로 넘나드는 학생이 많아. 사회 문제에 목소리 내는 학생들이 많은 것도 브라운의 오래된 색깔이야.',
+        fitsWho: '하고 싶은 게 여러 개인데 하나로 못 줄이겠는 사람. 남이 짜준 시간표를 그대로 따라가는 게 답답한 사람. 옆자리 친구를 이겨야 하는 분위기보다 같이 뭔가 만드는 분위기에서 더 힘이 나는 사람.',
+      },
+      parent: {
+        vibe: '아이비 여덟 곳 중 학생 자율에 가장 크게 기대는 학교입니다. 오픈 커리큘럼이라고 해서 전교생이 들어야 하는 필수 교양이 아예 없습니다. 4년간 무엇을 배울지를 학생이 직접 설계하고, 원하는 과목은 학점 대신 이수/미이수로 들을 수 있어 부담 없이 새로운 분야를 시도할 수 있습니다. 경쟁보다 협력적인 분위기로 잘 알려져 있습니다.',
+        strength: '원하는 전공이 없으면 직접 만들어 졸업하는 독립 전공 제도가 있습니다. 문예창작과 컴퓨터과학이 특히 강하고, 길 건너 로드아일랜드 디자인스쿨과 수업을 교차 수강할 수 있어 예술·디자인으로 넘나드는 학생이 많습니다.',
+        fitsWho: '관심사가 여러 갈래여서 하나로 좁히기 어려워하는 아이. 정해진 틀을 답답해하는 아이. 다만 방향을 스스로 잡는 힘이 아직 부족하다면 첫 1~2년을 헤맬 수 있는 구조이기도 합니다.',
+      },
+    },
+    forParents: {
+      aid: '국제학생에게 need-aware입니다. 재정지원 신청이 합격 판단에 영향을 줄 수 있지만, 합격하면 산정된 필요액의 100%를 지원합니다.',
+      place: '로드아일랜드주 프로비던스. 보스턴에서 차로 약 1시간 거리의 중소도시로, 대도시만큼 번잡하지 않으면서 생활이 불편하지 않은 규모입니다. 학부생 약 7,200명.',
+      after: '컴퓨터과학·문예창작 등에서 두각을 보이며, 진로를 하나로 정해두기보다 여러 갈래를 탐색하다 찾아가는 졸업생이 많습니다.',
     },
   },
   {
@@ -1200,15 +1295,28 @@ const SCHOOLS = [
     location: '미국 뉴욕주 뉴욕시 맨해튼',
     color: '#1D4E89',
     tagline: '뉴욕 한복판에서 고전을 읽는 도시형',
+    taglineParent: '뉴욕이라는 환경을 그대로 쓰는 도시형',
     keywords: ['코어 커리큘럼', '맨해튼', '독립적'],
     vector: {
       curriculum: 2, orientation: 0, setting: -2, scale: 0,
       pace: -1.5, community: 2, field: -1,
     },
     detail: {
-      vibe: '브라운의 정확히 반대편에 있는 학교야. 코어 커리큘럼(Core Curriculum)이라고, 전공이 뭐든 상관없이 전교생이 똑같이 문학·철학 고전을 읽고 토론하는 수업을 몇 학기씩 들어. 공대생도 플라톤을 읽어. 빡세다고 불평하면서도 졸업생들이 제일 많이 얘기하는 게 이 수업이야. 캠퍼스를 나서면 바로 맨해튼이라, 학교가 세상의 전부인 다른 아이비들과 분위기가 많이 달라.',
-      strength: '위치가 곧 스펙인 학교야. 유엔, 월가, 언론사, 미술관, 스타트업이 지하철 몇 정거장 거리라 학기 중에 인턴을 하는 게 자연스러워. 정치학·국제관계·역사 같은 인문사회 쪽 전통이 아주 강하고, 공대(SEAS)도 같은 캠퍼스에 붙어 있어.',
-      fitsWho: '학교 안에서만 노는 게 답답하고 도시 자체를 캠퍼스로 쓰고 싶은 사람. 학교가 정해준 필독서를 같이 읽는 게 귀찮기보다 오히려 든든한 사람. 혼자 다니는 게 외롭지 않고 편한 사람.',
+      student: {
+        vibe: '브라운의 정확히 반대편에 있는 학교야. 코어 커리큘럼(Core Curriculum)이라고, 전공이 뭐든 상관없이 전교생이 똑같이 문학·철학 고전을 읽고 토론하는 수업을 몇 학기씩 들어. 공대생도 플라톤을 읽어. 빡세다고 불평하면서도 졸업생들이 제일 많이 얘기하는 게 이 수업이야. 캠퍼스를 나서면 바로 맨해튼이라, 학교가 세상의 전부인 다른 아이비들과 분위기가 많이 달라.',
+        strength: '위치가 곧 스펙인 학교야. 유엔, 월가, 언론사, 미술관, 스타트업이 지하철 몇 정거장 거리라 학기 중에 인턴을 하는 게 자연스러워. 정치학·국제관계·역사 같은 인문사회 쪽 전통이 아주 강하고, 공대(SEAS)도 같은 캠퍼스에 붙어 있어.',
+        fitsWho: '학교 안에서만 노는 게 답답하고 도시 자체를 캠퍼스로 쓰고 싶은 사람. 학교가 정해준 필독서를 같이 읽는 게 귀찮기보다 오히려 든든한 사람. 혼자 다니는 게 외롭지 않고 편한 사람.',
+      },
+      parent: {
+        vibe: '브라운과 정반대로, 정해진 틀이 가장 뚜렷한 학교입니다. 코어 커리큘럼이라고 해서 전공과 무관하게 전교생이 문학·철학 고전을 읽고 토론하는 수업을 여러 학기 이수합니다. 공대생도 예외가 없습니다. 힘들다는 말이 많지만 졸업생들이 가장 많이 기억하는 경험이기도 합니다. 캠퍼스를 나서면 바로 맨해튼이라, 학교가 생활의 전부인 다른 아이비들과 분위기가 상당히 다릅니다.',
+        strength: '위치 자체가 강점입니다. 유엔, 월가, 언론사, 미술관, 스타트업이 지하철로 몇 정거장 거리라 학기 중 인턴이 자연스럽습니다. 정치학·국제관계·역사 등 인문사회 전통이 매우 강하고, 공과대학도 같은 캠퍼스에 있습니다.',
+        fitsWho: '학교 울타리 안에만 있기보다 도시를 직접 겪으며 크는 아이. 정해진 필독 과정을 부담이 아니라 든든하게 받아들이는 아이. 혼자 다니는 것을 외로워하지 않는 아이.',
+      },
+    },
+    forParents: {
+      aid: '국제학생에게 need-aware입니다. 합격 시에는 필요액의 100%를 지원하지만, 재정지원 신청 여부가 합격 판단에 영향을 줄 수 있습니다.',
+      place: '뉴욕 맨해튼 모닝사이드 하이츠. 캠퍼스는 담장으로 구분된 형태지만 도시 한복판이라 생활비가 여덟 곳 중 가장 높은 편입니다. 학부생 약 8,800명.',
+      after: '금융·언론·법조·국제기구로 이어지는 경로가 뚜렷하고, 학기 중 인턴 경험을 쌓기 가장 유리한 위치입니다.',
     },
   },
   {
@@ -1218,15 +1326,28 @@ const SCHOOLS = [
     location: '미국 뉴햄프셔주 하노버',
     color: '#00693E',
     tagline: '숲속에서 평생 갈 친구를 만드는 유대형',
+    taglineParent: '작고 안전한 환경에서 끈끈하게 크는 유대형',
     keywords: ['최소 규모', '자연', '끈끈함'],
     vector: {
       curriculum: 0, orientation: 0.5, setting: 2, scale: -2,
       pace: 1, community: -2, field: 0,
     },
     detail: {
-      vibe: '아이비 중 학부생이 제일 적고(4천 명대), 뉴햄프셔 숲과 강에 둘러싸인 작은 마을에 있어. 그래서 "학교가 곧 동네"고 사람들끼리 다 알아. 학교 이름에 University가 아니라 College가 붙어 있는 것도 학부 교육을 중심에 둔다는 자부심 때문이야. 홈커밍 모닥불, 윈터 카니발 같은 전통 행사에 진심이고 동문들의 애교심이 유별나게 강해.',
-      strength: 'D-Plan이라는 독특한 학사 일정이 있어. 1년을 네 학기로 쪼개서 어느 학기에 수업 듣고 어느 학기에 인턴할지를 학생이 직접 조합해. 덕분에 남들 학기 중일 때 인턴을 하러 갈 수 있어. 2학년 여름엔 동기 전체가 캠퍼스에 같이 남는 학기가 있는데, 다트머스 유대감의 핵심이 여기서 나와. 규모는 작은데 컨설팅·금융 쪽 취업이 아주 잘 되는 학교이기도 해.',
-      fitsWho: '넓고 얕은 관계보다 좁고 깊은 관계가 편한 사람. 도시의 소음보다 산·강·눈이 있는 환경에서 에너지를 얻는 사람. 학교 행사에 몰려가서 같이 소리 지르는 게 창피하지 않고 재밌는 사람.',
+      student: {
+        vibe: '아이비 중 학부생이 제일 적고(4천 명대), 뉴햄프셔 숲과 강에 둘러싸인 작은 마을에 있어. 그래서 "학교가 곧 동네"고 사람들끼리 다 알아. 학교 이름에 University가 아니라 College가 붙어 있는 것도 학부 교육을 중심에 둔다는 자부심 때문이야. 홈커밍 모닥불, 윈터 카니발 같은 전통 행사에 진심이고 동문들의 애교심이 유별나게 강해.',
+        strength: 'D-Plan이라는 독특한 학사 일정이 있어. 1년을 네 학기로 쪼개서 어느 학기에 수업 듣고 어느 학기에 인턴할지를 학생이 직접 조합해. 덕분에 남들 학기 중일 때 인턴을 하러 갈 수 있어. 2학년 여름엔 동기 전체가 캠퍼스에 같이 남는 학기가 있는데, 다트머스 유대감의 핵심이 여기서 나와. 규모는 작은데 컨설팅·금융 쪽 취업이 아주 잘 되는 학교이기도 해.',
+        fitsWho: '넓고 얕은 관계보다 좁고 깊은 관계가 편한 사람. 도시의 소음보다 산·강·눈이 있는 환경에서 에너지를 얻는 사람. 학교 행사에 몰려가서 같이 소리 지르는 게 창피하지 않고 재밌는 사람.',
+      },
+      parent: {
+        vibe: '아이비 중 학부생이 가장 적고, 뉴햄프셔 숲과 강에 둘러싸인 작은 마을에 있습니다. 학교가 곧 동네여서 학생들끼리 서로를 압니다. 이름에 University가 아니라 College가 붙어 있는 것도 학부 교육을 중심에 둔다는 뜻입니다. 교수와의 거리가 가깝고, 동문들의 애교심이 여덟 곳 중 가장 강한 편으로 알려져 있습니다.',
+        strength: 'D-Plan이라는 독특한 학사 일정이 있습니다. 1년을 네 학기로 나눠 어느 학기에 수업을 듣고 어느 학기에 인턴을 할지 학생이 직접 조합합니다. 남들이 학기 중일 때 인턴 자리를 잡을 수 있다는 실질적인 이점이 있습니다. 규모는 작지만 컨설팅·금융 분야 취업 성과가 매우 좋습니다.',
+        fitsWho: '넓고 얕은 관계보다 좁고 깊은 관계를 편해하는 아이. 도시의 자극보다 자연에서 안정을 얻는 아이. 다만 번화한 곳을 좋아하는 아이라면 답답해할 수 있는 위치입니다.',
+      },
+    },
+    forParents: {
+      aid: '국제학생에게도 need-blind입니다. 2022년부터 적용되었고, 재정 상황이 합격 판단에 영향을 주지 않으며 필요액의 100%를 지원합니다.',
+      place: '뉴햄프셔주 하노버. 여덟 곳 중 가장 한적하고 안전한 편이며 겨울이 깁니다. 학부생 약 4,400명으로 가장 작아 관리가 촘촘합니다.',
+      after: '규모 대비 컨설팅·금융 진출이 두드러지고, 동문 네트워크가 좁고 강해 졸업 후 도움을 받기 쉬운 구조입니다.',
     },
   },
   {
@@ -1236,15 +1357,28 @@ const SCHOOLS = [
     location: '미국 뉴욕주 이타카',
     color: '#B31B1B',
     tagline: '없는 전공이 없는 종합 실용형',
+    taglineParent: '전공 선택지가 가장 넓은 종합 실용형',
     keywords: ['최대 규모', '7개 단과대', '응용·STEM'],
     vector: {
       curriculum: 1, orientation: 1.5, setting: 1.5, scale: 2,
       pace: -1, community: -0.5, field: 2,
     },
     detail: {
-      vibe: '아이비 중 학부생이 가장 많고(1만 5천 명대) 캠퍼스도 제일 커. 설립자 에즈라 코넬이 남긴 "어떤 사람이든, 어떤 학문이든(any person, any study)"이라는 문장이 학교의 성격을 그대로 설명해. 협곡(gorges)과 호수로 둘러싸인 이타카에 있어서 자연은 좋은데 겨울이 길고 춥기로 유명해. 공부량이 많기로도 유명해서 "들어가기보다 버티기가 어렵다"는 말을 듣는 학교야.',
-      strength: '학부가 7개 단과대로 나뉘어 있고, 다른 아이비엔 아예 없는 전공이 많아. 호텔경영, 농업생명과학, 노사관계(ILR), 인간생태학 같은 게 학부 단위로 있어. 공대와 컴퓨터과학이 특히 강하고, 이론보다 "실제로 만들고 적용하는" 쪽에 무게가 실려 있어.',
-      fitsWho: '관심사가 특이하거나 아주 구체적이어서 일반적인 전공 목록에서 못 찾는 사람. 큰 학교에서 다양한 사람들 사이에 섞이는 게 좋은 사람. 손으로 만들고 숫자로 검증하는 걸 좋아하는 사람.',
+      student: {
+        vibe: '아이비 중 학부생이 가장 많고(1만 5천 명대) 캠퍼스도 제일 커. 설립자 에즈라 코넬이 남긴 "어떤 사람이든, 어떤 학문이든(any person, any study)"이라는 문장이 학교의 성격을 그대로 설명해. 협곡(gorges)과 호수로 둘러싸인 이타카에 있어서 자연은 좋은데 겨울이 길고 춥기로 유명해. 공부량이 많기로도 유명해서 "들어가기보다 버티기가 어렵다"는 말을 듣는 학교야.',
+        strength: '학부가 7개 단과대로 나뉘어 있고, 다른 아이비엔 아예 없는 전공이 많아. 호텔경영, 농업생명과학, 노사관계(ILR), 인간생태학 같은 게 학부 단위로 있어. 공대와 컴퓨터과학이 특히 강하고, 이론보다 "실제로 만들고 적용하는" 쪽에 무게가 실려 있어.',
+        fitsWho: '관심사가 특이하거나 아주 구체적이어서 일반적인 전공 목록에서 못 찾는 사람. 큰 학교에서 다양한 사람들 사이에 섞이는 게 좋은 사람. 손으로 만들고 숫자로 검증하는 걸 좋아하는 사람.',
+      },
+      parent: {
+        vibe: '아이비 중 학부생이 가장 많고 캠퍼스도 가장 큽니다. 설립자가 남긴 "어떤 사람이든, 어떤 학문이든"이라는 문장이 학교의 성격을 그대로 보여줍니다. 협곡과 호수로 둘러싸인 이타카에 있어 자연 환경은 좋지만 겨울이 길고 춥습니다. 학업 부담이 큰 학교로 알려져 있어, 스스로 관리하는 습관이 잡힌 아이에게 유리합니다.',
+        strength: '학부가 7개 단과대로 나뉘어 있고 다른 아이비에는 없는 전공이 많습니다. 호텔경영, 농업생명과학, 노사관계, 인간생태학 등이 학부 단위로 개설되어 있습니다. 공학과 컴퓨터과학이 특히 강하며, 이론보다 실제로 만들고 적용하는 쪽에 무게가 실려 있습니다.',
+        fitsWho: '관심 분야가 구체적이거나 특이해서 일반적인 전공 목록에서 찾기 어려운 아이. 큰 규모에서 다양한 사람과 섞이는 걸 좋아하는 아이. 다만 세심하게 챙겨주는 환경을 원한다면 규모가 부담이 될 수 있습니다.',
+      },
+    },
+    forParents: {
+      aid: '국제학생에게 need-aware입니다. 합격 시에는 필요액의 100%를 지원하지만, 재정지원 신청이 합격 판단에 영향을 줄 수 있습니다.',
+      place: '뉴욕주 이타카. 뉴욕시에서 차로 약 4시간 거리의 한적한 대학 도시로 겨울이 매우 춥습니다. 학부생 약 15,500명으로 여덟 곳 중 가장 큽니다.',
+      after: '공학·컴퓨터과학·호텔경영 등 전공과 직업이 바로 이어지는 분야가 많아, 진로가 비교적 뚜렷하게 그려지는 편입니다.',
     },
   },
   {
@@ -1254,15 +1388,28 @@ const SCHOOLS = [
     location: '미국 펜실베이니아주 필라델피아',
     color: '#990000',
     tagline: '배운 걸 바로 써먹는 프리프로페셔널형',
+    taglineParent: '진로가 빨리 잡히는 프리프로페셔널형',
     keywords: ['와튼', '실용주의', '사회생활'],
     vector: {
       curriculum: 0.5, orientation: 2, setting: -1.5, scale: 1.5,
       pace: -1.5, community: -0.5, field: 0.5,
     },
     detail: {
-      vibe: '아이비 중에서 가장 실용·취업 지향이 뚜렷한 학교야. 설립자 벤저민 프랭클린부터가 "쓸모 있는 교육"을 내세운 사람이었고, 그 색깔이 지금까지 이어져. 학부 과정에 경영대(와튼)와 간호대가 있는 게 아이비에선 굉장히 이례적이야. 공부만 하는 분위기는 아니고 사교 활동도 활발해서 "소셜 아이비"라는 별명이 붙어 있어.',
-      strength: '와튼(Wharton)은 학부 경영 교육에서 세계에서 가장 유명한 이름이야. 게다가 원 유니버시티 폴리시(One University Policy) 덕분에 소속 단과대와 상관없이 다른 단과대 수업을 들을 수 있어서, 공대+경영, 인문+경영처럼 섞는 학생이 많아. 두 개 학위를 동시에 하는 헌츠먼·M&T 같은 통합 프로그램도 유명해.',
-      fitsWho: '"이걸 배우면 뭘 할 수 있는데?"라는 질문이 자연스럽게 먼저 나오는 사람. 목표가 이미 꽤 뚜렷하고 거기까지 가는 길을 빨리 밟고 싶은 사람. 공부만큼 사람 만나고 어울리는 것도 중요한 사람.',
+      student: {
+        vibe: '아이비 중에서 가장 실용·취업 지향이 뚜렷한 학교야. 설립자 벤저민 프랭클린부터가 "쓸모 있는 교육"을 내세운 사람이었고, 그 색깔이 지금까지 이어져. 학부 과정에 경영대(와튼)와 간호대가 있는 게 아이비에선 굉장히 이례적이야. 공부만 하는 분위기는 아니고 사교 활동도 활발해서 "소셜 아이비"라는 별명이 붙어 있어.',
+        strength: '와튼(Wharton)은 학부 경영 교육에서 세계에서 가장 유명한 이름이야. 게다가 원 유니버시티 폴리시(One University Policy) 덕분에 소속 단과대와 상관없이 다른 단과대 수업을 들을 수 있어서, 공대+경영, 인문+경영처럼 섞는 학생이 많아. 두 개 학위를 동시에 하는 헌츠먼·M&T 같은 통합 프로그램도 유명해.',
+        fitsWho: '"이걸 배우면 뭘 할 수 있는데?"라는 질문이 자연스럽게 먼저 나오는 사람. 목표가 이미 꽤 뚜렷하고 거기까지 가는 길을 빨리 밟고 싶은 사람. 공부만큼 사람 만나고 어울리는 것도 중요한 사람.',
+      },
+      parent: {
+        vibe: '아이비 중 실용·취업 지향이 가장 뚜렷한 학교입니다. 설립자 벤저민 프랭클린이 내세운 "쓸모 있는 교육"이라는 방향이 지금까지 이어집니다. 학부 과정에 경영대와 간호대가 있는 것은 아이비에서 매우 이례적입니다. 학업과 사교 활동이 함께 활발한 편입니다.',
+        strength: '와튼(Wharton)은 학부 경영 교육에서 세계에서 가장 잘 알려진 이름입니다. 소속 단과대와 무관하게 다른 단과대 수업을 들을 수 있어 공학과 경영, 인문과 경영을 섞는 학생이 많습니다. 두 학위를 동시에 취득하는 통합 프로그램도 잘 갖춰져 있습니다.',
+        fitsWho: '무엇을 배우면 무엇을 할 수 있는지를 먼저 따지는 아이. 목표가 비교적 뚜렷하고 빨리 나아가고 싶어 하는 아이. 다만 진로를 천천히 탐색하고 싶은 아이에게는 주변 속도가 부담이 될 수 있습니다.',
+      },
+    },
+    forParents: {
+      aid: '국제학생에게 need-aware입니다. 합격 시에는 필요액의 100%를 지원하지만, 재정지원 신청이 합격 판단에 영향을 줄 수 있습니다.',
+      place: '펜실베이니아주 필라델피아 서부. 도시 캠퍼스이며 뉴욕까지 기차로 약 1시간 30분입니다. 학부생 약 11,200명. 도심 캠퍼스인 만큼 생활 안전 수칙을 미리 익혀두면 좋습니다.',
+      after: '금융·컨설팅·창업으로 이어지는 경로가 가장 뚜렷하고, 학부 단계에서 이미 진로가 정해지는 학생 비율이 높습니다.',
     },
   },
   {
@@ -1272,15 +1419,28 @@ const SCHOOLS = [
     location: '미국 뉴저지주 프린스턴',
     color: '#E77500',
     tagline: '끝까지 파고들어 내 논문을 쓰는 탐구형',
+    taglineParent: '학부생에게 자원이 가장 집중되는 탐구형',
     keywords: ['학부 중심', '졸업논문', '이론'],
     vector: {
       curriculum: 0.5, orientation: -2, setting: 1, scale: -1.5,
       pace: -0.5, community: -1.5, field: 1.5,
     },
     detail: {
-      vibe: '아이비 중 학부생에게 자원을 가장 몰아주는 학교로 유명해. 경영대·법대·의대가 아예 없어서 교수와 예산의 관심이 학부로 향해. 조용한 소도시에 캠퍼스가 있어서 바깥 소음이 적고, 그만큼 학교 안에서 깊게 파고드는 분위기야. 학생들끼리 이걸 "오렌지 버블(Orange Bubble)"이라고 불러.',
-      strength: '전교생이 4학년 때 졸업논문(Senior Thesis)을 반드시 써. 1년 내내 교수와 일대일로 붙어서 자기 주제를 파는 건데, 프린스턴 졸업생들이 학교에서 가장 힘들었고 가장 기억에 남는다고 말하는 경험이야. 프리셉트(precept)라는 소규모 토론 수업이 기본이고, 수학·물리·경제학·금융공학처럼 이론적으로 깊이 들어가는 분야가 특히 세. 재정지원이 후한 것으로도 잘 알려져 있어.',
-      fitsWho: '얕고 넓게 훑는 것보다 하나를 끝까지 파는 게 성격에 맞는 사람. 취업 준비보다 "이게 왜 이렇게 되는지"가 더 궁금한 사람. 교수님이 내 이름을 아는 작은 규모가 편한 사람.',
+      student: {
+        vibe: '아이비 중 학부생에게 자원을 가장 몰아주는 학교로 유명해. 경영대·법대·의대가 아예 없어서 교수와 예산의 관심이 학부로 향해. 조용한 소도시에 캠퍼스가 있어서 바깥 소음이 적고, 그만큼 학교 안에서 깊게 파고드는 분위기야. 학생들끼리 이걸 "오렌지 버블(Orange Bubble)"이라고 불러.',
+        strength: '전교생이 4학년 때 졸업논문(Senior Thesis)을 반드시 써. 1년 내내 교수와 일대일로 붙어서 자기 주제를 파는 건데, 프린스턴 졸업생들이 학교에서 가장 힘들었고 가장 기억에 남는다고 말하는 경험이야. 프리셉트(precept)라는 소규모 토론 수업이 기본이고, 수학·물리·경제학·금융공학처럼 이론적으로 깊이 들어가는 분야가 특히 세. 재정지원이 후한 것으로도 잘 알려져 있어.',
+        fitsWho: '얕고 넓게 훑는 것보다 하나를 끝까지 파는 게 성격에 맞는 사람. 취업 준비보다 "이게 왜 이렇게 되는지"가 더 궁금한 사람. 교수님이 내 이름을 아는 작은 규모가 편한 사람.',
+      },
+      parent: {
+        vibe: '아이비 중 학부생에게 자원이 가장 집중되는 학교입니다. 경영대·법대·의대가 아예 없어 교수와 예산의 관심이 학부로 향합니다. 조용한 소도시에 캠퍼스가 있어 외부 자극이 적고, 학교 안에서 깊게 파고드는 분위기입니다.',
+        strength: '전교생이 4학년 때 졸업논문을 반드시 씁니다. 1년 내내 교수와 일대일로 자기 주제를 파고드는 과정으로, 졸업생들이 가장 힘들었지만 가장 남았다고 말하는 경험입니다. 소규모 토론 수업이 기본이고 수학·물리·경제학·금융공학 등 이론적 깊이가 필요한 분야가 특히 강합니다.',
+        fitsWho: '넓게 훑기보다 하나를 끝까지 파고드는 성향의 아이. 교수가 이름을 아는 규모를 편해하는 아이. 다만 활동적이고 사람 많은 환경을 원하는 아이에게는 조용하게 느껴질 수 있습니다.',
+      },
+    },
+    forParents: {
+      aid: '국제학생에게도 need-blind이며, 재정 상황이 합격 판단에 영향을 주지 않습니다. 대출 없이 장학금으로 필요액을 채우는 정책으로도 잘 알려져 있습니다.',
+      place: '뉴저지주 프린스턴. 조용하고 안전한 소도시이며 뉴욕과 필라델피아 중간에 있어 이동이 편합니다. 학부생 약 5,300명으로 작은 편입니다.',
+      after: '대학원 진학과 연구로 이어지는 비율이 높고, 금융공학·컨설팅 등 정량적 분야로 나가는 졸업생도 많습니다.',
     },
   },
   {
@@ -1290,15 +1450,28 @@ const SCHOOLS = [
     location: '미국 코네티컷주 뉴헤이븐',
     color: '#00356B',
     tagline: '기숙사가 집이 되는 따뜻한 인문·예술형',
+    taglineParent: '소속감이 확실한 따뜻한 인문·예술형',
     keywords: ['레지덴셜 칼리지', '인문·예술', '따뜻함'],
     vector: {
       curriculum: -0.5, orientation: -1.5, setting: -0.5, scale: -1,
       pace: 1.5, community: -1.5, field: -2,
     },
     detail: {
-      vibe: '입학하면 14개 레지덴셜 칼리지 중 하나에 배정돼서 4년 내내 그곳 소속으로 지내. 각 칼리지마다 식당·도서관·행사가 따로 있고 학장도 따로 있어서, 큰 학교 안에 작은 학교가 하나 생기는 구조야. 해리포터 기숙사를 떠올리면 얼추 맞아. 아이비 중에서 학생들 사이가 덜 살벌하고 서로 잘 챙긴다는 평이 특히 강한 학교야.',
-      strength: '인문학과 예술이 가장 강한 아이비야. 연극·드라마 쪽은 세계적인 수준이고 여기서 배출된 배우와 연출가가 즐비해. 아카펠라 그룹, 학내 신문, 토론 동아리 같은 학생 활동 문화가 유별나게 발달해 있고, 글쓰기와 토론으로 승부하는 분야에서 오랫동안 강했어. 정치권으로 나가는 졸업생도 많아.',
-      fitsWho: '글 쓰고 말하고 무대에 서는 게 즐거운 사람. 경쟁에서 이기는 것보다 좋은 사람들과 오래 같이 있는 게 중요한 사람. 큰 학교의 자원은 누리고 싶은데 소속감 없이 붕 뜨는 건 싫은 사람.',
+      student: {
+        vibe: '입학하면 14개 레지덴셜 칼리지 중 하나에 배정돼서 4년 내내 그곳 소속으로 지내. 각 칼리지마다 식당·도서관·행사가 따로 있고 학장도 따로 있어서, 큰 학교 안에 작은 학교가 하나 생기는 구조야. 해리포터 기숙사를 떠올리면 얼추 맞아. 아이비 중에서 학생들 사이가 덜 살벌하고 서로 잘 챙긴다는 평이 특히 강한 학교야.',
+        strength: '인문학과 예술이 가장 강한 아이비야. 연극·드라마 쪽은 세계적인 수준이고 여기서 배출된 배우와 연출가가 즐비해. 아카펠라 그룹, 학내 신문, 토론 동아리 같은 학생 활동 문화가 유별나게 발달해 있고, 글쓰기와 토론으로 승부하는 분야에서 오랫동안 강했어. 정치권으로 나가는 졸업생도 많아.',
+        fitsWho: '글 쓰고 말하고 무대에 서는 게 즐거운 사람. 경쟁에서 이기는 것보다 좋은 사람들과 오래 같이 있는 게 중요한 사람. 큰 학교의 자원은 누리고 싶은데 소속감 없이 붕 뜨는 건 싫은 사람.',
+      },
+      parent: {
+        vibe: '입학하면 14개 레지덴셜 칼리지 중 하나에 배정되어 4년 내내 그곳 소속으로 지냅니다. 칼리지마다 식당·도서관·행사가 따로 있고 담당 학장도 따로 있어, 큰 학교 안에 작은 공동체가 만들어지는 구조입니다. 유학 초기에 아이가 소속감 없이 겉돌 걱정을 덜어주는 제도입니다. 학생들 사이가 덜 경쟁적이고 서로 잘 챙긴다는 평이 특히 강합니다.',
+        strength: '인문학과 예술이 가장 강한 아이비입니다. 연극·드라마 분야는 세계적인 수준이며 배우와 연출가를 다수 배출했습니다. 학내 신문, 아카펠라, 토론 동아리 등 학생 활동 문화가 발달해 있고, 글쓰기와 말하기로 승부하는 분야에서 오래 강했습니다.',
+        fitsWho: '글 쓰고 말하고 표현하는 것을 즐기는 아이. 경쟁에서 이기는 것보다 좋은 사람들과 오래 함께하는 것을 중요하게 여기는 아이. 큰 학교의 자원은 누리되 소속감 없이 지내는 건 힘들어하는 아이.',
+      },
+    },
+    forParents: {
+      aid: '국제학생에게도 need-blind이며, 재정 상황이 합격 판단에 영향을 주지 않고 필요액의 100%를 지원합니다.',
+      place: '코네티컷주 뉴헤이븐. 뉴욕까지 기차로 약 2시간인 중소도시입니다. 학부생 약 6,500명이며, 레지덴셜 칼리지 제도 덕분에 생활 관리가 촘촘한 편입니다.',
+      after: '법조·정치·언론·예술 분야 진출이 두드러지고, 대학원 진학 비율도 높습니다.',
     },
   },
   {
@@ -1308,6 +1481,7 @@ const SCHOOLS = [
     location: '미국 매사추세츠주 케임브리지',
     color: '#A51C30',
     tagline: '가장 큰 무대에서 가장 야심찬 사람들과',
+    taglineParent: '선택지와 자원이 가장 넓게 열려 있는 곳',
     keywords: ['최대 자원', '야망 밀도', '넓은 선택지'],
     // 하버드는 어느 축에서도 극단이 아니라 벡터가 밋밋해지기 쉽고, 그러면
     // 컬럼비아(도시·야망·독립)에 흡수돼서 아무도 1위로 못 받는 학교가 된다.
@@ -1318,9 +1492,21 @@ const SCHOOLS = [
       pace: -2, community: -0.5, field: -0.5,
     },
     detail: {
-      vibe: '학교 자체가 하나의 도시 같은 곳이야. 세계에서 가장 큰 대학 기금과 도서관을 갖고 있어서, 뭘 하고 싶다고 하면 대체로 그걸 할 돈과 사람과 공간이 이미 학교 안에 있어. 대신 주변 사람들이 하나같이 뭔가를 열심히 하고 있어서 밀도가 굉장히 높아. 2학년부터는 12개 기숙사(House) 중 하나에 배정돼서 거기가 생활의 중심이 돼.',
-      strength: '특정 분야가 아니라 거의 모든 분야가 상위권이라는 게 강점이야. 전공을 바꿔도 갈 곳이 있고, 관심사가 아직 안 정해졌어도 선택지가 줄지 않아. 학생 신문, 잡지, 각종 단체 같은 과외 활동이 하나하나 기관급 규모라 거기서 보내는 시간이 수업만큼 중요한 경우도 많아. 졸업 후 동문 네트워크의 규모와 범위는 비교 대상이 없어.',
-      fitsWho: '아직 하나로 좁히기 싫고 선택지를 최대한 열어두고 싶은 사람. 주변에 나보다 잘하는 사람이 많은 게 스트레스가 아니라 자극이 되는 사람. 보스턴이라는 도시와 큰 캠퍼스를 둘 다 원하는 사람.',
+      student: {
+        vibe: '학교 자체가 하나의 도시 같은 곳이야. 세계에서 가장 큰 대학 기금과 도서관을 갖고 있어서, 뭘 하고 싶다고 하면 대체로 그걸 할 돈과 사람과 공간이 이미 학교 안에 있어. 대신 주변 사람들이 하나같이 뭔가를 열심히 하고 있어서 밀도가 굉장히 높아. 2학년부터는 12개 기숙사(House) 중 하나에 배정돼서 거기가 생활의 중심이 돼.',
+        strength: '특정 분야가 아니라 거의 모든 분야가 상위권이라는 게 강점이야. 전공을 바꿔도 갈 곳이 있고, 관심사가 아직 안 정해졌어도 선택지가 줄지 않아. 학생 신문, 잡지, 각종 단체 같은 과외 활동이 하나하나 기관급 규모라 거기서 보내는 시간이 수업만큼 중요한 경우도 많아. 졸업 후 동문 네트워크의 규모와 범위는 비교 대상이 없어.',
+        fitsWho: '아직 하나로 좁히기 싫고 선택지를 최대한 열어두고 싶은 사람. 주변에 나보다 잘하는 사람이 많은 게 스트레스가 아니라 자극이 되는 사람. 보스턴이라는 도시와 큰 캠퍼스를 둘 다 원하는 사람.',
+      },
+      parent: {
+        vibe: '학교 자체가 하나의 도시에 가까운 규모입니다. 세계에서 가장 큰 대학 기금과 도서관을 갖고 있어, 학생이 무엇을 하고 싶다고 하면 대체로 그것을 할 자원이 이미 학교 안에 있습니다. 다만 주변 학생들의 밀도가 매우 높아, 비교에 쉽게 흔들리는 아이라면 초기 적응에 시간이 걸릴 수 있습니다. 2학년부터는 기숙사에 배정되어 그곳이 생활의 중심이 됩니다.',
+        strength: '특정 분야가 아니라 거의 모든 분야가 상위권입니다. 전공을 바꿔도 갈 곳이 있고, 관심사가 아직 정해지지 않았더라도 선택지가 줄지 않습니다. 학생 단체와 과외 활동이 하나하나 기관급 규모이며, 졸업 후 동문 네트워크의 규모와 범위는 비교 대상이 없습니다.',
+        fitsWho: '아직 진로를 하나로 좁히고 싶지 않고 선택지를 넓게 두고 싶은 아이. 잘하는 사람이 주변에 많은 것을 스트레스가 아니라 자극으로 받아들이는 아이.',
+      },
+    },
+    forParents: {
+      aid: '국제학생에게도 need-blind이며, 재정 상황이 합격 판단에 영향을 주지 않고 필요액의 100%를 지원합니다. 세계 최대 규모의 대학 기금을 바탕으로 지원이 후한 편입니다.',
+      place: '매사추세츠주 케임브리지. 보스턴과 강 하나를 사이에 둔 대학 도시로 한국인 유학생과 교민 사회가 잘 형성되어 있습니다. 학부생 약 7,000명.',
+      after: '거의 모든 분야에서 상위권 경로가 열려 있고, 동문 네트워크의 범위가 가장 넓습니다.',
     },
   },
 ];
@@ -1335,215 +1521,709 @@ if (typeof module !== 'undefined' && module.exports) {
 <script>
 /* === js/data/questions.js === */
 /**
- * 18개 질문
+ * 18개 질문 (학생용 / 학부모용)
+ *
+ * text 와 label 은 { student, parent } 두 벌이지만 weights 는 하나만 둔다.
+ * 두 모드가 같은 가중치를 공유해야 채점 결과가 같은 기준으로 나오고,
+ * 검증(scripts/check-reachability.js)도 한 번만 돌리면 된다.
+ * 문구를 모드별로 따로 두되 가중치를 따로 두지 말 것.
+ *
+ * 학생용은 "나는 ~한다", 학부모용은 "아이가 ~해요" 로 쓴다.
+ * 학부모가 답하는 건 부모 자신의 성향이 아니라 아이를 관찰한 내용이다.
+ * 학교를 아이에게 맞추는 게 목적이지 부모 취향에 맞추는 게 아니기 때문이다.
  *
  * 각 문항은 1개의 주축(primary)을 -2 / -1 / +1 / +2 로 훑고,
- * 보조축(secondary)을 ±1 로 얹어서 결과에 결이 생기게 한다.
- * 선택지 순서 자체에는 의미가 없다(A가 항상 음수 쪽인 건 아님).
+ * 보조축을 ±1 로 얹는다. 선택지 순서에는 의미가 없다.
  *
  * 주축 배분: curriculum 3 · orientation 3 · setting 3 ·
  *            scale 2 · pace 3 · community 2 · field 2  = 18
  *
- * 성적·시험·스펙을 묻는 문항은 의도적으로 하나도 넣지 않았다.
+ * 성적·시험·스펙을 묻는 문항은 의도적으로 하나도 없다.
  * 이건 성향 매칭이지 합격 예측이 아니다.
  */
 const QUESTIONS = [
   {
     id: 'q1',
     primary: 'curriculum',
-    text: '개강 첫 주, 시간표를 짜는 나는',
+    text: {
+      student: '개강 첫 주, 시간표를 짜는 나는',
+      parent: '아이가 무엇을 배울지 정할 때 보면',
+    },
     options: [
-      { label: '듣고 싶은 것만 골라 담는다. 필수 과목이란 게 없었으면 좋겠다', weights: { curriculum: -2, community: 1 } },
-      { label: '학교가 정해준 필수부터 채우고 남는 자리를 고른다', weights: { curriculum: 2, pace: -1 } },
-      { label: '전공 로드맵 순서대로 착실히 밟는다', weights: { curriculum: 1, orientation: 1 } },
-      { label: '관심 가는 분야를 일단 여기저기 찔러본다', weights: { curriculum: -1, scale: 1 } },
+      {
+        label: {
+          student: '듣고 싶은 것만 골라 담는다. 필수 과목이란 게 없었으면 좋겠다',
+          parent: '관심 가는 것만 골라서 파요. 정해진 틀을 답답해합니다',
+        },
+        weights: { curriculum: -2, community: 1 },
+      },
+      {
+        label: {
+          student: '학교가 정해준 필수부터 채우고 남는 자리를 고른다',
+          parent: '학교가 정해준 순서대로 따라가는 걸 편해합니다',
+        },
+        weights: { curriculum: 2, pace: -1 },
+      },
+      {
+        label: {
+          student: '전공 로드맵 순서대로 착실히 밟는다',
+          parent: '목표가 정해지면 필요한 걸 차근차근 밟아갑니다',
+        },
+        weights: { curriculum: 1, orientation: 1 },
+      },
+      {
+        label: {
+          student: '관심 가는 분야를 일단 여기저기 찔러본다',
+          parent: '이것저것 넓게 건드려보는 편입니다',
+        },
+        weights: { curriculum: -1, scale: 1 },
+      },
     ],
   },
   {
     id: 'q2',
     primary: 'orientation',
-    text: '전공을 고를 때 가장 먼저 떠오르는 생각은',
+    text: {
+      student: '전공을 고를 때 가장 먼저 떠오르는 생각은',
+      parent: '아이가 진로 이야기를 할 때 기준은',
+    },
     options: [
-      { label: '이거 진짜 재밌겠다', weights: { orientation: -2, field: -1 } },
-      { label: '졸업하고 뭘 하게 되는지가 분명하다', weights: { orientation: 2, pace: -1 } },
-      { label: '아직 모르겠고 일단 넓게 배우고 싶다', weights: { orientation: -1, scale: 1 } },
-      { label: '배운 걸 바로 써먹을 수 있는 게 좋다', weights: { orientation: 1, field: 1 } },
+      {
+        label: {
+          student: '이거 진짜 재밌겠다',
+          parent: '재밌겠다는 말이 먼저 나옵니다',
+        },
+        weights: { orientation: -2, field: -1 },
+      },
+      {
+        label: {
+          student: '졸업하고 뭘 하게 되는지가 분명하다',
+          parent: '졸업하고 뭘 할 수 있는지를 먼저 따집니다',
+        },
+        weights: { orientation: 2, pace: -1 },
+      },
+      {
+        label: {
+          student: '아직 모르겠고 일단 넓게 배우고 싶다',
+          parent: '아직 모르겠다며 여러 가능성을 열어둡니다',
+        },
+        weights: { orientation: -1, scale: 1 },
+      },
+      {
+        label: {
+          student: '배운 걸 바로 써먹을 수 있는 게 좋다',
+          parent: '배운 걸 바로 써먹는 걸 좋아합니다',
+        },
+        weights: { orientation: 1, field: 1 },
+      },
     ],
   },
   {
     id: 'q3',
     primary: 'setting',
-    text: '수업 없는 토요일, 내 기본값은',
+    text: {
+      student: '수업 없는 토요일, 내 기본값은',
+      parent: '아이가 쉬는 날 주로 하는 것은',
+    },
     options: [
-      { label: '지하철 타고 시내 한복판으로 나간다', weights: { setting: -2, community: 1 } },
-      { label: '도시는 도시인데 조용한 동네 카페에 있는다', weights: { setting: -1, pace: 1 } },
-      { label: '학교랑 붙어 있는 동네에서 소소하게 보낸다', weights: { setting: 1, scale: -1 } },
-      { label: '산이든 강이든 자연 있는 데로 나간다', weights: { setting: 2, community: -1 } },
+      {
+        label: {
+          student: '지하철 타고 시내 한복판으로 나간다',
+          parent: '시내로 나가서 사람 많은 곳을 돌아다닙니다',
+        },
+        weights: { setting: -2, community: 1 },
+      },
+      {
+        label: {
+          student: '도시는 도시인데 조용한 동네 카페에 있는다',
+          parent: '도시 안에서도 조용한 자리를 찾아갑니다',
+        },
+        weights: { setting: -1, pace: 1 },
+      },
+      {
+        label: {
+          student: '학교랑 붙어 있는 동네에서 소소하게 보낸다',
+          parent: '집이나 동네 근처에서 소소하게 보냅니다',
+        },
+        weights: { setting: 1, scale: -1 },
+      },
+      {
+        label: {
+          student: '산이든 강이든 자연 있는 데로 나간다',
+          parent: '산이든 바다든 자연 있는 곳을 좋아합니다',
+        },
+        weights: { setting: 2, community: -1 },
+      },
     ],
   },
   {
     id: 'q4',
     primary: 'scale',
-    text: '새 학기 첫 수업, 강의실에 들어갔을 때 마음이 편한 쪽은',
+    text: {
+      student: '새 학기 첫 수업, 강의실에 들어갔을 때 마음이 편한 쪽은',
+      parent: '아이가 편해하는 교실 분위기는',
+    },
     options: [
-      { label: '열댓 명. 교수님이 내 이름을 안다', weights: { scale: -2, pace: 1 } },
-      { label: '서른 명쯤. 적당히 묻히고 적당히 참여한다', weights: { scale: -1, orientation: -1 } },
-      { label: '200명 대형 강의. 다양한 사람 구경하는 맛이 있다', weights: { scale: 1, setting: -1 } },
-      { label: '수업마다 사람이 싹 달라서 매번 새로 만난다', weights: { scale: 2, community: 1 } },
+      {
+        label: {
+          student: '열댓 명. 교수님이 내 이름을 안다',
+          parent: '인원이 적어서 선생님이 이름을 아는 곳',
+        },
+        weights: { scale: -2, pace: 1 },
+      },
+      {
+        label: {
+          student: '서른 명쯤. 적당히 묻히고 적당히 참여한다',
+          parent: '적당한 인원에서 적당히 참여하는 곳',
+        },
+        weights: { scale: -1, orientation: -1 },
+      },
+      {
+        label: {
+          student: '200명 대형 강의. 다양한 사람 구경하는 맛이 있다',
+          parent: '사람 많은 큰 강의실도 아무렇지 않아 합니다',
+        },
+        weights: { scale: 1, setting: -1 },
+      },
+      {
+        label: {
+          student: '수업마다 사람이 싹 달라서 매번 새로 만난다',
+          parent: '매번 새로운 사람을 만나는 걸 즐깁니다',
+        },
+        weights: { scale: 2, community: 1 },
+      },
     ],
   },
   {
     id: 'q5',
     primary: 'pace',
-    text: '팀 프로젝트에서 나는',
+    text: {
+      student: '팀 프로젝트에서 나는',
+      parent: '조별 과제를 할 때 아이는',
+    },
     options: [
-      { label: '내가 제일 잘하고 싶다. 결과가 눈에 보여야 한다', weights: { pace: -2, orientation: 1 } },
-      { label: '잘하는 사람 옆에 붙어서 같이 수준을 올린다', weights: { pace: -1, scale: 1 } },
-      { label: '마감은 지키되 서로 감정 상하지 않게 조율한다', weights: { pace: 1, community: -1 } },
-      { label: '다 같이 잘 되는 게 제일 좋다. 점수는 그다음', weights: { pace: 2, field: -1 } },
+      {
+        label: {
+          student: '내가 제일 잘하고 싶다. 결과가 눈에 보여야 한다',
+          parent: '본인이 제일 잘하고 싶어 합니다',
+        },
+        weights: { pace: -2, orientation: 1 },
+      },
+      {
+        label: {
+          student: '잘하는 사람 옆에 붙어서 같이 수준을 올린다',
+          parent: '잘하는 친구 옆에서 같이 수준을 올립니다',
+        },
+        weights: { pace: -1, scale: 1 },
+      },
+      {
+        label: {
+          student: '마감은 지키되 서로 감정 상하지 않게 조율한다',
+          parent: '마감은 지키되 서로 감정 상하지 않게 조율합니다',
+        },
+        weights: { pace: 1, community: -1 },
+      },
+      {
+        label: {
+          student: '다 같이 잘 되는 게 제일 좋다. 점수는 그다음',
+          parent: '다 같이 잘 되는 걸 더 중요하게 여깁니다',
+        },
+        weights: { pace: 2, field: -1 },
+      },
     ],
   },
   {
     id: 'q6',
     primary: 'community',
-    text: '학교 응원전이나 축제 같은 전통 행사에 대해 나는',
+    text: {
+      student: '학교 응원전이나 축제 같은 전통 행사에 대해 나는',
+      parent: '학교 행사나 단체 활동에 대해 아이는',
+    },
     options: [
-      { label: '무조건 간다. 이런 게 대학 다니는 맛이다', weights: { community: -2, setting: 1 } },
-      { label: '친한 애들이 가면 나도 간다', weights: { community: -1, scale: -1 } },
-      { label: '한 번쯤은 가보는데 매년 챙기지는 않는다', weights: { community: 1, orientation: 1 } },
-      { label: '그 시간에 내 일정을 소화한다', weights: { community: 2, setting: -1 } },
+      {
+        label: {
+          student: '무조건 간다. 이런 게 대학 다니는 맛이다',
+          parent: '빠지지 않고 챙깁니다. 그런 데서 힘을 얻습니다',
+        },
+        weights: { community: -2, setting: 1 },
+      },
+      {
+        label: {
+          student: '친한 애들이 가면 나도 간다',
+          parent: '친한 친구들이 가면 같이 갑니다',
+        },
+        weights: { community: -1, scale: -1 },
+      },
+      {
+        label: {
+          student: '한 번쯤은 가보는데 매년 챙기지는 않는다',
+          parent: '한 번쯤 가보지만 매번 챙기지는 않습니다',
+        },
+        weights: { community: 1, orientation: 1 },
+      },
+      {
+        label: {
+          student: '그 시간에 내 일정을 소화한다',
+          parent: '그 시간에 자기 할 일을 합니다',
+        },
+        weights: { community: 2, setting: -1 },
+      },
     ],
   },
   {
     id: 'q7',
     primary: 'field',
-    text: '밤새 봐도 안 지겨울 것 같은 건',
+    text: {
+      student: '밤새 봐도 안 지겨울 것 같은 건',
+      parent: '아이가 시간 가는 줄 모르고 보는 것은',
+    },
     options: [
-      { label: '소설, 영화, 다큐. 결국 사람 이야기', weights: { field: -2, orientation: -1 } },
-      { label: '그림, 음악, 무대. 뭔가 표현하는 것', weights: { field: -1, pace: 1 } },
-      { label: '데이터랑 그래프. 왜 이렇게 되는지', weights: { field: 1, orientation: -1 } },
-      { label: '직접 조립하고 코딩해서 굴러가게 만드는 것', weights: { field: 2, orientation: 1 } },
+      {
+        label: {
+          student: '소설, 영화, 다큐. 결국 사람 이야기',
+          parent: '소설, 영화, 결국 사람 이야기',
+        },
+        weights: { field: -2, orientation: -1 },
+      },
+      {
+        label: {
+          student: '그림, 음악, 무대. 뭔가 표현하는 것',
+          parent: '그림, 음악처럼 뭔가 표현하는 것',
+        },
+        weights: { field: -1, pace: 1 },
+      },
+      {
+        label: {
+          student: '데이터랑 그래프. 왜 이렇게 되는지',
+          parent: '숫자나 자료에서 규칙을 찾아내는 것',
+        },
+        weights: { field: 1, orientation: -1 },
+      },
+      {
+        label: {
+          student: '직접 조립하고 코딩해서 굴러가게 만드는 것',
+          parent: '직접 만들고 코딩해서 굴러가게 하는 것',
+        },
+        weights: { field: 2, orientation: 1 },
+      },
     ],
   },
   {
     id: 'q8',
     primary: 'curriculum',
-    text: '전공 상관없이 전교생이 똑같이 듣는 고전 읽기 수업이 있다면',
+    text: {
+      student: '전공 상관없이 전교생이 똑같이 듣는 고전 읽기 수업이 있다면',
+      parent: '전교생이 똑같이 듣는 고전 읽기 필수 수업이 있다면 아이는',
+    },
     options: [
-      { label: '왜 내 시간을 거기에 써야 하는지 모르겠다', weights: { curriculum: -2, orientation: 1 } },
-      { label: '필수 말고 선택이면 들어볼 수도 있다', weights: { curriculum: -1, pace: 1 } },
-      { label: '평생 안 읽었을 책을 읽게 되니 나쁘지 않다', weights: { curriculum: 1, field: -1 } },
-      { label: '다 같이 같은 걸 읽는다는 게 오히려 좋다', weights: { curriculum: 2, scale: 1 } },
+      {
+        label: {
+          student: '왜 내 시간을 거기에 써야 하는지 모르겠다',
+          parent: '왜 그걸 해야 하냐고 할 것 같습니다',
+        },
+        weights: { curriculum: -2, orientation: 1 },
+      },
+      {
+        label: {
+          student: '필수 말고 선택이면 들어볼 수도 있다',
+          parent: '필수만 아니면 들어볼 것 같습니다',
+        },
+        weights: { curriculum: -1, pace: 1 },
+      },
+      {
+        label: {
+          student: '평생 안 읽었을 책을 읽게 되니 나쁘지 않다',
+          parent: '평생 안 읽었을 책을 읽게 되니 좋아할 것 같습니다',
+        },
+        weights: { curriculum: 1, field: -1 },
+      },
+      {
+        label: {
+          student: '다 같이 같은 걸 읽는다는 게 오히려 좋다',
+          parent: '다 같이 같은 걸 읽는 걸 오히려 좋아할 것 같습니다',
+        },
+        weights: { curriculum: 2, scale: 1 },
+      },
     ],
   },
   {
     id: 'q9',
     primary: 'orientation',
-    text: '방학 3개월이 통으로 비었다. 나는',
+    text: {
+      student: '방학 3개월이 통으로 비었다. 나는',
+      parent: '방학이 통으로 비면 아이는',
+    },
     options: [
-      { label: '인턴에 지원한다. 실무를 겪어봐야 안다', weights: { orientation: 2, pace: -1 } },
-      { label: '관심 있는 주제를 혼자 끝까지 파본다', weights: { orientation: -2, scale: -1 } },
-      { label: '뭐가 됐든 남는 결과물 하나는 만든다', weights: { orientation: 1, community: 1 } },
-      { label: '여행 가고 사람 만나면서 경험을 넓힌다', weights: { orientation: -1, setting: 1 } },
+      {
+        label: {
+          student: '인턴에 지원한다. 실무를 겪어봐야 안다',
+          parent: '인턴이든 실무든 경험할 자리를 찾습니다',
+        },
+        weights: { orientation: 2, pace: -1 },
+      },
+      {
+        label: {
+          student: '관심 있는 주제를 혼자 끝까지 파본다',
+          parent: '관심 있는 주제를 혼자 끝까지 팝니다',
+        },
+        weights: { orientation: -2, scale: -1 },
+      },
+      {
+        label: {
+          student: '뭐가 됐든 남는 결과물 하나는 만든다',
+          parent: '뭐가 됐든 남는 결과물을 하나 만듭니다',
+        },
+        weights: { orientation: 1, community: 1 },
+      },
+      {
+        label: {
+          student: '여행 가고 사람 만나면서 경험을 넓힌다',
+          parent: '여행하고 사람 만나며 경험을 넓힙니다',
+        },
+        weights: { orientation: -1, setting: 1 },
+      },
     ],
   },
   {
     id: 'q10',
     primary: 'setting',
-    text: '앞으로 4년 동안 살 동네를 고른다면',
+    text: {
+      student: '앞으로 4년 동안 살 동네를 고른다면',
+      parent: '아이가 4년을 지낼 동네를 고른다면',
+    },
     options: [
-      { label: '새벽에도 뭐든 열려 있는 대도시', weights: { setting: -2, community: 1 } },
-      { label: '학교랑 도시가 적당히 섞여 있는 곳', weights: { setting: -1, pace: -1 } },
-      { label: '학교가 곧 동네인 조용한 캠퍼스타운', weights: { setting: 1, community: -1 } },
-      { label: '창밖에 나무랑 강이 보이는 곳', weights: { setting: 2, pace: 1 } },
+      {
+        label: {
+          student: '새벽에도 뭐든 열려 있는 대도시',
+          parent: '새벽에도 뭐든 열려 있는 대도시',
+        },
+        weights: { setting: -2, community: 1 },
+      },
+      {
+        label: {
+          student: '학교랑 도시가 적당히 섞여 있는 곳',
+          parent: '학교와 도시가 적당히 섞여 있는 곳',
+        },
+        weights: { setting: -1, pace: -1 },
+      },
+      {
+        label: {
+          student: '학교가 곧 동네인 조용한 캠퍼스타운',
+          parent: '학교가 곧 동네인 조용한 캠퍼스타운',
+        },
+        weights: { setting: 1, community: -1 },
+      },
+      {
+        label: {
+          student: '창밖에 나무랑 강이 보이는 곳',
+          parent: '창밖에 나무와 강이 보이는 곳',
+        },
+        weights: { setting: 2, pace: 1 },
+      },
     ],
   },
   {
     id: 'q11',
     primary: 'scale',
-    text: '동아리를 고를 때 나는',
+    text: {
+      student: '동아리를 고를 때 나는',
+      parent: '아이가 모임이나 동아리를 고를 때는',
+    },
     options: [
-      { label: '소수정예로 오래 갈 사람들을 만나는 곳', weights: { scale: -2, community: -1 } },
-      { label: '하나만 제대로, 대신 깊게 하는 곳', weights: { scale: -1, orientation: -1 } },
-      { label: '여러 개 걸쳐두고 상황 따라 움직이는 편', weights: { scale: 1, curriculum: -1 } },
-      { label: '규모 크고 매년 사람이 바뀌는 곳', weights: { scale: 2, setting: -1 } },
+      {
+        label: {
+          student: '소수정예로 오래 갈 사람들을 만나는 곳',
+          parent: '소수라도 오래 갈 사람들을 만나는 곳',
+        },
+        weights: { scale: -2, community: -1 },
+      },
+      {
+        label: {
+          student: '하나만 제대로, 대신 깊게 하는 곳',
+          parent: '하나만 제대로, 대신 깊게 하는 곳',
+        },
+        weights: { scale: -1, orientation: -1 },
+      },
+      {
+        label: {
+          student: '여러 개 걸쳐두고 상황 따라 움직이는 편',
+          parent: '여러 개 걸쳐두고 상황 따라 움직입니다',
+        },
+        weights: { scale: 1, curriculum: -1 },
+      },
+      {
+        label: {
+          student: '규모 크고 매년 사람이 바뀌는 곳',
+          parent: '규모가 크고 사람이 계속 바뀌는 곳',
+        },
+        weights: { scale: 2, setting: -1 },
+      },
     ],
   },
   {
     id: 'q12',
     primary: 'pace',
-    text: '주변에 나보다 잘하는 사람이 많을 때',
+    text: {
+      student: '주변에 나보다 잘하는 사람이 많을 때',
+      parent: '주변에 아이보다 잘하는 친구가 많을 때',
+    },
     options: [
-      { label: '자극받아서 나도 더 한다', weights: { pace: -2, scale: 1 } },
-      { label: '좀 위축되긴 하는데 결국 배우게 된다', weights: { pace: -1, field: 1 } },
-      { label: '그 사람들이랑 친해져서 같이 한다', weights: { pace: 1, community: -1 } },
-      { label: '비교하지 않으려 한다. 나는 내 속도가 있다', weights: { pace: 2, curriculum: -1 } },
+      {
+        label: {
+          student: '자극받아서 나도 더 한다',
+          parent: '자극받아서 더 열심히 합니다',
+        },
+        weights: { pace: -2, scale: 1 },
+      },
+      {
+        label: {
+          student: '좀 위축되긴 하는데 결국 배우게 된다',
+          parent: '좀 위축되긴 해도 결국 배웁니다',
+        },
+        weights: { pace: -1, field: 1 },
+      },
+      {
+        label: {
+          student: '그 사람들이랑 친해져서 같이 한다',
+          parent: '그 친구들과 친해져서 같이 합니다',
+        },
+        weights: { pace: 1, community: -1 },
+      },
+      {
+        label: {
+          student: '비교하지 않으려 한다. 나는 내 속도가 있다',
+          parent: '비교하지 않고 자기 속도대로 갑니다',
+        },
+        weights: { pace: 2, curriculum: -1 },
+      },
     ],
   },
   {
     id: 'q13',
     primary: 'community',
-    text: '졸업하고 10년 뒤, 학교와 나의 관계는',
+    text: {
+      student: '졸업하고 10년 뒤, 학교와 나의 관계는',
+      parent: '아이가 졸업하고 10년 뒤, 학교와의 관계는',
+    },
     options: [
-      { label: '동문 모임 챙기고 후배들도 끌어준다', weights: { community: -2, scale: -1 } },
-      { label: '친했던 몇 명하고만 계속 연락한다', weights: { community: -1, pace: 1 } },
-      { label: '필요할 때 네트워크로 잘 활용한다', weights: { community: 1, scale: 1 } },
-      { label: '학교보다는 내가 하는 일로 사람을 만난다', weights: { community: 2, orientation: 1 } },
+      {
+        label: {
+          student: '동문 모임 챙기고 후배들도 끌어준다',
+          parent: '동문 모임을 챙기고 후배도 끌어줄 것 같습니다',
+        },
+        weights: { community: -2, scale: -1 },
+      },
+      {
+        label: {
+          student: '친했던 몇 명하고만 계속 연락한다',
+          parent: '친했던 몇 명하고만 계속 연락할 것 같습니다',
+        },
+        weights: { community: -1, pace: 1 },
+      },
+      {
+        label: {
+          student: '필요할 때 네트워크로 잘 활용한다',
+          parent: '필요할 때 네트워크로 잘 쓸 것 같습니다',
+        },
+        weights: { community: 1, scale: 1 },
+      },
+      {
+        label: {
+          student: '학교보다는 내가 하는 일로 사람을 만난다',
+          parent: '학교보다는 자기 일로 사람을 만날 것 같습니다',
+        },
+        weights: { community: 2, orientation: 1 },
+      },
     ],
   },
   {
     id: 'q14',
     primary: 'field',
-    text: '어려운 문제를 만났을 때 내 첫 동작은',
+    text: {
+      student: '어려운 문제를 만났을 때 내 첫 동작은',
+      parent: '아이가 어려운 문제를 만나면 먼저 하는 것은',
+    },
     options: [
-      { label: '이 문제에 대해 사람들이 뭐라고 했는지부터 읽는다', weights: { field: -2, orientation: -1 } },
-      { label: '일단 내 생각을 글로 정리해본다', weights: { field: -1, curriculum: -1 } },
-      { label: '일단 만들어보고 안 되면 고친다', weights: { field: 1, orientation: 1 } },
-      { label: '숫자로 바꿔서 계산해본다', weights: { field: 2, orientation: -1 } },
+      {
+        label: {
+          student: '이 문제에 대해 사람들이 뭐라고 했는지부터 읽는다',
+          parent: '관련된 글부터 찾아 읽습니다',
+        },
+        weights: { field: -2, orientation: -1 },
+      },
+      {
+        label: {
+          student: '일단 내 생각을 글로 정리해본다',
+          parent: '자기 생각을 글로 정리해봅니다',
+        },
+        weights: { field: -1, curriculum: -1 },
+      },
+      {
+        label: {
+          student: '일단 만들어보고 안 되면 고친다',
+          parent: '일단 만들어보고 안 되면 고칩니다',
+        },
+        weights: { field: 1, orientation: 1 },
+      },
+      {
+        label: {
+          student: '숫자로 바꿔서 계산해본다',
+          parent: '숫자로 바꿔서 계산해봅니다',
+        },
+        weights: { field: 2, orientation: -1 },
+      },
     ],
   },
   {
     id: 'q15',
     primary: 'curriculum',
-    text: "'이건 원래 이렇게 하는 거야'라는 말 앞에서 나는",
+    text: {
+      student: "'이건 원래 이렇게 하는 거야'라는 말 앞에서 나는",
+      parent: "'원래 이렇게 하는 거야'라는 말에 아이는",
+    },
     options: [
-      { label: '납득이 안 되면 안 따른다', weights: { curriculum: -2, community: 1 } },
-      { label: '적당히 지키되 결국 내 방식대로 튼다', weights: { curriculum: -1, field: 1 } },
-      { label: '일단 따라해보고 나중에 판단한다', weights: { curriculum: 1, pace: -1 } },
-      { label: '정해진 게 있으면 오히려 마음이 편하다', weights: { curriculum: 2, scale: 1 } },
+      {
+        label: {
+          student: '납득이 안 되면 안 따른다',
+          parent: '납득이 안 되면 안 따릅니다',
+        },
+        weights: { curriculum: -2, community: 1 },
+      },
+      {
+        label: {
+          student: '적당히 지키되 결국 내 방식대로 튼다',
+          parent: '적당히 지키다가 결국 자기 방식대로 합니다',
+        },
+        weights: { curriculum: -1, field: 1 },
+      },
+      {
+        label: {
+          student: '일단 따라해보고 나중에 판단한다',
+          parent: '일단 따라해보고 나중에 판단합니다',
+        },
+        weights: { curriculum: 1, pace: -1 },
+      },
+      {
+        label: {
+          student: '정해진 게 있으면 오히려 마음이 편하다',
+          parent: '정해진 게 있으면 오히려 편해합니다',
+        },
+        weights: { curriculum: 2, scale: 1 },
+      },
     ],
   },
   {
     id: 'q16',
     primary: 'orientation',
-    text: '지금까지 들었던 수업 중 가장 만족스러웠던 건',
+    text: {
+      student: '지금까지 들었던 수업 중 가장 만족스러웠던 건',
+      parent: '아이가 가장 재밌어했던 수업은',
+    },
     options: [
-      { label: '답이 없는 질문을 갖고 끝까지 토론한 수업', weights: { orientation: -2, field: -1 } },
-      { label: '실제 회사나 시장 사례를 뜯어본 수업', weights: { orientation: 2, scale: 1 } },
-      { label: '이론이 딱 맞아떨어지는 순간을 본 수업', weights: { orientation: -1, field: 1 } },
-      { label: '뭔가를 직접 만들어서 제출한 수업', weights: { orientation: 1, curriculum: -1 } },
+      {
+        label: {
+          student: '답이 없는 질문을 갖고 끝까지 토론한 수업',
+          parent: '답이 없는 질문을 끝까지 토론한 수업',
+        },
+        weights: { orientation: -2, field: -1 },
+      },
+      {
+        label: {
+          student: '실제 회사나 시장 사례를 뜯어본 수업',
+          parent: '실제 회사나 시장 사례를 뜯어본 수업',
+        },
+        weights: { orientation: 2, scale: 1 },
+      },
+      {
+        label: {
+          student: '이론이 딱 맞아떨어지는 순간을 본 수업',
+          parent: '이론이 딱 맞아떨어지는 걸 본 수업',
+        },
+        weights: { orientation: -1, field: 1 },
+      },
+      {
+        label: {
+          student: '뭔가를 직접 만들어서 제출한 수업',
+          parent: '뭔가를 직접 만들어서 제출한 수업',
+        },
+        weights: { orientation: 1, curriculum: -1 },
+      },
     ],
   },
   {
     id: 'q17',
     primary: 'setting',
-    text: '겨울에 눈이 아주 많이 오는 곳이라면',
+    text: {
+      student: '겨울에 눈이 아주 많이 오는 곳이라면',
+      parent: '눈이 아주 많이 오는 추운 곳이라면 아이는',
+    },
     options: [
-      { label: '눈보다는 사람 많고 불빛 많은 쪽이 좋다', weights: { setting: -2, scale: 1 } },
-      { label: '별로다. 건물끼리 실내로 이어졌으면 좋겠다', weights: { setting: -1, pace: -1 } },
-      { label: '춥긴 해도 실내에서 잘 지내면 된다', weights: { setting: 1, scale: -1 } },
-      { label: '낭만적이다. 눈 쌓인 캠퍼스 좋아한다', weights: { setting: 2, community: -1 } },
+      {
+        label: {
+          student: '눈보다는 사람 많고 불빛 많은 쪽이 좋다',
+          parent: '눈보다 사람 많고 불빛 많은 쪽을 좋아합니다',
+        },
+        weights: { setting: -2, scale: 1 },
+      },
+      {
+        label: {
+          student: '별로다. 건물끼리 실내로 이어졌으면 좋겠다',
+          parent: '추운 걸 싫어합니다. 실내로 이어지면 좋겠다고 할 겁니다',
+        },
+        weights: { setting: -1, pace: -1 },
+      },
+      {
+        label: {
+          student: '춥긴 해도 실내에서 잘 지내면 된다',
+          parent: '춥긴 해도 실내에서 잘 지냅니다',
+        },
+        weights: { setting: 1, scale: -1 },
+      },
+      {
+        label: {
+          student: '낭만적이다. 눈 쌓인 캠퍼스 좋아한다',
+          parent: '눈 쌓인 풍경을 좋아합니다',
+        },
+        weights: { setting: 2, community: -1 },
+      },
     ],
   },
   {
     id: 'q18',
     primary: 'pace',
-    text: "'잘 살았다'는 말을 들으면 떠오르는 건",
+    text: {
+      student: "'잘 살았다'는 말을 들으면 떠오르는 건",
+      parent: '아이가 어떻게 살았으면 하시나요',
+    },
     options: [
-      { label: '누가 봐도 인정하는 자리에 올라간 것', weights: { pace: -2, community: 1 } },
-      { label: '내 분야에서 실력으로 증명해낸 것', weights: { pace: -1, field: 1 } },
-      { label: '좋은 사람들이랑 오래 같이 해온 것', weights: { pace: 1, community: -1 } },
-      { label: '하루하루가 나한테 만족스러웠던 것', weights: { pace: 2, setting: 1 } },
+      {
+        label: {
+          student: '누가 봐도 인정하는 자리에 올라간 것',
+          parent: '누가 봐도 인정하는 자리에 올라갔으면',
+        },
+        weights: { pace: -2, community: 1 },
+      },
+      {
+        label: {
+          student: '내 분야에서 실력으로 증명해낸 것',
+          parent: '자기 분야에서 실력으로 증명했으면',
+        },
+        weights: { pace: -1, field: 1 },
+      },
+      {
+        label: {
+          student: '좋은 사람들이랑 오래 같이 해온 것',
+          parent: '좋은 사람들과 오래 함께했으면',
+        },
+        weights: { pace: 1, community: -1 },
+      },
+      {
+        label: {
+          student: '하루하루가 나한테 만족스러웠던 것',
+          parent: '하루하루가 본인에게 만족스러웠으면',
+        },
+        weights: { pace: 2, setting: 1 },
+      },
     ],
   },
 ];
@@ -1833,14 +2513,19 @@ if (typeof module !== 'undefined' && module.exports) {
  *    영향을 받지 않는다. GitHub Pages / Vercel / Netlify 어디에 올려도 동일하게 동작한다.
  *  - file:// 로 열었을 때도 그대로 동작한다.
  *
- * 형식:  #r=v1.<페이로드 7자><체크섬 1자>
+ * 형식:  #r=v2.<모드 1자><페이로드 7자><체크섬 1자>
  *  - 버전: 질문을 고치면 반드시 올린다. 안 올리면 예전 링크가 조용히
  *    엉뚱한 결과를 보여준다.
+ *  - 모드: s(학생) 또는 p(학부모). 링크를 받은 사람도 같은 화면을 봐야 한다.
  *  - 체크섬: 카카오톡·인스타 링크 처리 과정에서 뒤가 잘린 링크를 걸러낸다.
  */
 
 // 질문·선택지·가중치를 수정하면 이 값을 올릴 것.
-var SHARE_VERSION = 'v1';
+// v2: 학부모 모드가 생기면서 모드 문자가 붙었다.
+var SHARE_VERSION = 'v2';
+
+var MODE_CHAR = { student: 's', parent: 'p' };
+var CHAR_MODE = { s: 'student', p: 'parent' };
 
 var B64_SAFE = { '+': '-', '/': '_' };
 var B64_BACK = { '-': '+', _: '/' };
@@ -1889,12 +2574,13 @@ function checksumChar(answers) {
   return (sum % 36).toString(36);
 }
 
-function encodeAnswers(answers) {
-  return SHARE_VERSION + '.' + bytesToB64url(packAnswers(answers)) + checksumChar(answers);
+function encodeAnswers(mode, answers) {
+  var m = MODE_CHAR[mode] || 's';
+  return SHARE_VERSION + '.' + m + bytesToB64url(packAnswers(answers)) + checksumChar(answers);
 }
 
 /**
- * @returns {{ok:true, answers:number[]} | {ok:false, reason:'none'|'version'|'corrupt'}}
+ * @returns {{ok:true, mode:string, answers:number[]} | {ok:false, reason:'none'|'version'|'corrupt'}}
  */
 function decodeAnswers(code, expectedCount) {
   if (!code) return { ok: false, reason: 'none' };
@@ -1906,8 +2592,12 @@ function decodeAnswers(code, expectedCount) {
   if (version !== SHARE_VERSION) return { ok: false, reason: 'version' };
 
   var body = code.slice(dot + 1);
-  if (body.length < 2) return { ok: false, reason: 'corrupt' };
+  if (body.length < 3) return { ok: false, reason: 'corrupt' };
 
+  var mode = CHAR_MODE[body.charAt(0)];
+  if (!mode) return { ok: false, reason: 'corrupt' };
+
+  body = body.slice(1);
   var payload = body.slice(0, -1);
   var chk = body.slice(-1);
 
@@ -1922,7 +2612,7 @@ function decodeAnswers(code, expectedCount) {
   }
   if (checksumChar(answers) !== chk) return { ok: false, reason: 'corrupt' };
 
-  return { ok: true, answers: answers };
+  return { ok: true, mode: mode, answers: answers };
 }
 
 /* ── URL 다루기 ────────────────────────────────────────────── */
@@ -1941,12 +2631,12 @@ function canShareLink() {
   return !isFileProtocol() || !!SITE_URL;
 }
 
-function buildShareUrl(answers) {
+function buildShareUrl(mode, answers) {
   var base = isFileProtocol()
     ? SITE_URL
     : location.origin + location.pathname + location.search;
   if (!base) return '';
-  return base + '#r=' + encodeAnswers(answers);
+  return base + '#r=' + encodeAnswers(mode, answers);
 }
 
 function readHashCode() {
@@ -1954,10 +2644,11 @@ function readHashCode() {
   return m ? decodeURIComponent(m[1]) : '';
 }
 
-function writeHashCode(answers) {
+function writeHashCode(mode, answers) {
   if (isFileProtocol()) return; // file:// 에서 해시를 바꾸면 히스토리만 지저분해진다
   try {
-    history.replaceState(null, '', location.pathname + location.search + '#r=' + encodeAnswers(answers));
+    history.replaceState(null, '', location.pathname + location.search +
+      '#r=' + encodeAnswers(mode, answers));
   } catch (e) { /* 무시 */ }
 }
 
@@ -2058,22 +2749,6 @@ function serifFont(weight, size) {
   return weight + ' ' + size + 'px ' + SERIF;
 }
 
-// 화면의 엠블럼을 캔버스에도 같은 모양으로 그린다.
-// Path2D 가 SVG path 문자열을 그대로 받는다.
-function drawEmblem(ctx, schoolId, color, x, y, size) {
-  var paths = (typeof EMBLEMS !== 'undefined') ? EMBLEMS[schoolId] : null;
-  if (!paths || typeof Path2D !== 'function') return;
-  ctx.save();
-  ctx.translate(x, y);
-  ctx.scale(size / 24, size / 24);   // 원본 뷰박스가 24x24
-  ctx.strokeStyle = color;
-  ctx.lineWidth = 1.7;
-  ctx.lineCap = 'round';
-  ctx.lineJoin = 'round';
-  paths.forEach(function (d) { ctx.stroke(new Path2D(d)); });
-  ctx.restore();
-}
-
 /* ── 한글 줄바꿈 ───────────────────────────────────────────────
  * canvas 에는 줄바꿈이 없어서 직접 잘라야 한다. 공백 기준으로 자르는
  * 흔한 방식은 한글에서 그냥 안 먹는다 — 한국어 문장은 공백이 적고,
@@ -2142,9 +2817,10 @@ function roundRect(ctx, x, y, w, h, r) {
 
 /* ── 그리기 ────────────────────────────────────────────────── */
 
-function renderResultCard(canvas, result) {
+function renderResultCard(canvas, result, copy) {
   var ctx = canvas.getContext('2d');
   var top = result.top3[0];
+  var c = copy || {};
   var pad = 84;
   var innerW = CARD_W - pad * 2;
 
@@ -2180,12 +2856,13 @@ function renderResultCard(canvas, result) {
 
   ctx.fillStyle = C.brass;
   ctx.font = serifFont(400, 26);
-  ctx.fillText('Your closest match', pad, y);
-  y += 48;
+  ctx.fillText(c.cardEyebrow || 'Your closest match', pad, y);
+  y += 44;
 
-  // 엠블럼
-  drawEmblem(ctx, top.school.id, top.school.color, pad, y, 66);
-  y += 88;
+  ctx.fillStyle = C.inkSoft;
+  ctx.font = font(600, 32);
+  ctx.fillText(c.cardLead || '나랑 제일 잘 맞는 아이비는', pad, y);
+  y += 62;
 
   ctx.fillStyle = top.school.color;
   ctx.font = font(700, 88);
@@ -2199,7 +2876,8 @@ function renderResultCard(canvas, result) {
 
   ctx.fillStyle = C.ink;
   ctx.font = font(600, 36);
-  y = drawLines(ctx, wrapText(ctx, top.school.tagline, innerW, 2), pad, y, 52);
+  var tagline = c.taglineOf ? c.taglineOf(top.school) : top.school.tagline;
+  y = drawLines(ctx, wrapText(ctx, tagline, innerW, 2), pad, y, 52);
   y += 26;
 
   // 구분선
@@ -2241,17 +2919,15 @@ function renderResultCard(canvas, result) {
   result.top3.forEach(function (item, i) {
     var rowY = y + i * ROW_H;
 
-    drawEmblem(ctx, item.school.id, item.school.color, pad, rowY + 2, 34);
-
     // 순번 (세리프)
     ctx.fillStyle = C.brass;
     ctx.font = serifFont(400, 26);
-    ctx.fillText(String(i + 1), pad + 54, rowY + 8);
+    ctx.fillText(String(i + 1), pad, rowY + 8);
 
     // 학교 이름
     ctx.fillStyle = C.ink;
     ctx.font = font(700, 40);
-    ctx.fillText(item.school.nameKo, pad + 82, rowY);
+    ctx.fillText(item.school.nameKo, pad + 30, rowY);
 
     // 퍼센트 (우측 정렬, 세리프)
     ctx.textAlign = 'right';
@@ -2300,9 +2976,9 @@ function renderResultCard(canvas, result) {
     ctx.letterSpacing = '0px';
   }
 
-  // 결정적이었던 내 성향 (없으면 이 블록을 건너뛴다)
+  // 결정적이었던 성향 (없으면 이 블록을 건너뛴다)
   if (result.reasons && result.reasons.length) {
-    drawLabel('이런 성향이 결정적이었어요', y);
+    drawLabel(c.cardTraits || '이런 성향이 결정적이었어요', y);
     drawChips(result.reasons.map(function (r) { return r.label; }),
       y + LABEL_H + LABEL_GAP, C.brass, C.brass);
     y += LABEL_H + LABEL_GAP + CHIP_H + BLOCK_GAP;
@@ -2321,7 +2997,7 @@ function renderResultCard(canvas, result) {
   ctx.fillText('재미로 보는 성향 매칭이에요 · 합격 가능성 예측이 아닙니다', pad, footerTop);
   ctx.font = font(500, 24);
   ctx.fillStyle = C.inkFaint;
-  ctx.fillText('18개 질문으로 알아보는 나와 맞는 아이비리그', pad, footerTop + 36);
+  ctx.fillText(c.cardFoot || '18개 질문으로 알아보는 나와 맞는 아이비리그', pad, footerTop + 36);
 
   return canvas;
 }
@@ -2415,8 +3091,11 @@ function showLongPressSheet(url) {
 /**
  * 화면 상태 머신 + 렌더링
  *
- * intro -> quiz(18문항) -> loading -> result
- * 프레임워크 없이 세 개의 <section> 을 hidden 으로 토글한다.
+ * intro(모드 선택) -> quiz(18문항) -> loading -> result
+ * 프레임워크 없이 네 개의 <section> 을 hidden 으로 토글한다.
+ *
+ * 모드(student / parent)는 문구만 바꾼다. 가중치와 채점은 완전히 같다.
+ * 그래서 학부모가 답해도 학생이 답한 것과 같은 기준으로 학교가 나온다.
  */
 (function () {
   'use strict';
@@ -2427,6 +3106,7 @@ function showLongPressSheet(url) {
 
   var state = {
     screen: 'intro',
+    mode: 'student',
     index: 0,
     answers: new Array(QUESTIONS.length).fill(null),
     result: null,
@@ -2435,18 +3115,28 @@ function showLongPressSheet(url) {
 
   var el = {};
   ['screen-intro', 'screen-quiz', 'screen-loading', 'screen-result',
-    'btn-start', 'btn-resume', 'btn-prev', 'btn-next', 'btn-share', 'btn-image',
-    'btn-restart', 'btn-community',
-    'progress-now', 'progress-total', 'progress-fill', 'q-index', 'dots',
-    'question-text', 'options', 'axis-preview', 'roster', 'ranking', 'axis-chart',
-    'result-hero', 'result-emblem', 'result-name', 'result-en', 'result-tagline',
-    'result-place', 'result-percent', 'result-keywords', 'detail-title',
-    'why-block', 'detail-block', 'share-hint', 'export-canvas'].forEach(function (id) {
+    'btn-resume', 'btn-prev', 'btn-next', 'btn-share', 'btn-image',
+    'btn-restart', 'btn-community', 'mode-student', 'mode-parent',
+    'progress-now', 'progress-total', 'progress-fill', 'progress-note',
+    'quiz-mode-label', 'q-index', 'dots', 'question-text', 'options',
+    'axis-preview', 'roster', 'ranking', 'axis-chart', 'axis-label', 'axis-note',
+    'loading-text', 'result-hero', 'result-label', 'result-name', 'result-en',
+    'result-tagline', 'result-place', 'result-percent', 'result-keywords',
+    'detail-title', 'why-block', 'detail-block', 'parent-facts',
+    'parent-facts-block', 'share-hint', 'export-canvas'].forEach(function (id) {
       el[id] = document.getElementById(id);
     });
 
   var reduceMotion = window.matchMedia &&
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function copy() { return MODE_COPY[state.mode] || MODE_COPY.student; }
+
+  // 질문/선택지 문구는 모드별로 두 벌이다. 한쪽이 비어 있으면 학생용으로 떨어진다.
+  function pick(bundle) {
+    if (typeof bundle === 'string') return bundle;
+    return (bundle && (bundle[state.mode] || bundle.student)) || '';
+  }
 
   /**
    * 조사 선택. 학교 이름이 데이터에서 오기 때문에 "유펜가", "코넬와" 같은
@@ -2472,7 +3162,7 @@ function showLongPressSheet(url) {
         return;
       }
       localStorage.setItem(STORE_KEY, JSON.stringify({
-        index: state.index, answers: state.answers,
+        mode: state.mode, index: state.index, answers: state.answers,
       }));
     } catch (e) { /* 시크릿 모드나 file:// — 그냥 저장 안 하고 넘어간다 */ }
   }
@@ -2484,6 +3174,7 @@ function showLongPressSheet(url) {
       var data = JSON.parse(raw);
       if (!data || !Array.isArray(data.answers) ||
         data.answers.length !== QUESTIONS.length) return null;
+      if (MODES.indexOf(data.mode) === -1) data.mode = 'student';
       return data;
     } catch (e) { return null; }
   }
@@ -2522,21 +3213,27 @@ function showLongPressSheet(url) {
       el['axis-preview'].appendChild(li);
     });
 
-    // 여덟 학교 엠블럼. 결과에서 처음 보는 것보다 미리 보여주는 편이 낫다
+    // 여덟 학교를 활자로만 나열한다
     el.roster.innerHTML = '';
     SCHOOLS.forEach(function (school) {
       var li = document.createElement('li');
-      li.innerHTML = emblemSvg(school.id, school.color, 19);
-      var name = document.createElement('span');
-      name.textContent = school.nameKo;
-      li.appendChild(name);
+      var ko = document.createElement('span');
+      ko.className = 'roster-ko';
+      ko.textContent = school.nameKo;
+      var en = document.createElement('span');
+      en.className = 'roster-en';
+      en.textContent = school.nameEn;
+      li.appendChild(ko); li.appendChild(en);
       el.roster.appendChild(li);
     });
 
     var saved = loadProgress();
     var answered = saved ? saved.answers.filter(function (a) { return a !== null; }).length : 0;
     el['btn-resume'].classList.toggle('hidden', answered === 0);
-    if (answered) el['btn-resume'].textContent = '이어서 하기 (' + answered + '/' + QUESTIONS.length + ')';
+    if (answered) {
+      var who = MODE_COPY[saved.mode].pickLabel;
+      el['btn-resume'].textContent = '이어서 하기 · ' + who + ' ' + answered + '/' + QUESTIONS.length;
+    }
   }
 
   function showNotice(text) {
@@ -2555,6 +3252,8 @@ function showLongPressSheet(url) {
     var total = QUESTIONS.length;
     var answered = state.answers.filter(function (a) { return a !== null; }).length;
 
+    el['quiz-mode-label'].textContent = state.mode === 'parent' ? '학부모용 · 진행률' : '진행률';
+    el['progress-note'].textContent = copy().quizNote;
     el['progress-total'].textContent = total;
     el['progress-now'].textContent = answered;
     el['progress-fill'].style.width = (answered / total * 100) + '%';
@@ -2570,7 +3269,7 @@ function showLongPressSheet(url) {
       el.dots.appendChild(d);
     }
 
-    el['question-text'].textContent = q.text;
+    el['question-text'].textContent = pick(q.text);
 
     // 선택지
     var legend = document.createElement('legend');
@@ -2597,7 +3296,7 @@ function showLongPressSheet(url) {
 
       var text = document.createElement('span');
       text.className = 'option-label';
-      text.textContent = opt.label;
+      text.textContent = pick(opt.label);
 
       label.appendChild(input);
       label.appendChild(badge);
@@ -2639,14 +3338,25 @@ function showLongPressSheet(url) {
     goto(state.index + 1);
   }
 
+  function startQuiz(mode) {
+    state.mode = mode;
+    state.index = 0;
+    state.answers = new Array(QUESTIONS.length).fill(null);
+    clearProgress();
+    show('quiz');
+    renderQuiz();
+    scrollTop();
+  }
+
   /* ── 결과 ──────────────────────────────────────────────────── */
   function finish() {
+    el['loading-text'].textContent = copy().loading;
     show('loading');
     scrollTop();
     setTimeout(function () {
       state.result = scoreAnswers(state.answers);
       state.fromShare = false;
-      writeHashCode(state.answers);
+      writeHashCode(state.mode, state.answers);
       clearProgress();
       renderResult();
       show('result');
@@ -2657,15 +3367,20 @@ function showLongPressSheet(url) {
   function renderResult() {
     var r = state.result;
     var top = r.top3[0];
+    var c = copy();
 
     // 학교색은 결과 화면 전체에 퍼진다(이름·퍼센트·막대). 한 곳에서만 정한다.
     el['screen-result'].style.setProperty('--school', top.school.color);
-    el['result-emblem'].innerHTML = emblemSvg(top.school.id, top.school.color, 40);
+    el['result-label'].textContent = c.resultLabel;
     el['result-name'].textContent = top.school.nameKo;
     el['result-en'].textContent = top.school.nameEn;
-    el['result-tagline'].textContent = top.school.tagline;
+    el['result-tagline'].textContent = state.mode === 'parent'
+      ? (top.school.taglineParent || top.school.tagline)
+      : top.school.tagline;
     el['result-place'].textContent = top.school.location;
     el['result-percent'].textContent = top.percent + '%';
+    el['axis-label'].textContent = c.axisLabel;
+    el['axis-note'].textContent = c.axisNote;
 
     el['result-keywords'].innerHTML = '';
     top.school.keywords.forEach(function (kw) {
@@ -2677,6 +3392,7 @@ function showLongPressSheet(url) {
     renderRanking(r);
     renderWhy(r);
     renderDetail(top.school);
+    renderParentFacts(top.school);
     renderAxisChart(r);
 
     el['share-hint'].textContent = '';
@@ -2692,10 +3408,6 @@ function showLongPressSheet(url) {
       var row = document.createElement('div');
       row.className = 'rank-row' + (i === 0 ? ' is-top' : '');
 
-      var mark = document.createElement('div');
-      mark.className = 'rank-mark';
-      mark.innerHTML = emblemSvg(item.school.id, item.school.color, 26);
-
       var body = document.createElement('div');
       body.className = 'rank-body';
       var name = document.createElement('p');
@@ -2707,7 +3419,9 @@ function showLongPressSheet(url) {
       name.appendChild(document.createTextNode(item.school.nameKo));
       var tag = document.createElement('p');
       tag.className = 'rank-tagline';
-      tag.textContent = item.school.tagline;
+      tag.textContent = state.mode === 'parent'
+        ? (item.school.taglineParent || item.school.tagline)
+        : item.school.tagline;
       body.appendChild(name); body.appendChild(tag);
 
       var right = document.createElement('div');
@@ -2722,7 +3436,7 @@ function showLongPressSheet(url) {
       track.appendChild(fill);
       right.appendChild(pct); right.appendChild(track);
 
-      row.appendChild(mark); row.appendChild(body); row.appendChild(right);
+      row.appendChild(body); row.appendChild(right);
       el.ranking.appendChild(row);
 
       // 다음 프레임에 너비를 줘야 트랜지션이 실제로 돈다
@@ -2734,7 +3448,8 @@ function showLongPressSheet(url) {
 
   function renderWhy(r) {
     var top = r.top3[0];
-    el['detail-title'].textContent = top.school.nameKo + '가 1위인 이유';
+    var c = copy();
+    el['detail-title'].textContent = josa(top.school.nameKo, '이', '가') + ' 1위인 이유';
 
     var list = el['why-block'];
     list.innerHTML = '';
@@ -2743,48 +3458,34 @@ function showLongPressSheet(url) {
       var li = document.createElement('li');
       var span = document.createElement('span');
       span.style.gridColumn = '1 / -1';
-      span.textContent = '성향이 어느 쪽으로도 크게 기울지 않아서 세 학교가 비슷하게 나왔어요. ' +
-        '아래 세 곳을 다 살펴보는 걸 추천해요.';
+      span.textContent = c.flatReason;
       li.appendChild(span);
       list.appendChild(li);
-    } else {
-      // 세 줄이 전부 같은 문장으로 끝나면 기계가 찍어낸 티가 난다.
-      // 순서대로 다른 어투를 쓰고, 태그(축 이름)와 문장(극)이 겹치지 않게 한다.
-      var templates = [
-        function (pole, school) {
-          return pole + ' 쪽으로 가장 뚜렷하게 기울었어요. ' +
-            josa(school, '이', '가') + ' 딱 그런 학교예요.';
-        },
-        function (pole, school) {
-          return josa(pole, '을', '를') + ' 중요하게 보는 편인데, ' +
-            school + '의 색깔이 바로 그거예요.';
-        },
-        function (pole, school) {
-          return pole + ' 쪽 답을 여러 번 골랐어요. ' +
-            josa(school, '과', '와') + ' 잘 맞는 지점이에요.';
-        },
-      ];
-
-      r.reasons.forEach(function (reason, i) {
-        var li = document.createElement('li');
-        var tag = document.createElement('span');
-        tag.className = 'why-tag';
-        tag.textContent = reason.axis.name;      // 태그는 축 이름, 문장은 어느 쪽인지
-        var pole = reason.side === 'neg' ? reason.axis.neg : reason.axis.pos;
-        var txt = document.createElement('span');
-        txt.textContent = templates[i % templates.length](pole, top.school.nameKo);
-        li.appendChild(tag); li.appendChild(txt);
-        list.appendChild(li);
-      });
+      return;
     }
+
+    r.reasons.forEach(function (reason, i) {
+      var li = document.createElement('li');
+      var tag = document.createElement('span');
+      tag.className = 'why-tag';
+      tag.textContent = reason.axis.name;      // 태그는 축 이름, 문장은 어느 쪽인지
+      var pole = reason.side === 'neg' ? reason.axis.neg : reason.axis.pos;
+      var txt = document.createElement('span');
+      txt.textContent = c.reasons[i % c.reasons.length](pole) + ' ' +
+        josa(top.school.nameKo, '이', '가') + ' 딱 그런 학교예요.';
+      li.appendChild(tag); li.appendChild(txt);
+      list.appendChild(li);
+    });
   }
 
   function renderDetail(school) {
+    var heads = copy().detailHeads;
+    var d = school.detail[state.mode] || school.detail.student;
     el['detail-block'].innerHTML = '';
     [
-      ['분위기', school.detail.vibe],
-      ['이 학교가 잘하는 것', school.detail.strength],
-      ['이런 사람이 잘 맞아요', school.detail.fitsWho],
+      [heads[0], d.vibe],
+      [heads[1], d.strength],
+      [heads[2], d.fitsWho],
     ].forEach(function (part) {
       var wrap = document.createElement('div');
       wrap.className = 'detail-part';
@@ -2796,6 +3497,28 @@ function showLongPressSheet(url) {
       b.textContent = part[1];
       wrap.appendChild(h); wrap.appendChild(b);
       el['detail-block'].appendChild(wrap);
+    });
+  }
+
+  // 학부모가 실제로 먼저 묻는 것들 — 학비 지원, 어디서 어떻게 사는지, 졸업 후.
+  // 학생 모드에서는 통째로 숨긴다.
+  function renderParentFacts(school) {
+    var show = state.mode === 'parent' && school.forParents;
+    el['parent-facts-block'].classList.toggle('hidden', !show);
+    if (!show) return;
+
+    el['parent-facts'].innerHTML = '';
+    [
+      ['재정지원', school.forParents.aid],
+      ['환경과 규모', school.forParents.place],
+      ['졸업 후', school.forParents.after],
+    ].forEach(function (row) {
+      var dt = document.createElement('dt');
+      dt.textContent = row[0];
+      var dd = document.createElement('dd');
+      dd.textContent = row[1];
+      el['parent-facts'].appendChild(dt);
+      el['parent-facts'].appendChild(dd);
     });
   }
 
@@ -2836,7 +3559,6 @@ function showLongPressSheet(url) {
       bar.style.width = '0%';
       track.appendChild(center);
       track.appendChild(bar);
-      // 순위 막대와 마찬가지로 다음 프레임에 너비를 줘야 트랜지션이 돈다
       requestAnimationFrame(function () {
         requestAnimationFrame(function () { bar.style.width = barWidth + '%'; });
       });
@@ -2864,17 +3586,15 @@ function showLongPressSheet(url) {
   }
 
   function onShare() {
-    var url = buildShareUrl(state.answers);
+    var url = buildShareUrl(state.mode, state.answers);
     if (!url) { hint('공유 링크를 만들 수 없어요.'); return; }
+    var c = copy();
     var top = state.result.top3[0];
-    shareOrCopy(
-      url,
-      '나에게 맞는 아이비리그는?',
-      '나는 ' + top.school.nameKo + ' ' + top.percent + '% 나왔어. 너도 해볼래?'
-    ).then(function (outcome) {
-      if (outcome === 'copied') hint('링크를 복사했어요. 붙여넣기 해보세요.');
-      else if (outcome === 'failed') hint('복사에 실패했어요. 주소창을 직접 복사해 주세요.');
-    });
+    shareOrCopy(url, c.shareTitle, c.shareText(top.school.nameKo, top.percent))
+      .then(function (outcome) {
+        if (outcome === 'copied') hint('링크를 복사했어요. 붙여넣기 해보세요.');
+        else if (outcome === 'failed') hint('복사에 실패했어요. 주소창을 직접 복사해 주세요.');
+      });
   }
 
   function onImage() {
@@ -2885,7 +3605,7 @@ function showLongPressSheet(url) {
     // 그리기는 동기라서, 버튼 상태가 화면에 반영된 뒤에 시작하도록 한 프레임 미룬다
     requestAnimationFrame(function () {
       try {
-        renderResultCard(el['export-canvas'], state.result);
+        renderResultCard(el['export-canvas'], state.result, copy());
         saveResultCard(el['export-canvas'], state.result).then(function (outcome) {
           if (outcome === 'downloaded') hint('이미지를 저장했어요.');
           else if (outcome === 'failed') hint('이미지 저장에 실패했어요.');
@@ -2916,18 +3636,13 @@ function showLongPressSheet(url) {
   function boot() {
     renderIntro();
 
-    el['btn-start'].addEventListener('click', function () {
-      state.index = 0;
-      state.answers = new Array(QUESTIONS.length).fill(null);
-      clearProgress();
-      show('quiz');
-      renderQuiz();
-      scrollTop();
-    });
+    el['mode-student'].addEventListener('click', function () { startQuiz('student'); });
+    el['mode-parent'].addEventListener('click', function () { startQuiz('parent'); });
 
     el['btn-resume'].addEventListener('click', function () {
       var saved = loadProgress();
       if (!saved) return;
+      state.mode = saved.mode;
       state.answers = saved.answers;
       // 저장된 위치가 이상해도 첫 미응답 문항으로 보내면 안전하다
       var firstBlank = state.answers.indexOf(null);
@@ -2970,6 +3685,7 @@ function showLongPressSheet(url) {
     if (code) {
       var decoded = decodeAnswers(code, QUESTIONS.length);
       if (decoded.ok) {
+        state.mode = decoded.mode;
         state.answers = decoded.answers;
         state.result = scoreAnswers(state.answers);
         state.fromShare = true;

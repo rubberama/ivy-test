@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>나에게 맞는 아이비리그는? | 성향 매칭 테스트</title>
-<meta name="description" content="18개 질문으로 알아보는 나와 잘 맞는 아이비리그 8개교. 성향 기반 매칭 테스트.">
+<meta name="description" content="18개 질문으로 알아보는 나와 잘 맞는 아이비리그 8개교. 학생용과 학부모용 두 가지 버전.">
 <meta name="theme-color" content="#143c2b">
 <meta property="og:type" content="website">
 <meta property="og:title" content="나에게 맞는 아이비리그는?">
 <meta property="og:description" content="18개 질문으로 알아보는 나와 잘 맞는 아이비리그. 재미로 보는 성향 매칭이에요.">
 <!-- 파비콘을 인라인 SVG 로 넣는다. 별도 파일이 없어도 되고 file:// 에서도 뜬다. -->
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%231f5b41'/%3E%3Cpath d='M8 24 V13 a8 8 0 0 1 16 0 v11' stroke='%23f4efe3' stroke-width='2.4' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%231f5b41'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='19' fill='%23f4efe3' text-anchor='middle'%3EI%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -28,21 +28,32 @@
   <section id="screen-intro" class="screen">
 
     <div class="block">
-      <p class="hero-en">Which Ivy fits you?</p>
-      <h1 class="hero-title">나랑 결이 맞는<br>아이비리그는 어디일까</h1>
+      <p class="hero-en">Which Ivy fits?</p>
+      <h1 class="hero-title">결이 맞는 아이비리그는<br>어디일까</h1>
       <p class="hero-sub">
         하버드부터 다트머스까지, 여덟 학교는 분위기도 학제도 서로 꽤 달라요.
-        성적이 아니라 <b>성향</b>으로 나와 맞는 세 곳을 찾아드릴게요.
+        성적이 아니라 <b>성향</b>으로 맞는 세 곳을 찾아드릴게요.
       </p>
       <p class="fine">질문 18개 · 약 2분</p>
-      <div class="action-grid" style="margin-top:6px">
-        <button type="button" class="btn btn-primary btn-block" id="btn-start">
-          시작하기 <span class="arw" aria-hidden="true">→</span>
+    </div>
+
+    <!-- 시작 전에 누가 답하는지부터 고른다. 같은 18문항이지만
+         학생은 자기 얘기로, 학부모는 아이를 떠올리며 답하게 된다. -->
+    <div class="block">
+      <p class="label">누가 답하시나요?</p>
+      <div class="mode-pick">
+        <button type="button" class="mode-btn" id="mode-student" data-mode="student">
+          <span class="mode-name">학생이에요</span>
+          <span class="mode-sub">제가 직접 답할게요</span>
         </button>
-        <button type="button" class="btn btn-outline btn-block hidden" id="btn-resume">
-          이어서 하기
+        <button type="button" class="mode-btn" id="mode-parent" data-mode="parent">
+          <span class="mode-name">학부모예요</span>
+          <span class="mode-sub">아이를 떠올리며 답할게요</span>
         </button>
       </div>
+      <button type="button" class="btn btn-outline btn-block hidden" id="btn-resume">
+        이어서 하기
+      </button>
     </div>
 
     <div class="block">
@@ -65,13 +76,13 @@
   <section id="screen-quiz" class="screen hidden">
     <div>
       <div class="progress-head">
-        <span class="label">진행률</span>
+        <span class="label" id="quiz-mode-label">진행률</span>
         <span class="progress-count"><b id="progress-now">0</b> / <span id="progress-total">18</span></span>
       </div>
       <div class="progress-track">
         <div class="progress-fill" id="progress-fill"></div>
       </div>
-      <p class="progress-note">정답은 없어요. 더 나 같거나, 오래 해도 덜 지칠 것 같은 쪽을 골라주세요.</p>
+      <p class="progress-note" id="progress-note"></p>
     </div>
 
     <div>
@@ -103,7 +114,7 @@
   <section id="screen-loading" class="screen hidden">
     <div class="loading-wrap">
       <div class="spinner" aria-hidden="true"></div>
-      <p class="loading-text">답변을 여덟 학교의 성향과 맞춰보는 중…</p>
+      <p class="loading-text" id="loading-text"></p>
     </div>
   </section>
 
@@ -111,8 +122,7 @@
   <section id="screen-result" class="screen hidden">
 
     <div class="block result-hero" id="result-hero">
-      <p class="label">나와 가장 잘 맞는 학교</p>
-      <div class="result-emblem" id="result-emblem"></div>
+      <p class="label" id="result-label">나와 가장 잘 맞는 학교</p>
       <h1 class="result-name" id="result-name"></h1>
       <p class="result-en" id="result-en"></p>
       <p class="result-tagline" id="result-tagline"></p>
@@ -135,9 +145,18 @@
       <div id="detail-block"></div>
     </div>
 
+    <!-- 학부모 모드에서만 보인다 -->
+    <div class="block hidden" id="parent-facts-block">
+      <p class="label">학부모가 먼저 보는 것</p>
+      <dl class="facts" id="parent-facts"></dl>
+      <p class="fine">
+        재정지원 정책은 바뀔 수 있어요. 지원 전에 각 학교 재정지원 페이지에서 다시 확인하세요.
+      </p>
+    </div>
+
     <div class="block">
-      <p class="label">내 성향 축</p>
-      <p class="section-sub">가운데에서 멀수록 그쪽 성향이 뚜렷하다는 뜻이에요.</p>
+      <p class="label" id="axis-label">내 성향 축</p>
+      <p class="section-sub" id="axis-note"></p>
       <div id="axis-chart" class="axis-chart"></div>
     </div>
 
@@ -182,7 +201,7 @@
 <!-- 일반 script 로 순서대로 로드한다. type="module" 을 쓰면 file:// 에서
      CORS 때문에 안 열려서, index.html 더블클릭으로는 못 쓰게 된다. -->
 <script src="js/data/axes.js"></script>
-<script src="js/data/emblems.js"></script>
+<script src="js/data/copy.js"></script>
 <script src="js/data/schools.js"></script>
 <script src="js/data/questions.js"></script>
 <script src="js/scoring.js"></script>

@@ -33,22 +33,6 @@ function serifFont(weight, size) {
   return weight + ' ' + size + 'px ' + SERIF;
 }
 
-// 화면의 엠블럼을 캔버스에도 같은 모양으로 그린다.
-// Path2D 가 SVG path 문자열을 그대로 받는다.
-function drawEmblem(ctx, schoolId, color, x, y, size) {
-  var paths = (typeof EMBLEMS !== 'undefined') ? EMBLEMS[schoolId] : null;
-  if (!paths || typeof Path2D !== 'function') return;
-  ctx.save();
-  ctx.translate(x, y);
-  ctx.scale(size / 24, size / 24);   // 원본 뷰박스가 24x24
-  ctx.strokeStyle = color;
-  ctx.lineWidth = 1.7;
-  ctx.lineCap = 'round';
-  ctx.lineJoin = 'round';
-  paths.forEach(function (d) { ctx.stroke(new Path2D(d)); });
-  ctx.restore();
-}
-
 /* ── 한글 줄바꿈 ───────────────────────────────────────────────
  * canvas 에는 줄바꿈이 없어서 직접 잘라야 한다. 공백 기준으로 자르는
  * 흔한 방식은 한글에서 그냥 안 먹는다 — 한국어 문장은 공백이 적고,
@@ -117,9 +101,10 @@ function roundRect(ctx, x, y, w, h, r) {
 
 /* ── 그리기 ────────────────────────────────────────────────── */
 
-function renderResultCard(canvas, result) {
+function renderResultCard(canvas, result, copy) {
   var ctx = canvas.getContext('2d');
   var top = result.top3[0];
+  var c = copy || {};
   var pad = 84;
   var innerW = CARD_W - pad * 2;
 
@@ -155,12 +140,13 @@ function renderResultCard(canvas, result) {
 
   ctx.fillStyle = C.brass;
   ctx.font = serifFont(400, 26);
-  ctx.fillText('Your closest match', pad, y);
-  y += 48;
+  ctx.fillText(c.cardEyebrow || 'Your closest match', pad, y);
+  y += 44;
 
-  // 엠블럼
-  drawEmblem(ctx, top.school.id, top.school.color, pad, y, 66);
-  y += 88;
+  ctx.fillStyle = C.inkSoft;
+  ctx.font = font(600, 32);
+  ctx.fillText(c.cardLead || '나랑 제일 잘 맞는 아이비는', pad, y);
+  y += 62;
 
   ctx.fillStyle = top.school.color;
   ctx.font = font(700, 88);
@@ -174,7 +160,8 @@ function renderResultCard(canvas, result) {
 
   ctx.fillStyle = C.ink;
   ctx.font = font(600, 36);
-  y = drawLines(ctx, wrapText(ctx, top.school.tagline, innerW, 2), pad, y, 52);
+  var tagline = c.taglineOf ? c.taglineOf(top.school) : top.school.tagline;
+  y = drawLines(ctx, wrapText(ctx, tagline, innerW, 2), pad, y, 52);
   y += 26;
 
   // 구분선
@@ -216,17 +203,15 @@ function renderResultCard(canvas, result) {
   result.top3.forEach(function (item, i) {
     var rowY = y + i * ROW_H;
 
-    drawEmblem(ctx, item.school.id, item.school.color, pad, rowY + 2, 34);
-
     // 순번 (세리프)
     ctx.fillStyle = C.brass;
     ctx.font = serifFont(400, 26);
-    ctx.fillText(String(i + 1), pad + 54, rowY + 8);
+    ctx.fillText(String(i + 1), pad, rowY + 8);
 
     // 학교 이름
     ctx.fillStyle = C.ink;
     ctx.font = font(700, 40);
-    ctx.fillText(item.school.nameKo, pad + 82, rowY);
+    ctx.fillText(item.school.nameKo, pad + 30, rowY);
 
     // 퍼센트 (우측 정렬, 세리프)
     ctx.textAlign = 'right';
@@ -275,9 +260,9 @@ function renderResultCard(canvas, result) {
     ctx.letterSpacing = '0px';
   }
 
-  // 결정적이었던 내 성향 (없으면 이 블록을 건너뛴다)
+  // 결정적이었던 성향 (없으면 이 블록을 건너뛴다)
   if (result.reasons && result.reasons.length) {
-    drawLabel('이런 성향이 결정적이었어요', y);
+    drawLabel(c.cardTraits || '이런 성향이 결정적이었어요', y);
     drawChips(result.reasons.map(function (r) { return r.label; }),
       y + LABEL_H + LABEL_GAP, C.brass, C.brass);
     y += LABEL_H + LABEL_GAP + CHIP_H + BLOCK_GAP;
@@ -296,7 +281,7 @@ function renderResultCard(canvas, result) {
   ctx.fillText('재미로 보는 성향 매칭이에요 · 합격 가능성 예측이 아닙니다', pad, footerTop);
   ctx.font = font(500, 24);
   ctx.fillStyle = C.inkFaint;
-  ctx.fillText('18개 질문으로 알아보는 나와 맞는 아이비리그', pad, footerTop + 36);
+  ctx.fillText(c.cardFoot || '18개 질문으로 알아보는 나와 맞는 아이비리그', pad, footerTop + 36);
 
   return canvas;
 }

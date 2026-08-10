@@ -1,8 +1,11 @@
 /**
  * 화면 상태 머신 + 렌더링
  *
- * intro -> quiz(18문항) -> loading -> result
- * 프레임워크 없이 세 개의 <section> 을 hidden 으로 토글한다.
+ * intro(모드 선택) -> quiz(18문항) -> loading -> result
+ * 프레임워크 없이 네 개의 <section> 을 hidden 으로 토글한다.
+ *
+ * 모드(student / parent)는 문구만 바꾼다. 가중치와 채점은 완전히 같다.
+ * 그래서 학부모가 답해도 학생이 답한 것과 같은 기준으로 학교가 나온다.
  */
 (function () {
   'use strict';
@@ -13,6 +16,7 @@
 
   var state = {
     screen: 'intro',
+    mode: 'student',
     index: 0,
     answers: new Array(QUESTIONS.length).fill(null),
     result: null,
@@ -21,18 +25,28 @@
 
   var el = {};
   ['screen-intro', 'screen-quiz', 'screen-loading', 'screen-result',
-    'btn-start', 'btn-resume', 'btn-prev', 'btn-next', 'btn-share', 'btn-image',
-    'btn-restart', 'btn-community',
-    'progress-now', 'progress-total', 'progress-fill', 'q-index', 'dots',
-    'question-text', 'options', 'axis-preview', 'roster', 'ranking', 'axis-chart',
-    'result-hero', 'result-emblem', 'result-name', 'result-en', 'result-tagline',
-    'result-place', 'result-percent', 'result-keywords', 'detail-title',
-    'why-block', 'detail-block', 'share-hint', 'export-canvas'].forEach(function (id) {
+    'btn-resume', 'btn-prev', 'btn-next', 'btn-share', 'btn-image',
+    'btn-restart', 'btn-community', 'mode-student', 'mode-parent',
+    'progress-now', 'progress-total', 'progress-fill', 'progress-note',
+    'quiz-mode-label', 'q-index', 'dots', 'question-text', 'options',
+    'axis-preview', 'roster', 'ranking', 'axis-chart', 'axis-label', 'axis-note',
+    'loading-text', 'result-hero', 'result-label', 'result-name', 'result-en',
+    'result-tagline', 'result-place', 'result-percent', 'result-keywords',
+    'detail-title', 'why-block', 'detail-block', 'parent-facts',
+    'parent-facts-block', 'share-hint', 'export-canvas'].forEach(function (id) {
       el[id] = document.getElementById(id);
     });
 
   var reduceMotion = window.matchMedia &&
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function copy() { return MODE_COPY[state.mode] || MODE_COPY.student; }
+
+  // 질문/선택지 문구는 모드별로 두 벌이다. 한쪽이 비어 있으면 학생용으로 떨어진다.
+  function pick(bundle) {
+    if (typeof bundle === 'string') return bundle;
+    return (bundle && (bundle[state.mode] || bundle.student)) || '';
+  }
 
   /**
    * 조사 선택. 학교 이름이 데이터에서 오기 때문에 "유펜가", "코넬와" 같은
@@ -58,7 +72,7 @@
         return;
       }
       localStorage.setItem(STORE_KEY, JSON.stringify({
-        index: state.index, answers: state.answers,
+        mode: state.mode, index: state.index, answers: state.answers,
       }));
     } catch (e) { /* 시크릿 모드나 file:// — 그냥 저장 안 하고 넘어간다 */ }
   }
@@ -70,6 +84,7 @@
       var data = JSON.parse(raw);
       if (!data || !Array.isArray(data.answers) ||
         data.answers.length !== QUESTIONS.length) return null;
+      if (MODES.indexOf(data.mode) === -1) data.mode = 'student';
       return data;
     } catch (e) { return null; }
   }
@@ -108,21 +123,27 @@
       el['axis-preview'].appendChild(li);
     });
 
-    // 여덟 학교 엠블럼. 결과에서 처음 보는 것보다 미리 보여주는 편이 낫다
+    // 여덟 학교를 활자로만 나열한다
     el.roster.innerHTML = '';
     SCHOOLS.forEach(function (school) {
       var li = document.createElement('li');
-      li.innerHTML = emblemSvg(school.id, school.color, 19);
-      var name = document.createElement('span');
-      name.textContent = school.nameKo;
-      li.appendChild(name);
+      var ko = document.createElement('span');
+      ko.className = 'roster-ko';
+      ko.textContent = school.nameKo;
+      var en = document.createElement('span');
+      en.className = 'roster-en';
+      en.textContent = school.nameEn;
+      li.appendChild(ko); li.appendChild(en);
       el.roster.appendChild(li);
     });
 
     var saved = loadProgress();
     var answered = saved ? saved.answers.filter(function (a) { return a !== null; }).length : 0;
     el['btn-resume'].classList.toggle('hidden', answered === 0);
-    if (answered) el['btn-resume'].textContent = '이어서 하기 (' + answered + '/' + QUESTIONS.length + ')';
+    if (answered) {
+      var who = MODE_COPY[saved.mode].pickLabel;
+      el['btn-resume'].textContent = '이어서 하기 · ' + who + ' ' + answered + '/' + QUESTIONS.length;
+    }
   }
 
   function showNotice(text) {
@@ -141,6 +162,8 @@
     var total = QUESTIONS.length;
     var answered = state.answers.filter(function (a) { return a !== null; }).length;
 
+    el['quiz-mode-label'].textContent = state.mode === 'parent' ? '학부모용 · 진행률' : '진행률';
+    el['progress-note'].textContent = copy().quizNote;
     el['progress-total'].textContent = total;
     el['progress-now'].textContent = answered;
     el['progress-fill'].style.width = (answered / total * 100) + '%';
@@ -156,7 +179,7 @@
       el.dots.appendChild(d);
     }
 
-    el['question-text'].textContent = q.text;
+    el['question-text'].textContent = pick(q.text);
 
     // 선택지
     var legend = document.createElement('legend');
@@ -183,7 +206,7 @@
 
       var text = document.createElement('span');
       text.className = 'option-label';
-      text.textContent = opt.label;
+      text.textContent = pick(opt.label);
 
       label.appendChild(input);
       label.appendChild(badge);
@@ -225,14 +248,25 @@
     goto(state.index + 1);
   }
 
+  function startQuiz(mode) {
+    state.mode = mode;
+    state.index = 0;
+    state.answers = new Array(QUESTIONS.length).fill(null);
+    clearProgress();
+    show('quiz');
+    renderQuiz();
+    scrollTop();
+  }
+
   /* ── 결과 ──────────────────────────────────────────────────── */
   function finish() {
+    el['loading-text'].textContent = copy().loading;
     show('loading');
     scrollTop();
     setTimeout(function () {
       state.result = scoreAnswers(state.answers);
       state.fromShare = false;
-      writeHashCode(state.answers);
+      writeHashCode(state.mode, state.answers);
       clearProgress();
       renderResult();
       show('result');
@@ -243,15 +277,20 @@
   function renderResult() {
     var r = state.result;
     var top = r.top3[0];
+    var c = copy();
 
     // 학교색은 결과 화면 전체에 퍼진다(이름·퍼센트·막대). 한 곳에서만 정한다.
     el['screen-result'].style.setProperty('--school', top.school.color);
-    el['result-emblem'].innerHTML = emblemSvg(top.school.id, top.school.color, 40);
+    el['result-label'].textContent = c.resultLabel;
     el['result-name'].textContent = top.school.nameKo;
     el['result-en'].textContent = top.school.nameEn;
-    el['result-tagline'].textContent = top.school.tagline;
+    el['result-tagline'].textContent = state.mode === 'parent'
+      ? (top.school.taglineParent || top.school.tagline)
+      : top.school.tagline;
     el['result-place'].textContent = top.school.location;
     el['result-percent'].textContent = top.percent + '%';
+    el['axis-label'].textContent = c.axisLabel;
+    el['axis-note'].textContent = c.axisNote;
 
     el['result-keywords'].innerHTML = '';
     top.school.keywords.forEach(function (kw) {
@@ -263,6 +302,7 @@
     renderRanking(r);
     renderWhy(r);
     renderDetail(top.school);
+    renderParentFacts(top.school);
     renderAxisChart(r);
 
     el['share-hint'].textContent = '';
@@ -278,10 +318,6 @@
       var row = document.createElement('div');
       row.className = 'rank-row' + (i === 0 ? ' is-top' : '');
 
-      var mark = document.createElement('div');
-      mark.className = 'rank-mark';
-      mark.innerHTML = emblemSvg(item.school.id, item.school.color, 26);
-
       var body = document.createElement('div');
       body.className = 'rank-body';
       var name = document.createElement('p');
@@ -293,7 +329,9 @@
       name.appendChild(document.createTextNode(item.school.nameKo));
       var tag = document.createElement('p');
       tag.className = 'rank-tagline';
-      tag.textContent = item.school.tagline;
+      tag.textContent = state.mode === 'parent'
+        ? (item.school.taglineParent || item.school.tagline)
+        : item.school.tagline;
       body.appendChild(name); body.appendChild(tag);
 
       var right = document.createElement('div');
@@ -308,7 +346,7 @@
       track.appendChild(fill);
       right.appendChild(pct); right.appendChild(track);
 
-      row.appendChild(mark); row.appendChild(body); row.appendChild(right);
+      row.appendChild(body); row.appendChild(right);
       el.ranking.appendChild(row);
 
       // 다음 프레임에 너비를 줘야 트랜지션이 실제로 돈다
@@ -320,7 +358,8 @@
 
   function renderWhy(r) {
     var top = r.top3[0];
-    el['detail-title'].textContent = top.school.nameKo + '가 1위인 이유';
+    var c = copy();
+    el['detail-title'].textContent = josa(top.school.nameKo, '이', '가') + ' 1위인 이유';
 
     var list = el['why-block'];
     list.innerHTML = '';
@@ -329,48 +368,34 @@
       var li = document.createElement('li');
       var span = document.createElement('span');
       span.style.gridColumn = '1 / -1';
-      span.textContent = '성향이 어느 쪽으로도 크게 기울지 않아서 세 학교가 비슷하게 나왔어요. ' +
-        '아래 세 곳을 다 살펴보는 걸 추천해요.';
+      span.textContent = c.flatReason;
       li.appendChild(span);
       list.appendChild(li);
-    } else {
-      // 세 줄이 전부 같은 문장으로 끝나면 기계가 찍어낸 티가 난다.
-      // 순서대로 다른 어투를 쓰고, 태그(축 이름)와 문장(극)이 겹치지 않게 한다.
-      var templates = [
-        function (pole, school) {
-          return pole + ' 쪽으로 가장 뚜렷하게 기울었어요. ' +
-            josa(school, '이', '가') + ' 딱 그런 학교예요.';
-        },
-        function (pole, school) {
-          return josa(pole, '을', '를') + ' 중요하게 보는 편인데, ' +
-            school + '의 색깔이 바로 그거예요.';
-        },
-        function (pole, school) {
-          return pole + ' 쪽 답을 여러 번 골랐어요. ' +
-            josa(school, '과', '와') + ' 잘 맞는 지점이에요.';
-        },
-      ];
-
-      r.reasons.forEach(function (reason, i) {
-        var li = document.createElement('li');
-        var tag = document.createElement('span');
-        tag.className = 'why-tag';
-        tag.textContent = reason.axis.name;      // 태그는 축 이름, 문장은 어느 쪽인지
-        var pole = reason.side === 'neg' ? reason.axis.neg : reason.axis.pos;
-        var txt = document.createElement('span');
-        txt.textContent = templates[i % templates.length](pole, top.school.nameKo);
-        li.appendChild(tag); li.appendChild(txt);
-        list.appendChild(li);
-      });
+      return;
     }
+
+    r.reasons.forEach(function (reason, i) {
+      var li = document.createElement('li');
+      var tag = document.createElement('span');
+      tag.className = 'why-tag';
+      tag.textContent = reason.axis.name;      // 태그는 축 이름, 문장은 어느 쪽인지
+      var pole = reason.side === 'neg' ? reason.axis.neg : reason.axis.pos;
+      var txt = document.createElement('span');
+      txt.textContent = c.reasons[i % c.reasons.length](pole) + ' ' +
+        josa(top.school.nameKo, '이', '가') + ' 딱 그런 학교예요.';
+      li.appendChild(tag); li.appendChild(txt);
+      list.appendChild(li);
+    });
   }
 
   function renderDetail(school) {
+    var heads = copy().detailHeads;
+    var d = school.detail[state.mode] || school.detail.student;
     el['detail-block'].innerHTML = '';
     [
-      ['분위기', school.detail.vibe],
-      ['이 학교가 잘하는 것', school.detail.strength],
-      ['이런 사람이 잘 맞아요', school.detail.fitsWho],
+      [heads[0], d.vibe],
+      [heads[1], d.strength],
+      [heads[2], d.fitsWho],
     ].forEach(function (part) {
       var wrap = document.createElement('div');
       wrap.className = 'detail-part';
@@ -382,6 +407,28 @@
       b.textContent = part[1];
       wrap.appendChild(h); wrap.appendChild(b);
       el['detail-block'].appendChild(wrap);
+    });
+  }
+
+  // 학부모가 실제로 먼저 묻는 것들 — 학비 지원, 어디서 어떻게 사는지, 졸업 후.
+  // 학생 모드에서는 통째로 숨긴다.
+  function renderParentFacts(school) {
+    var show = state.mode === 'parent' && school.forParents;
+    el['parent-facts-block'].classList.toggle('hidden', !show);
+    if (!show) return;
+
+    el['parent-facts'].innerHTML = '';
+    [
+      ['재정지원', school.forParents.aid],
+      ['환경과 규모', school.forParents.place],
+      ['졸업 후', school.forParents.after],
+    ].forEach(function (row) {
+      var dt = document.createElement('dt');
+      dt.textContent = row[0];
+      var dd = document.createElement('dd');
+      dd.textContent = row[1];
+      el['parent-facts'].appendChild(dt);
+      el['parent-facts'].appendChild(dd);
     });
   }
 
@@ -422,7 +469,6 @@
       bar.style.width = '0%';
       track.appendChild(center);
       track.appendChild(bar);
-      // 순위 막대와 마찬가지로 다음 프레임에 너비를 줘야 트랜지션이 돈다
       requestAnimationFrame(function () {
         requestAnimationFrame(function () { bar.style.width = barWidth + '%'; });
       });
@@ -450,17 +496,15 @@
   }
 
   function onShare() {
-    var url = buildShareUrl(state.answers);
+    var url = buildShareUrl(state.mode, state.answers);
     if (!url) { hint('공유 링크를 만들 수 없어요.'); return; }
+    var c = copy();
     var top = state.result.top3[0];
-    shareOrCopy(
-      url,
-      '나에게 맞는 아이비리그는?',
-      '나는 ' + top.school.nameKo + ' ' + top.percent + '% 나왔어. 너도 해볼래?'
-    ).then(function (outcome) {
-      if (outcome === 'copied') hint('링크를 복사했어요. 붙여넣기 해보세요.');
-      else if (outcome === 'failed') hint('복사에 실패했어요. 주소창을 직접 복사해 주세요.');
-    });
+    shareOrCopy(url, c.shareTitle, c.shareText(top.school.nameKo, top.percent))
+      .then(function (outcome) {
+        if (outcome === 'copied') hint('링크를 복사했어요. 붙여넣기 해보세요.');
+        else if (outcome === 'failed') hint('복사에 실패했어요. 주소창을 직접 복사해 주세요.');
+      });
   }
 
   function onImage() {
@@ -471,7 +515,7 @@
     // 그리기는 동기라서, 버튼 상태가 화면에 반영된 뒤에 시작하도록 한 프레임 미룬다
     requestAnimationFrame(function () {
       try {
-        renderResultCard(el['export-canvas'], state.result);
+        renderResultCard(el['export-canvas'], state.result, copy());
         saveResultCard(el['export-canvas'], state.result).then(function (outcome) {
           if (outcome === 'downloaded') hint('이미지를 저장했어요.');
           else if (outcome === 'failed') hint('이미지 저장에 실패했어요.');
@@ -502,18 +546,13 @@
   function boot() {
     renderIntro();
 
-    el['btn-start'].addEventListener('click', function () {
-      state.index = 0;
-      state.answers = new Array(QUESTIONS.length).fill(null);
-      clearProgress();
-      show('quiz');
-      renderQuiz();
-      scrollTop();
-    });
+    el['mode-student'].addEventListener('click', function () { startQuiz('student'); });
+    el['mode-parent'].addEventListener('click', function () { startQuiz('parent'); });
 
     el['btn-resume'].addEventListener('click', function () {
       var saved = loadProgress();
       if (!saved) return;
+      state.mode = saved.mode;
       state.answers = saved.answers;
       // 저장된 위치가 이상해도 첫 미응답 문항으로 보내면 안전하다
       var firstBlank = state.answers.indexOf(null);
@@ -556,6 +595,7 @@
     if (code) {
       var decoded = decodeAnswers(code, QUESTIONS.length);
       if (decoded.ok) {
+        state.mode = decoded.mode;
         state.answers = decoded.answers;
         state.result = scoreAnswers(state.answers);
         state.fromShare = true;
