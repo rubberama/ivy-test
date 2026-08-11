@@ -42,8 +42,11 @@ OUT_CSS = os.path.join(ROOT, 'fonts', 'suit.css')
 
 # 이 파일들에 등장하는 글자를 전부 모은다. 코드 식별자(영문)까지 섞이지만
 # 라틴 글리프는 몇 개 되지 않아서 손해가 없고, 문구를 빠뜨릴 위험이 없다.
+# 같은 서브셋을 아이비 버전과 한국 대학 버전이 같이 쓴다.
+# 한쪽 파일만 넣으면 다른 쪽에만 있는 글자가 시스템 폰트로 떨어진다.
 SOURCES = [
     'index.html',
+    'korea-uni/index.html',
     'js/app.js',
     'js/scoring.js',
     'js/share.js',
@@ -52,6 +55,10 @@ SOURCES = [
     'js/data/copy.js',
     'js/data/schools.js',
     'js/data/questions.js',
+    'js/data/korea/axes.js',
+    'js/data/korea/copy.js',
+    'js/data/korea/schools.js',
+    'js/data/korea/questions.js',
 ]
 
 # 소스에 없더라도 실행 중에 나올 수 있는 글자들.

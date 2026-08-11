@@ -132,12 +132,15 @@ function renderResultCard(canvas, result, copy) {
   ctx.fillStyle = C.ivy;
   ctx.font = serifFont(700, 30);
   ctx.letterSpacing = '5px';
-  ctx.fillText('IVY', pad, y);
+  // 워드마크는 테스트마다 다르다. copy.js 에서 받아서 쓴다.
+  var mark = c.cardMark || 'IVY';
+  ctx.fillText(mark, pad, y);
+  var markW = ctx.measureText(mark).width;
   ctx.letterSpacing = '0px';
 
   ctx.fillStyle = C.inkFaint;
   ctx.font = font(600, 24);
-  ctx.fillText('성향 매칭', pad + 76, y + 7);
+  ctx.fillText(c.cardMarkSub || '성향 매칭', pad + markW + 22, y + 7);
   y += 62;
 
   ctx.fillStyle = C.brass;
@@ -306,7 +309,8 @@ function saveResultCard(canvas, result, alt) {
       if (!blob) { resolve('failed'); return; }
 
       // 파일명은 ASCII 로. 일부 브라우저가 한글 파일명을 깨뜨린다.
-      var name = 'ivy-match-' + result.top3[0].id + '.png';
+      var name = (typeof TEST_ID !== 'undefined' ? TEST_ID : 'match') +
+        '-' + result.top3[0].id + '.png';
 
       // 모바일에서는 공유 시트가 사진 앱 저장까지 한 번에 처리해준다
       if (navigator.canShare && typeof File === 'function') {

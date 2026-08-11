@@ -63,6 +63,8 @@ var MODE_COPY = {
       return '나는 ' + name + ' ' + pct + '% 나왔어요. 같이 해볼래요?';
     },
 
+    cardMark: 'IVY',
+    cardMarkSub: '성향 매칭',
     cardEyebrow: 'Your closest match',
     cardLead: '나랑 제일 잘 맞는 아이비는',
     cardTraits: '이런 성향이 결정적이었어요',
@@ -101,6 +103,8 @@ var MODE_COPY = {
       return '우리 아이는 ' + name + ' ' + pct + '% 나왔어요. 한번 해보세요.';
     },
 
+    cardMark: 'IVY',
+    cardMarkSub: '성향 매칭',
     cardEyebrow: 'Closest match for your child',
     cardLead: '우리 아이와 맞는 아이비는',
     cardTraits: '아이의 이런 성향이 결정적이었어요',

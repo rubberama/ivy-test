@@ -16,7 +16,8 @@ var fs = require('fs');
 var path = require('path');
 
 var ROOT = path.join(__dirname, '..');
-var OUT = path.join(ROOT, 'og.png');
+var TEST = process.env.OG_TEST || 'ivy';
+var OUT = path.join(ROOT, TEST === 'korea' ? 'og-korea.png' : 'og.png');
 
 var W = 1200, H = 630;
 
@@ -110,23 +111,23 @@ h1{
 </style>
 <div class="frame">
   <div class="left">
-    <div class="brand"><span class="mark">IVY</span><span class="brand-sub">성향 매칭</span></div>
-    <p class="eyebrow">Which Ivy fits?</p>
-    <h1>결이 맞는<br>아이비리그는 어디일까</h1>
+    <div class="brand"><span class="mark">${TEST === 'korea' ? 'UNIV' : 'IVY'}</span><span class="brand-sub">${TEST === 'korea' ? '대학 성향 매칭' : '성향 매칭'}</span></div>
+    <p class="eyebrow">${TEST === 'korea' ? 'Which campus fits?' : 'Which Ivy fits?'}</p>
+    <h1>결이 맞는<br>${TEST === 'korea' ? '대학은' : '아이비리그는'} 어디일까</h1>
     <p class="sub">성적이 아니라 <b>성향</b>으로 찾는 나와 맞는 학교 세 곳.</p>
     <div class="meta">
-      <span class="chip">질문 18개</span>
+      <span class="chip">질문 ${TEST === 'korea' ? '20' : '18'}개</span>
       <span class="chip">약 2분</span>
       <span class="chip">학생 · 학부모</span>
     </div>
   </div>
   <div class="right">
     <p class="right-label">이렇게 나와요</p>
-    <div class="row top"><span class="n">1</span><span class="nm">유펜</span><span class="pc">94%</span>
+    <div class="row top"><span class="n">1</span><span class="nm">${TEST === 'korea' ? '서강대' : '유펜'}</span><span class="pc">${TEST === 'korea' ? '91' : '94'}%</span>
       <span class="bar"><i style="width:94%"></i></span></div>
-    <div class="row"><span class="n">2</span><span class="nm">하버드</span><span class="pc">85%</span>
+    <div class="row"><span class="n">2</span><span class="nm">${TEST === 'korea' ? '서울시립대' : '하버드'}</span><span class="pc">${TEST === 'korea' ? '84' : '85'}%</span>
       <span class="bar"><i style="width:85%"></i></span></div>
-    <div class="row"><span class="n">3</span><span class="nm">코넬</span><span class="pc">79%</span>
+    <div class="row"><span class="n">3</span><span class="nm">${TEST === 'korea' ? '한국외대' : '코넬'}</span><span class="pc">${TEST === 'korea' ? '80' : '79'}%</span>
       <span class="bar"><i style="width:79%"></i></span></div>
     <p class="foot">재미로 보는 성향 매칭이에요<br>합격 가능성 예측이 아니에요</p>
   </div>

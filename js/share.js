@@ -117,8 +117,13 @@ function decodeAnswers(code, expectedCount) {
 // 배포 주소. 웹에 올라간 상태에서는 현재 주소를 그대로 쓰기 때문에 이 값이
 // 필요 없고, index.html 을 파일로 직접 열었을 때만 쓰인다
 // (file:///Users/... 주소는 남에게 보내도 안 열리니까).
-// 다른 곳에 배포했다면 여기를 바꿔주세요.
-var SITE_URL = 'https://ivy-test-two.vercel.app/';
+//
+// 같은 도메인에 테스트가 여러 개 올라가 있어서, 테스트마다 주소가 다르다.
+// 각 페이지가 로드 전에 TEST_SITE_URL 을 정의해 자기 주소를 알려준다.
+// 다른 곳에 배포했다면 각 index.html 의 TEST_SITE_URL 을 바꿔주세요.
+var SITE_URL = (typeof TEST_SITE_URL !== 'undefined')
+  ? TEST_SITE_URL
+  : 'https://ivy-test-two.vercel.app/';
 
 function isFileProtocol() {
   return location.protocol === 'file:';

@@ -18,7 +18,7 @@
       ]
     },
     {
-      "source": "/og.png",
+      "source": "/(og|og-korea).png",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=3600, must-revalidate" }
       ]

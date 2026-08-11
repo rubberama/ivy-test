@@ -419,7 +419,11 @@
   function renderWhy(r) {
     var top = r.top3[0];
     var c = copy();
-    el['detail-title'].textContent = josa(top.school.nameKo, '이', '가') + ' 1위인 이유';
+    // 제목도 테스트마다 다르다. 한국 대학 버전은 30곳을 늘어놓는 것이라
+    // '1위'라고 부르면 성향 매칭이 아니라 서열 확인으로 읽힌다.
+    el['detail-title'].textContent = (c.whyTitle || function (n) {
+      return josa(n, '이', '가') + ' 1위인 이유';
+    })(top.school.nameKo, josa);
 
     var list = el['why-block'];
     list.innerHTML = '';
