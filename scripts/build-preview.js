@@ -18,7 +18,16 @@ var path = require('path');
 var ROOT = path.join(__dirname, '..');
 var read = function (p) { return fs.readFileSync(path.join(ROOT, p), 'utf8'); };
 
-var html = read('index.html');
+/* 어느 테스트를 묶을지. 기본은 아이비.
+   node scripts/build-preview.js korea  로 한국 대학 버전을 묶는다.
+   한국 버전은 korea-uni/ 안에 있어서 파일 안의 경로가 ../ 로 시작한다.
+   합칠 때는 리포 루트 기준으로 읽어야 하므로 그 ../ 를 떼준다. */
+var TEST = process.argv[2] === 'korea' ? 'korea' : 'ivy';
+var SRC = TEST === 'korea' ? 'korea-uni/index.html' : 'index.html';
+var OUT_FULL = TEST === 'korea' ? 'preview-korea.html' : 'preview.html';
+var OUT_EMBED = TEST === 'korea' ? 'dist/embed-korea.html' : 'dist/embed.html';
+
+var html = read(SRC).replace(/(href|src)="\.\.\//g, '$1="');
 
 /* ── CSS 인라인 ────────────────────────────────────────────── */
 // 단일 파일에서는 폰트를 비동기로 받을 이유가 없다(이미 파일 안에 있다).
@@ -60,7 +69,7 @@ if (!inlined.length) {
 }
 
 /* ── 산출물 1: 완전한 단일 파일 ────────────────────────────── */
-fs.writeFileSync(path.join(ROOT, 'preview.html'), html);
+fs.writeFileSync(path.join(ROOT, OUT_FULL), html);
 
 /* ── 산출물 2: body 안쪽만 ─────────────────────────────────── */
 // 바깥에서 head 를 만들어주는 환경에서도 제목과 스타일은 살아야 해서
@@ -76,7 +85,7 @@ var styleBlocks = (html.match(/<style>[\s\S]*?<\/style>/g) || []).join('\n');
 var embed = '<title>' + title + '</title>\n' + styleBlocks + '\n' + bodyInner + '\n';
 
 fs.mkdirSync(path.join(ROOT, 'dist'), { recursive: true });
-fs.writeFileSync(path.join(ROOT, 'dist/embed.html'), embed);
+fs.writeFileSync(path.join(ROOT, OUT_EMBED), embed);
 
 /* ── 보고 ──────────────────────────────────────────────────── */
 function kb(p) { return (fs.statSync(path.join(ROOT, p)).size / 1024).toFixed(1) + 'KB'; }
@@ -86,8 +95,8 @@ inlinedCss.forEach(function (s) { console.log('  · ' + s); });
 console.log('인라인한 스크립트 ' + inlined.length + '개:');
 inlined.forEach(function (s) { console.log('  · ' + s); });
 console.log('');
-console.log('preview.html     ' + kb('preview.html'));
-console.log('dist/embed.html  ' + kb('dist/embed.html'));
+console.log(OUT_FULL + '   ' + kb(OUT_FULL));
+console.log(OUT_EMBED + '  ' + kb(OUT_EMBED));
 
 // 합치고 나서 바깥 파일 참조가 남아 있으면 그 파일은 혼자 못 돈다
 var leftover = /(?:src|href)="(?!data:|https?:|#)([^"]+)"/g;
