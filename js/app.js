@@ -35,7 +35,7 @@
     'loading-text', 'result-hero', 'result-label', 'result-name', 'result-en',
     'result-tagline', 'result-place', 'result-percent', 'result-keywords',
     'detail-title', 'why-block', 'detail-block', 'parent-facts',
-    'parent-facts-block', 'share-hint', 'export-canvas'].forEach(function (id) {
+    'parent-facts-block', 'share-hint', 'result-bar', 'export-canvas'].forEach(function (id) {
       el[id] = document.getElementById(id);
     });
 
@@ -144,6 +144,18 @@
     ['intro', 'quiz', 'loading', 'result'].forEach(function (s) {
       el['screen-' + s].classList.toggle('hidden', s !== screen);
     });
+    // 공유 바는 결과 화면에서만 띄운다. 다른 화면에서는 자리만 차지한다.
+    // body 클래스로도 표시해서 결과 섹션이 바에 가리지 않게 아래 여백을 준다.
+    var onResult = screen === 'result';
+    if (el['result-bar']) {
+      // 화면을 바꾸자마자 붙이면 hidden 이 풀리는 프레임과 겹쳐서
+      // 올라오는 게 안 보인다. 다음 프레임에 붙인다.
+      requestAnimationFrame(function () {
+        el['result-bar'].classList.toggle('is-on', onResult);
+      });
+      el['result-bar'].setAttribute('aria-hidden', onResult ? 'false' : 'true');
+    }
+    document.body.classList.toggle('has-result-bar', onResult);
   }
 
   function scrollTop() {

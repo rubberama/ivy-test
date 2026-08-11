@@ -938,3 +938,53 @@ main { padding: 30px 22px 44px; }
 @media (prefers-reduced-motion: reduce) {
   .q-in-fwd, .q-in-back, .option.is-selected { animation: none; }
 }
+
+/* ── 결과 화면 고정 공유 바 ──────────────────────────────────
+   결과가 막 나온 순간이 공유하고 싶은 마음이 제일 큰 때다. 예전에는
+   공유 버튼이 해설과 성향 그래프를 다 지나야 나오는 맨 아래에 있어서,
+   그 순간에 손이 닿지 않았다. 화면 아래에 붙여둔다.
+
+   결과 화면일 때만 보인다. 인트로·문항 화면에서는 방해만 된다. */
+.result-bar {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 20;
+  background: color-mix(in srgb, var(--paper) 92%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-top: 1px solid var(--rule);
+  /* 홈 인디케이터가 있는 기기에서 버튼이 가리지 않게 */
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  transform: translate3d(0, 100%, 0);
+  transition: transform .24s cubic-bezier(.2, 0, .2, 1);
+}
+.result-bar.is-on { transform: translate3d(0, 0, 0); }
+
+.result-bar-inner { padding: 10px 20px 12px; }
+
+.result-bar-row {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 8px;
+}
+.result-bar-row .btn { margin: 0; }
+
+.result-bar .share-hint {
+  margin: 0 0 6px;
+  min-height: 0;
+  text-align: center;
+}
+.result-bar .share-hint:empty { display: none; }
+
+/* 고정 바가 마지막 내용을 덮지 않게 자리를 비워둔다 */
+#screen-result:not(.hidden) ~ * { }
+body.has-result-bar #screen-result { padding-bottom: 92px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .result-bar { transition: none; }
+}
+
+/* 배경 흐림을 지원하지 않는 브라우저에서는 그냥 불투명하게 */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .result-bar { background: var(--paper); }
+}

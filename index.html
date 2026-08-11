@@ -211,13 +211,7 @@
     </div>
 
     <div class="block">
-      <p class="label">저장하고 공유하기</p>
-      <div class="action-grid">
-        <button type="button" class="btn btn-primary btn-block" id="btn-share">결과 링크 복사</button>
-        <button type="button" class="btn btn-outline btn-block" id="btn-image">결과 이미지 저장</button>
-        <button type="button" class="btn btn-quiet btn-block" id="btn-restart">다시 하기</button>
-      </div>
-      <p class="share-hint" id="share-hint" role="status" aria-live="polite"></p>
+      <button type="button" class="btn btn-quiet btn-block" id="btn-restart">다시 하기</button>
     </div>
 
     <div class="community">
@@ -237,6 +231,21 @@
       재미로 보는 <b>성향 매칭</b>이에요. 합격 가능성 예측이 아니고, 이 결과로 지원 여부를
       정하지는 마세요. 학교마다 실제로 가보고 재학생과 이야기해보는 게 제일 정확해요.
     </p>
+
+    <!-- 결과를 보는 내내 따라다니는 공유 바.
+         결과가 나온 직후가 공유하고 싶은 마음이 제일 큰 순간인데, 예전에는
+         공유 버튼이 해설·성향 그래프를 다 지나야 나오는 맨 아래에 있었다.
+         화면에 고정해두면 언제 마음이 들든 바로 누를 수 있다.
+         아래 액션 블록에는 '다시 하기'만 남겨서 같은 버튼이 두 번 나오지 않게 했다. -->
+    <div class="result-bar" id="result-bar">
+      <div class="shell result-bar-inner">
+        <p class="share-hint" id="share-hint" role="status" aria-live="polite"></p>
+        <div class="result-bar-row">
+          <button type="button" class="btn btn-primary" id="btn-share">결과 링크 복사</button>
+          <button type="button" class="btn btn-outline" id="btn-image">이미지 저장</button>
+        </div>
+      </div>
+    </div>
   </section>
 
 </main>

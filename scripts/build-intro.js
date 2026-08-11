@@ -50,17 +50,24 @@ TESTS.forEach(function (t) {
   var html = fs.readFileSync(p, 'utf8');
   var before = html;
 
-  html = html.replace(/(<ul class="roster" id="roster">)[\s\S]*?(<\/ul>)/,
-    '$1\n' + roster + '\n    $2');
-  html = html.replace(/(<ul class="axis-preview" id="axis-preview">)[\s\S]*?(<\/ul>)/,
-    '$1\n' + axisList + '\n    $2');
+  // 결과가 같은지로 판정하면 "자리를 못 찾음"과 "이미 최신"을 구분할 수 없다.
+  // 정규식이 실제로 물렸는지를 따로 확인한다.
+  var missing = [];
+  [
+    ['roster', /(<ul class="roster" id="roster">)[\s\S]*?(<\/ul>)/, roster],
+    ['axis-preview', /(<ul class="axis-preview" id="axis-preview">)[\s\S]*?(<\/ul>)/, axisList],
+  ].forEach(function (spec) {
+    if (!spec[1].test(html)) { missing.push(spec[0]); return; }
+    html = html.replace(spec[1], '$1\n' + spec[2] + '\n    $2');
+  });
 
-  if (html === before) {
-    console.error('  자리를 못 찾음: ' + t.html);
+  if (missing.length) {
+    console.error('  자리를 못 찾음: ' + t.html + ' — ' + missing.join(', '));
     process.exitCode = 1;
     return;
   }
   fs.writeFileSync(p, html);
   console.log('  ' + t.html + '  학교 ' + schools.SCHOOLS.length +
-    '곳 · 축 ' + axes.AXES.length + '개 박아넣음');
+    '곳 · 축 ' + axes.AXES.length + '개' +
+    (html === before ? ' (이미 최신)' : ' 박아넣음'));
 });
