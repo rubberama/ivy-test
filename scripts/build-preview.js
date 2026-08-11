@@ -21,11 +21,17 @@ var read = function (p) { return fs.readFileSync(path.join(ROOT, p), 'utf8'); };
 var html = read('index.html');
 
 /* ── CSS 인라인 ────────────────────────────────────────────── */
-// /g 가 있어야 한다. 폰트(fonts/suit.css)와 본 스타일 두 장이 걸려 있는데
-// 하나만 처리하면 나머지가 외부 참조로 남아서 단일 파일이 깨진다.
+// 단일 파일에서는 폰트를 비동기로 받을 이유가 없다(이미 파일 안에 있다).
+// 그래서 preload 와 noscript 짝은 지우고, media="print" 로 걸린 것도
+// 그냥 인라인한다. /g 가 있어야 두 장 다 처리된다 — 하나만 하면
+// 나머지가 외부 참조로 남아서 단일 파일이 깨진다.
+html = html
+  .replace(/[ \t]*<link rel="preload" as="style" href="[^"]+">\n?/g, '')
+  .replace(/[ \t]*<noscript><link rel="stylesheet" href="[^"]+"><\/noscript>\n?/g, '');
+
 var inlinedCss = [];
 html = html.replace(
-  /[ \t]*<link rel="stylesheet" href="([^"]+)">/g,
+  /[ \t]*<link rel="stylesheet" href="([^"]+)"[^>]*>/g,
   function (_, href) {
     inlinedCss.push(href);
     return '<style>\n/* === ' + href + ' === */\n' + read(href).trim() + '\n</style>';

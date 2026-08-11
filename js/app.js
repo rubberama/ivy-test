@@ -250,7 +250,17 @@
       input.name = 'answer-' + q.id;
       input.value = String(i);
       input.checked = state.answers[state.index] === i;
-      input.addEventListener('change', function () { choose(i); });
+      // 포인터로 고른 것과 키보드 방향키로 훑는 것을 구분한다.
+      // 방향키는 라디오 그룹을 훑어보는 동작이라 자동 전진하면 안 된다 —
+      // 읽어보려고 내려가는 중에 화면이 넘어가버린다.
+      input.addEventListener('change', function (e) {
+        choose(i, e.pointerType !== undefined || pointerPick);
+        pointerPick = false;
+      });
+      label.addEventListener('pointerdown', function () { pointerPick = true; });
+      // 눌렀다가 밖에서 떼면 change 가 안 와서 플래그가 남는다.
+      // 그 뒤에 키보드로 고르면 엉뚱하게 넘어가므로 키가 들어오면 지운다.
+      input.addEventListener('keydown', function () { pointerPick = false; });
 
       var badge = document.createElement('span');
       badge.className = 'option-badge';
@@ -273,7 +283,28 @@
       ' <span class="arw" aria-hidden="true">→</span>';
   }
 
-  function choose(i) {
+  /**
+   * 선택지를 고른다.
+   *
+   * @param {number} i        고른 선택지
+   * @param {boolean} advance 골랐으니 다음 문항으로 넘어갈지
+   *
+   * 자동 전진은 이 테스트에서 가장 크게 체감되는 부분이다. 20문항을
+   * "고르고 다음 누르고"로 가면 탭이 40번인데, 고르면 넘어가게 하면 20번이다.
+   * 한국 유형테스트들이 대부분 이렇게 하고, 실제로 끝까지 가는 비율이 다르다.
+   *
+   * 다만 두 곳에서는 넘기지 않는다.
+   *   - 마지막 문항: 고르자마자 결과가 나오면 당황한다. '결과 보기'를 누르게 둔다.
+   *   - 키보드 방향키: 라디오 그룹을 훑어보는 중이라 넘기면 안 된다.
+   *
+   * 넘기기 전에 잠깐 멈추는 건 고른 게 표시되는 걸 눈으로 확인시켜주기 위해서다.
+   * 바로 넘기면 뭘 골랐는지 모른 채 화면이 바뀐다.
+   */
+  var ADVANCE_MS = 260;
+  var pointerPick = false;
+  var advanceTimer = null;
+
+  function choose(i, advance) {
     state.answers[state.index] = i;
     saveProgress();
     // 선택 표시만 갱신하면 되므로 전체를 다시 그리지 않는다
@@ -285,14 +316,41 @@
     var dots = el.dots.children;
     if (dots[state.index]) dots[state.index].classList.add('answered');
     el['btn-next'].disabled = false;
+
+    if (advance && state.index < QUESTIONS.length - 1) {
+      clearTimeout(advanceTimer);
+      advanceTimer = setTimeout(function () { next(); }, reduceMotion ? 0 : ADVANCE_MS);
+    }
   }
 
   function goto(index) {
-    state.index = Math.max(0, Math.min(QUESTIONS.length - 1, index));
+    clearTimeout(advanceTimer);
+    var target = Math.max(0, Math.min(QUESTIONS.length - 1, index));
+    // 앞으로 가는지 뒤로 가는지에 따라 들어오는 방향을 바꾼다.
+    // 방향이 없으면 문항이 그냥 교체돼서 몇 번째인지 감이 안 잡힌다.
+    var dir = target > state.index ? 'fwd' : target < state.index ? 'back' : '';
+    state.index = target;
     saveProgress();
     renderQuiz();
+    animateQuestion(dir);
     scrollTop();
     el['question-text'].focus({ preventScroll: true });
+  }
+
+  /**
+   * 문항이 들어오는 짧은 연출.
+   * 150~500ms 를 넘기면 답하는 리듬이 끊긴다. 여기서는 애니메이션이
+   * 끝나기 전에 다음 탭이 가능해야 해서 짧게 잡았다.
+   * 모션을 줄이겠다고 설정한 사람에게는 아예 안 건다.
+   */
+  function animateQuestion(dir) {
+    if (reduceMotion || !dir) return;
+    var box = el['screen-quiz'].querySelector('.question-head').parentNode;
+    box.classList.remove('q-in-fwd', 'q-in-back');
+    // 클래스를 떼자마자 다시 붙이면 브라우저가 같은 프레임으로 묶어서
+    // 애니메이션이 안 돈다. 강제로 레이아웃을 읽어 프레임을 끊는다.
+    void box.offsetWidth;
+    box.classList.add(dir === 'back' ? 'q-in-back' : 'q-in-fwd');
   }
 
   function next() {

@@ -75,6 +75,27 @@ ALWAYS = (
 )
 
 
+# 첫 화면에 바로 보이는 글자는 HTML 에 그대로 박혀 있다.
+# 이 파일들의 텍스트 노드만 긁어서 critical 서브셋을 만든다.
+CRITICAL_SOURCES = ['index.html', 'korea-uni/index.html']
+
+
+def collect_critical():
+    """HTML 의 보이는 텍스트만 모은다. 태그·속성·주석은 뺀다."""
+    import re
+    chars = set(ALWAYS)
+    for rel in CRITICAL_SOURCES:
+        path = os.path.join(ROOT, rel)
+        if not os.path.exists(path):
+            continue
+        html = open(path, encoding='utf-8').read()
+        html = re.sub(r'<!--.*?-->', ' ', html, flags=re.S)
+        html = re.sub(r'<(script|style)\b.*?</\1>', ' ', html, flags=re.S | re.I)
+        html = re.sub(r'<[^>]+>', ' ', html)     # 태그 제거 -> 텍스트 노드만 남는다
+        chars.update(html)
+    return {c for c in chars if ord(c) >= 0x20}
+
+
 def collect_chars():
     chars = set(ALWAYS)
     for rel in SOURCES:
@@ -86,6 +107,41 @@ def collect_chars():
             chars.update(fh.read())
     # 제어문자는 뺀다
     return {c for c in chars if ord(c) >= 0x20 and c not in ''}
+
+
+def build_subset(chars, trimmed):
+    """글자 집합을 받아 woff2 를 만들고 base64 로 돌려준다."""
+    with tempfile.NamedTemporaryFile('w', suffix='.txt', delete=False,
+                                     encoding='utf-8') as tf:
+        tf.write(''.join(sorted(chars)))
+        text_file = tf.name
+    out = os.path.join(tempfile.gettempdir(), 'SUIT-%d.woff2' % len(chars))
+    subprocess.run([
+        sys.executable, '-m', 'fontTools.subset', trimmed,
+        '--text-file=' + text_file,
+        '--output-file=' + out,
+        '--flavor=woff2',
+        '--layout-features+=tnum',
+        '--no-hinting',
+        '--desubroutinize',
+        '--name-IDs=1,2,3,4,5,6',
+    ], check=True)
+    os.unlink(text_file)
+    raw = open(out, 'rb').read()
+    return raw, base64.b64encode(raw).decode('ascii')
+
+
+def face(family, b64, note):
+    return (
+        "/* " + note + " */\n"
+        "@font-face {\n"
+        "  font-family: '" + family + "';\n"
+        "  font-style: normal;\n"
+        "  font-weight: %d %d;\n"
+        "  font-display: swap;\n"
+        "  src: url(data:font/woff2;base64," + b64 + ") format('woff2-variations');\n"
+        "}\n"
+    ) % (WGHT_MIN, WGHT_MAX)
 
 
 def main():
@@ -101,11 +157,6 @@ def main():
     hangul = sorted(c for c in chars if 0xAC00 <= ord(c) <= 0xD7A3)
     print('모은 글자 %d자 (한글 %d자)' % (len(chars), len(hangul)))
 
-    with tempfile.NamedTemporaryFile('w', suffix='.txt', delete=False,
-                                     encoding='utf-8') as tf:
-        tf.write(''.join(sorted(chars)))
-        text_file = tf.name
-
     # 1) 가변축을 쓰는 범위로 좁힌다
     trimmed = os.path.join(tempfile.gettempdir(), 'SUIT-trimmed.ttf')
     font = TTFont(SRC_FONT)
@@ -113,57 +164,39 @@ def main():
         font, {'wght': (WGHT_MIN, WGHT_MAX)}, inplace=True)
     font.save(trimmed)
 
-    # 2) 쓰는 글자만 남긴다
-    out_woff2 = os.path.join(tempfile.gettempdir(), 'SUIT-subset.woff2')
-
-    cmd = [
-        sys.executable, '-m', 'fontTools.subset', trimmed,
-        '--text-file=' + text_file,
-        '--output-file=' + out_woff2,
-        '--flavor=woff2',
-        # tnum 은 기본 유지 목록에 없다. 퍼센트 숫자를 고정폭으로 쓰고 있어서
-        # 이게 빠지면 자릿수가 흔들린다.
-        '--layout-features+=tnum',
-        '--no-hinting',
-        '--desubroutinize',
-        '--name-IDs=1,2,3,4,5,6',
-    ]
+    # 2) 두 벌을 만든다.
+    #
+    #    화면에 처음 보이는 글자(인트로 HTML 에 그대로 박혀 있는 문구)만 담은
+    #    작은 벌과, 나머지 전부를 담은 큰 벌이다. 큰 벌은 120KB가 넘어서
+    #    보통처럼 걸면 다 받을 때까지 화면이 백지로 남는다. 그렇다고 통째로
+    #    비동기로 돌리면 시스템 폰트로 먼저 그려졌다가 SUIT 로 바뀌면서
+    #    글줄이 다시 짜인다 — SUIT 의 한글 폭이 0.874em 인데 시스템 한글
+    #    폰트는 대개 1.0em 이라 폭이 12% 넘게 차이 난다. 실측 CLS 가 0.146
+    #    이었다(기준 0.1).
+    #
+    #    그래서 처음 보이는 글자만 작은 벌로 떼서 그것만 블로킹으로 걸고,
+    #    나머지를 비동기로 돌린다. 첫 화면은 처음부터 SUIT 로 그려지므로
+    #    다시 짜일 일이 없고, 아래쪽 글자만 늦게 교체된다.
     print('서브셋 중… (가변축 %d-%d 로 축소 후)' % (WGHT_MIN, WGHT_MAX))
-    subprocess.run(cmd, check=True)
-    os.unlink(text_file)
+    raw, b64 = build_subset(chars, trimmed)
     os.unlink(trimmed)
-
-    raw = open(out_woff2, 'rb').read()
-    b64 = base64.b64encode(raw).decode('ascii')
 
     src_size = os.path.getsize(SRC_FONT)
     print('  원본   %6.1fKB' % (src_size / 1024))
     print('  서브셋 %6.1fKB  (base64 %.1fKB)' % (len(raw) / 1024, len(b64) / 1024))
     print('  절감   %.1f%%' % (100 - len(raw) * 100.0 / src_size))
 
-    css = (
+    HEAD = (
         '/* SUIT (SUNN, http://sun.fo/suit) — SIL Open Font License 1.1\n'
         ' * https://github.com/sun-typeface/SUIT\n'
         ' *\n'
         ' * 이 파일은 scripts/build-font.py 가 생성합니다. 직접 고치지 마세요.\n'
-        ' * 앱 소스에 등장하는 글자만 남긴 서브셋이라, 문구를 수정했으면\n'
-        ' * 스크립트를 다시 돌려야 새 글자가 폰트에 들어갑니다.\n'
-        ' *\n'
-        ' * 가변축 wght %d-%d 를 유지합니다. 이 범위 밖 굵기를 쓰면\n'
-        ' * 가장 가까운 값으로 잘립니다.\n'
+        ' * 문구를 수정했으면 스크립트를 다시 돌려야 새 글자가 들어갑니다.\n'
         ' */\n'
-        "@font-face {\n"
-        "  font-family: 'SUIT';\n"
-        "  font-style: normal;\n"
-        "  font-weight: %d %d;\n"
-        "  font-display: swap;\n"
-        "  src: url(data:font/woff2;base64," + b64 + ") format('woff2-variations');\n"
-        "}\n"
-    ) % (WGHT_MIN, WGHT_MAX, WGHT_MIN, WGHT_MAX)
+    )
 
-    os.makedirs(os.path.dirname(OUT_CSS), exist_ok=True)
     with open(OUT_CSS, 'w', encoding='utf-8') as fh:
-        fh.write(css)
+        fh.write(HEAD + face('SUIT', b64, '전체 서브셋. 비동기로 불러온다'))
     print('  -> fonts/suit.css  %.1fKB' % (os.path.getsize(OUT_CSS) / 1024))
 
 

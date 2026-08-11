@@ -906,3 +906,35 @@ main { padding: 30px 22px 44px; }
   .result-percent { font-size: 52px; }
   .option { font-size: 14.5px; }
 }
+
+/* ── 문항 전환 ────────────────────────────────────────────────
+   답을 고르면 자동으로 다음 문항으로 넘어간다. 그때 화면이 그냥
+   바뀌면 뭐가 바뀐 건지 감이 안 잡혀서, 들어오는 방향을 준다.
+   앞으로 갈 때는 오른쪽에서, 뒤로 갈 때는 왼쪽에서 들어온다.
+
+   translate 와 opacity 만 건드린다. 둘 다 합성만으로 처리돼서
+   레이아웃을 다시 계산하지 않는다 — 중급 안드로이드 기기에서
+   프레임이 떨어지는 걸 막는 가장 확실한 방법이다. */
+@keyframes q-in-fwd {
+  from { opacity: 0; transform: translate3d(14px, 0, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+@keyframes q-in-back {
+  from { opacity: 0; transform: translate3d(-14px, 0, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+.q-in-fwd  { animation: q-in-fwd .22s cubic-bezier(.2, 0, .2, 1) both; }
+.q-in-back { animation: q-in-back .22s cubic-bezier(.2, 0, .2, 1) both; }
+
+/* 고른 순간을 눈으로 확인시켜준다. 자동 전진이 걸려 있어서
+   이 표시가 없으면 뭘 골랐는지 모른 채 화면이 넘어간다. */
+.option.is-selected { animation: option-pick .2s ease-out; }
+@keyframes option-pick {
+  0%   { transform: scale(1); }
+  45%  { transform: scale(.985); }
+  100% { transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .q-in-fwd, .q-in-back, .option.is-selected { animation: none; }
+}
