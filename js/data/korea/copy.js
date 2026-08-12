@@ -16,6 +16,29 @@ var REASON_TAILS = [
   function (name) { return name + '에서 그 부분이 잘 맞아요.'; },
 ];
 
+/**
+ * 근거 한 줄. 축 이름만 대는 것과 실제 답에서 숫자를 뽑아 보여주는 건 다르다.
+ *
+ * ev 는 scoring.js 의 countPicks 결과다.
+ *   total   내 답이 이 축을 건드린 문항 수
+ *   picked  그중 이 방향이었던 수
+ *   strong  ±2 로 확실하게 고른 수
+ *
+ * 두 개 이하면 숫자를 대봐야 근거가 안 된다. 절반도 안 되면 아예 안 쓴다 —
+ * "5개 중 2개"라고 적어두면 오히려 결과를 못 믿게 만든다.
+ */
+var EVIDENCE = function (ev, pole) {
+  if (!ev || ev.total < 3) return '';
+  if (ev.picked === ev.total) {
+    return '이 축을 건드린 답 ' + ev.total + '개가 전부 ' + pole + ' 쪽이었어요' +
+      (ev.strong >= 2 ? ', 그중 ' + ev.strong + '개는 제일 끝 선택지였고요.' : '.');
+  }
+  if (ev.picked * 2 > ev.total) {
+    return '관련된 답 ' + ev.total + '개 중 ' + ev.picked + '개가 ' + pole + ' 쪽이었어요.';
+  }
+  return '';
+};
+
 var MODE_COPY = {
   student: {
     pickLabel: '학생이에요',
@@ -40,6 +63,7 @@ var MODE_COPY = {
       function (pole) { return pole + ' 쪽 답을 여러 번 골랐어요.'; },
     ],
     reasonTails: REASON_TAILS,
+    evidenceOf: EVIDENCE,
 
     shareTitle: '나와 결이 맞는 대학은?',
     shareText: function (name, pct) {
@@ -79,6 +103,7 @@ var MODE_COPY = {
       function (pole) { return pole + ' 쪽 답을 여러 번 고르셨어요.'; },
     ],
     reasonTails: REASON_TAILS,
+    evidenceOf: EVIDENCE,
 
     shareTitle: '내 아이와 결이 맞는 대학은?',
     shareText: function (name, pct) {

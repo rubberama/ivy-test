@@ -64,8 +64,12 @@ TESTS.forEach(function (t) {
       '<span class="test-sub">' + esc(m.where) + '</span>' +
       '<span class="test-meta">' + m.schools + '곳 · 질문 ' + m.questions + '개</span>';
     if (here) {
-      return '        <span class="test-card is-here" aria-current="page">' + body +
-        '<span class="test-flag">지금 보는 중</span></span>';
+      // 지금 보고 있는 테스트. 이걸 고르면 다음 단계로 넘어간다.
+      // 예전에는 갈 데가 없어서 <span> 이었는데, 단계를 나누면서
+      // "이걸로 하겠다"는 실제 동작이 생겼으므로 버튼이 맞다.
+      return '        <button type="button" class="test-card is-here" id="pick-here"' +
+        ' data-name="' + esc(m.name) + '" data-count="' + m.schools + '">' + body +
+        '<span class="test-flag test-go">이걸로 할게요 <span aria-hidden="true">→</span></span></button>';
     }
     return '        <a class="test-card" href="' + m.hrefFrom[t.id] + '">' + body +
       '<span class="test-flag test-go">보러 가기 <span aria-hidden="true">→</span></span></a>';

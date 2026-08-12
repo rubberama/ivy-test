@@ -13,6 +13,7 @@ const check = (n, c, x) => { console.log((c ? '  OK   ' : '  FAIL ') + n + (x ? 
     await p.goto(BASE);
     check(mode+' 인트로', (await p.locator('#roster li').count()) === 30, '학교 '+(await p.locator('#roster li').count())+'곳');
     check(mode+' 축 목록', (await p.locator('#axis-preview li').count()) === 10);
+    await p.click('#pick-here');
     await p.click('#mode-'+mode);
     await p.waitForSelector('#screen-quiz:not(.hidden)');
     check(mode+' 총 문항', (await p.locator('#progress-total').innerText()) === '20');

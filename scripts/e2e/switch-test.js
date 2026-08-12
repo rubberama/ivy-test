@@ -23,8 +23,18 @@ const check = (n, c, x) => { console.log((c ? '  OK   ' : '  FAIL ') + n + (x ? 
     check(name + ' 지금 보는 쪽 표시', (await here.count()) === 1 &&
       (await here.locator('.test-name').innerText()) === hereName,
       await here.locator('.test-name').innerText());
+    // 지금 보는 쪽은 다른 페이지로 가는 게 아니라 다음 단계로 넘어간다.
+    // 링크(<a>)면 안 되고, 눌렀을 때 주소가 바뀌어도 안 된다.
     check(name + ' 지금 보는 쪽은 링크 아님',
-      (await here.evaluate(e => e.tagName)) === 'SPAN');
+      (await here.evaluate(e => e.tagName)) === 'BUTTON');
+    var urlBefore = p.url();
+    await here.click();
+    await p.waitForTimeout(200);
+    check(name + ' 눌러도 페이지 이동 없음', p.url() === urlBefore &&
+      await p.locator('#step-mode').isVisible(), p.url());
+    // 1단계로 되돌려서 나머지 검사를 이어간다
+    await p.locator('#chosen-test .link-btn').click();
+    await p.waitForTimeout(150);
 
     const go = p.locator('#test-pick a.test-card');
     check(name + ' 반대쪽은 링크', (await go.count()) === 1 &&

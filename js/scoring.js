@@ -218,7 +218,7 @@ function scoreAnswers(answers) {
     axes: AXIS_IDS.map(function (id, k) {
       return { axis: AXES[k], value: u[id] };
     }),
-    reasons: explainMatch(uVec, ranked[0].id),
+    reasons: explainMatch(uVec, ranked[0].id, answers),
     decisiveness: d,
     isFlat: isFlat,
   };
@@ -229,7 +229,7 @@ function scoreAnswers(answers) {
  * 기여도 = 사용자의 축 값 × 그 학교의 센터링된 축 값.
  * 양수이고 클수록 "이 축 때문에 이 학교가 올라왔다"는 뜻이다.
  */
-function explainMatch(uVec, schoolId) {
+function explainMatch(uVec, schoolId, answers) {
   var c = null;
   for (var i = 0; i < CENTERED.length; i++) {
     if (CENTERED[i].id === schoolId) { c = CENTERED[i]; break; }
@@ -244,11 +244,50 @@ function explainMatch(uVec, schoolId) {
       side: side,
       label: side === 'neg' ? axis.negShort : axis.posShort,
       weight: c.vec[k] * uVec[k],
+      evidence: countPicks(answers, id, side),
     };
   })
     .filter(function (r) { return r.weight > 0.01; })
     .sort(function (a, b) { return b.weight - a.weight; })
     .slice(0, 3);
+}
+
+/**
+ * 내 답이 이 축을 건드린 문항 중 몇 개가 같은 방향이었나.
+ *
+ * 축 이름만 말하면("협력·여유 쪽으로 기울었어요") 그럴듯하지만 근거가 없다.
+ * 실제로 답한 것에서 숫자를 뽑아 붙이면 "내 답을 읽었구나"가 된다.
+ *
+ * 분모를 "이 축을 건드리는 모든 문항"으로 잡으면 안 된다. 축 하나가
+ * 보조축으로 열 문항 넘게 스치기 때문에, 그 방향으로 일관되게 답한
+ * 사람도 "14문항 중 3번"이 되어 실제보다 약해 보인다. 그래서
+ * **내가 고른 선택지가 실제로 이 축에 값을 준 문항**만 센다.
+ * 그러면 "내 답 중 이 축을 건드린 게 6개였고 그중 5개가 이쪽"이 된다.
+ *
+ *   picked  그 방향이었던 문항 수
+ *   total   내 답이 이 축을 건드린 문항 수
+ *   strong  ±2 로 확실하게 그쪽을 고른 문항 수
+ *
+ * 안 푼 문항은 세지 않는다.
+ */
+function countPicks(answers, axisId, side) {
+  if (!answers) return null;
+  var want = side === 'neg' ? -1 : 1;
+  var picked = 0, total = 0, strong = 0;
+
+  QUESTIONS.forEach(function (q, i) {
+    var pick = answers[i];
+    if (pick === null || pick === undefined) return;
+    var w = (q.options[pick] && q.options[pick].weights[axisId]) || 0;
+    if (!w) return;
+    total++;
+    if (w * want > 0) {
+      picked++;
+      if (Math.abs(w) >= 2) strong++;
+    }
+  });
+
+  return total ? { picked: picked, total: total, strong: strong } : null;
 }
 
 if (typeof module !== 'undefined' && module.exports) {
@@ -259,5 +298,6 @@ if (typeof module !== 'undefined' && module.exports) {
     buildUserVector: buildUserVector,
     scoreAnswers: scoreAnswers,
     explainMatch: explainMatch,
+    countPicks: countPicks,
   };
 }

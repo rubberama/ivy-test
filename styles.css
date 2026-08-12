@@ -687,6 +687,16 @@ main { padding: 30px 22px 44px; }
 }
 .why-list li:first-child { border-top: 1px solid var(--rule-soft); }
 
+/* 실제 답에서 뽑은 근거. 축 이름 아래 칸에 붙여서 두 번째 줄로 흐르게 한다.
+   본문보다 작고 흐리게 — 읽으라고 있는 게 아니라 "세어봤다"는 표시다. */
+.why-evidence {
+  grid-column: 2;
+  margin-top: 3px;
+  font-size: 12.5px;
+  color: var(--ink-faint);
+  line-height: 1.55;
+}
+
 .why-tag {
   font-size: 10.5px;
   font-weight: 700;
@@ -1016,12 +1026,6 @@ body.has-result-bar #screen-result { padding-bottom: 92px; }
 }
 a.test-card:hover { border-color: var(--ivy); background: var(--ivy-wash); }
 
-/* 지금 보고 있는 쪽. 눌러야 하는 건 반대쪽이라 이쪽을 가라앉힌다. */
-.test-card.is-here {
-  background: transparent;
-  border-style: dashed;
-}
-.test-card.is-here .test-name { color: var(--ink-soft); }
 
 .test-name {
   grid-area: name;
@@ -1051,3 +1055,61 @@ a.test-card:hover { border-color: var(--ivy); background: var(--ivy-wash); }
   color: var(--ink-faint);
 }
 .test-flag.test-go { color: var(--ivy); }
+
+/* ── 인트로 단계 ──────────────────────────────────────────────
+   테스트 선택과 모드 선택을 한 화면에 같이 두니 뭘 먼저 골라야 하는지
+   헷갈렸다. 한 번에 하나만 묻는다. */
+.step-n {
+  display: inline-grid;
+  place-items: center;
+  width: 17px; height: 17px;
+  margin-right: 5px;
+  border-radius: 50%;
+  background: var(--ivy);
+  color: var(--paper);
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0;
+  vertical-align: 1px;
+}
+
+/* 1단계에서 고른 것을 2단계 위에 한 줄로 남긴다.
+   뭘 고르고 왔는지 안 보이면 되돌아갈 생각을 못 한다. */
+.chosen-test {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 0 0 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--rule);
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.link-btn {
+  border: 0;
+  background: none;
+  padding: 0;
+  font: inherit;
+  font-weight: 700;
+  color: var(--ivy);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.link-btn:hover { color: var(--ivy-deep); }
+
+/* 지금 보는 테스트 카드는 이제 누를 수 있는 버튼이다.
+   가라앉혀 두면 눌러야 하는 줄 모른다. */
+button.test-card {
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  background: var(--card);
+  border-style: solid;
+}
+button.test-card:hover { border-color: var(--ivy); background: var(--ivy-wash); }
+button.test-card .test-name { color: var(--ink); }

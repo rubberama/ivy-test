@@ -28,6 +28,7 @@
   var el = {};
   ['screen-intro', 'screen-quiz', 'screen-loading', 'screen-result',
     'btn-resume', 'btn-prev', 'btn-next', 'btn-share', 'btn-image',
+    'step-test', 'step-mode', 'pick-here', 'chosen-test',
     'btn-restart', 'btn-community', 'mode-student', 'mode-parent',
     'progress-now', 'progress-total', 'progress-fill', 'progress-note',
     'quiz-mode-label', 'q-index', 'dots', 'question-text', 'options',
@@ -209,6 +210,39 @@
       el['btn-resume'].textContent = '이어서 하기 · ' + MODE_COPY[saved.mode].shortLabel +
         ' ' + answered + '/' + QUESTIONS.length;
     }
+
+    // 하던 게 있으면 테스트는 이미 고른 셈이라 2단계로 바로 간다.
+    introStep(answered ? 'mode' : 'test');
+  }
+
+  /**
+   * 인트로를 두 단계로 나눈다.
+   *
+   * 테스트 선택과 모드 선택을 한 화면에 같이 두니 뭘 먼저 골라야 하는지
+   * 헷갈렸다. 1단계에서 테스트를 정하고, 정하면 2단계가 나온다.
+   * 1단계는 한 줄 요약으로 접히고 '바꾸기'로 되돌아갈 수 있다.
+   *
+   * 저장된 진행이 있으면 1단계를 건너뛴다. 이미 이 테스트를 고른 사람이다.
+   */
+  function introStep(step) {
+    var onMode = step === 'mode';
+    el['step-test'].classList.toggle('hidden', onMode);
+    el['step-mode'].classList.toggle('hidden', !onMode);
+    if (onMode && el['pick-here'] && el['chosen-test']) {
+      el['chosen-test'].innerHTML = '';
+      var what = document.createElement('span');
+      what.textContent = el['pick-here'].dataset.name + ' · ' +
+        el['pick-here'].dataset.count + '곳';
+      var back = document.createElement('button');
+      back.type = 'button';
+      back.className = 'link-btn';
+      back.textContent = '바꾸기';
+      back.addEventListener('click', function () { introStep('test'); });
+      el['chosen-test'].appendChild(what);
+      el['chosen-test'].appendChild(back);
+    }
+    // 단계를 넘길 때 새로 나온 블록이 보이게 올린다.
+    if (onMode) scrollTop();
   }
 
   function showNotice(text) {
@@ -523,6 +557,15 @@
       txt.textContent = c.reasons[i % c.reasons.length](pole) + ' ' +
         tail(top.school.nameKo, josa);
       li.appendChild(tag); li.appendChild(txt);
+
+      // 실제 답에서 뽑은 근거 한 줄. 셀 만한 게 없으면 안 붙인다.
+      var ev = c.evidenceOf && c.evidenceOf(reason.evidence, pole);
+      if (ev) {
+        var evEl = document.createElement('span');
+        evEl.className = 'why-evidence';
+        evEl.textContent = ev;
+        li.appendChild(evEl);
+      }
       list.appendChild(li);
     });
   }
@@ -692,6 +735,9 @@
   function boot() {
     renderIntro();
 
+    if (el['pick-here']) {
+      el['pick-here'].addEventListener('click', function () { introStep('mode'); });
+    }
     el['mode-student'].addEventListener('click', function () { startQuiz('student'); });
     el['mode-parent'].addEventListener('click', function () { startQuiz('parent'); });
 

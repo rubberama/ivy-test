@@ -74,18 +74,21 @@
          한쪽에 들어오면 다른 쪽으로 갈 방법이 없었다.
          내용은 scripts/build-intro.js 가 채운다 — 학교 수와 문항 수를
          손으로 적어두면 데이터를 고쳤을 때 조용히 어긋난다. -->
-    <div class="block">
-      <p class="label">어떤 테스트를 볼까요?</p>
+    <div class="block step" id="step-test">
+      <p class="label"><span class="step-n">1</span> 어떤 테스트를 볼까요?</p>
       <div class="test-pick" id="test-pick">
-        <span class="test-card is-here" aria-current="page"><span class="test-name">미국 아이비리그</span><span class="test-sub">하버드 · 예일 · 프린스턴 등</span><span class="test-meta">8곳 · 질문 18개</span><span class="test-flag">지금 보는 중</span></span>
+        <button type="button" class="test-card is-here" id="pick-here" data-name="미국 아이비리그" data-count="8"><span class="test-name">미국 아이비리그</span><span class="test-sub">하버드 · 예일 · 프린스턴 등</span><span class="test-meta">8곳 · 질문 18개</span><span class="test-flag test-go">이걸로 할게요 <span aria-hidden="true">→</span></span></button>
         <a class="test-card" href="korea-uni/"><span class="test-name">한국 대학</span><span class="test-sub">서울대 · 카이스트 · 한예종 등</span><span class="test-meta">30곳 · 질문 20개</span><span class="test-flag test-go">보러 가기 <span aria-hidden="true">→</span></span></a>
       </div>
     </div>
 
     <!-- 시작 전에 누가 답하는지부터 고른다. 같은 18문항이지만
          학생은 자기 얘기로, 학부모는 아이를 떠올리며 답하게 된다. -->
-    <div class="block">
-      <p class="label">누가 답하시나요?</p>
+    <!-- 두 질문을 한 화면에 같이 두면 뭘 먼저 골라야 하는지 헷갈린다.
+         테스트를 정한 다음에 이 블록이 나온다. 위 블록은 한 줄 요약으로 접힌다. -->
+    <div class="block step hidden" id="step-mode">
+      <p class="chosen-test" id="chosen-test"></p>
+      <p class="label"><span class="step-n">2</span> 누가 답하시나요?</p>
       <div class="mode-pick">
         <button type="button" class="mode-btn" id="mode-student" data-mode="student">
           <span class="mode-name">학생이에요</span>

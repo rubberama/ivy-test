@@ -6,7 +6,8 @@ const fails=[]; const check=(n,c,x)=>{console.log((c?'  OK   ':'  FAIL ')+n+(x?'
   // 1) 탭 수: 클릭만으로 끝까지 가는가
   const p=await b.newPage({viewport:{width:390,height:844}});
   await p.goto('http://127.0.0.1:8765/korea-uni/');
-  await p.click('#mode-student');
+  await p.click('#pick-here');            // 1단계: 테스트 확정
+    await p.click('#mode-student');
   await p.waitForSelector('#screen-quiz:not(.hidden)');
   let taps=0;
   for(let i=0;i<19;i++){
@@ -28,7 +29,8 @@ const fails=[]; const check=(n,c,x)=>{console.log((c?'  OK   ':'  FAIL ')+n+(x?'
   // 2) 키보드 방향키로는 안 넘어가야 한다
   const k=await b.newPage({viewport:{width:390,height:844}});
   await k.goto('http://127.0.0.1:8765/korea-uni/');
-  await k.click('#mode-student');
+  await k.click('#pick-here');            // 1단계: 테스트 확정
+    await k.click('#mode-student');
   await k.waitForSelector('#screen-quiz:not(.hidden)');
   await k.locator('#options input').first().focus();
   await k.keyboard.press('ArrowDown');
@@ -42,7 +44,8 @@ const fails=[]; const check=(n,c,x)=>{console.log((c?'  OK   ':'  FAIL ')+n+(x?'
   // 3) 뒤로 갔다가 답을 바꾸면 다시 앞으로
   const r=await b.newPage({viewport:{width:390,height:844}});
   await r.goto('http://127.0.0.1:8765/korea-uni/');
-  await r.click('#mode-student');
+  await r.click('#pick-here');            // 1단계: 테스트 확정
+    await r.click('#mode-student');
   await r.waitForSelector('#screen-quiz:not(.hidden)');
   await r.locator('#options .option').nth(0).click();
   await r.waitForFunction(()=>document.getElementById('q-index').textContent==='2');

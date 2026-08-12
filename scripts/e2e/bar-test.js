@@ -9,6 +9,7 @@ const fails=[]; const check=(n,c,x)=>{console.log((c?'  OK   ':'  FAIL ')+n+(x?'
     await p.goto(base);
     const bar=p.locator('#result-bar');
     check(name+' 인트로에선 숨김', !(await bar.evaluate(e=>e.classList.contains('is-on'))));
+    await p.click('#pick-here');            // 1단계: 테스트 확정
     await p.click('#mode-student');
     await p.waitForSelector('#screen-quiz:not(.hidden)');
     check(name+' 문항에서도 숨김', !(await bar.evaluate(e=>e.classList.contains('is-on'))));

@@ -54,7 +54,8 @@ async function runQuiz(page, pattern) {
 
   // ── 학생 모드 ─────────────────────────────────────────────
   console.log('\n=== 학생 모드 ===');
-  await page.click('#mode-student');
+  await page.click('#pick-here');            // 1단계: 테스트 확정
+    await page.click('#mode-student');
   await page.waitForSelector('#screen-quiz:not(.hidden)');
   const sQ1 = await page.locator('#question-text').innerText();
   check('학생용 문항 (1인칭)', sQ1.includes('나는'), '"' + sQ1 + '"');
@@ -82,7 +83,8 @@ async function runQuiz(page, pattern) {
   console.log('\n=== 학부모 모드 ===');
   const pp = await newPage();
   await pp.goto(BASE + '/index.html');
-  await pp.click('#mode-parent');
+  await pp.click('#pick-here');            // 1단계: 테스트 확정
+    await pp.click('#mode-parent');
   await pp.waitForSelector('#screen-quiz:not(.hidden)');
   const pQ1 = await pp.locator('#question-text').innerText();
   check('학부모용 문항 (아이 주어)', pQ1.includes('아이'), '"' + pQ1 + '"');
@@ -194,7 +196,8 @@ async function runQuiz(page, pattern) {
   console.log('\n=== 이어서 하기 (모드 기억) ===');
   const p4 = await newPage();
   await p4.goto(BASE + '/index.html');
-  await p4.click('#mode-parent');
+  await p4.click('#pick-here');            // 1단계: 테스트 확정
+    await p4.click('#mode-parent');
   for (let i = 0; i < 5; i++) {
     await p4.locator('#options .option').nth(1).click();
     await p4.click('#btn-next');
@@ -236,7 +239,8 @@ async function runQuiz(page, pattern) {
   console.log('\n=== 접근성 · 레이아웃 ===');
   const p5 = await newPage();
   await p5.goto(BASE + '/index.html');
-  await p5.click('#mode-student');
+  await p5.click('#pick-here');            // 1단계: 테스트 확정
+    await p5.click('#mode-student');
   await p5.locator('#options input[type=radio]').first().focus();
   await p5.keyboard.press('ArrowDown');
   const idx = await p5.evaluate(() =>
@@ -257,7 +261,8 @@ async function runQuiz(page, pattern) {
   p6.on('pageerror', e => fileErrors.push(e.message));
   await p6.goto('file://' + APP + '/index.html');
   await p6.waitForSelector('#screen-intro:not(.hidden)', { timeout: 6000 });
-  await p6.click('#mode-parent');
+  await p6.click('#pick-here');            // 1단계: 테스트 확정
+    await p6.click('#mode-parent');
   await runQuiz(p6, i => (i * 3) % 4);
   check('file:// 학부모 완주', await p6.isVisible('#screen-result'),
     await p6.locator('#result-name').innerText());
