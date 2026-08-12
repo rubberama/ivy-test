@@ -80,6 +80,31 @@
   }
 
   /**
+   * 해설 본문의 **강조** 를 굵게 그린다.
+   *
+   * 줄글이 길어서 그냥 읽으면 뭐가 중요한지 안 잡힌다. 제도 이름과 숫자처럼
+   * 이 학교를 실제로 구별해주는 말만 굵게 한다. 표시는 데이터에 **이렇게**
+   * 적혀 있다 — 어디를 굵게 할지는 문장을 쓴 사람이 정하는 게 맞다.
+   *
+   * innerHTML 을 쓰지 않는다. 학교 해설은 우리가 쓴 글이지만, 데이터에서
+   * 온 문자열을 HTML 로 해석하는 습관을 만들면 나중에 어디선가 샌다.
+   * 텍스트 노드와 <b> 만 직접 만들어 붙인다.
+   */
+  function setEmphasis(node, text) {
+    node.textContent = '';
+    String(text == null ? '' : text).split(/\*\*/).forEach(function (part, i) {
+      if (!part) return;
+      if (i % 2 === 1) {
+        var b = document.createElement('b');
+        b.textContent = part;
+        node.appendChild(b);
+      } else {
+        node.appendChild(document.createTextNode(part));
+      }
+    });
+  }
+
+  /**
    * 학교 이름을 그 학교 홈페이지로 가는 링크로 만든다.
    * 바깥으로 나가는 링크라 새 탭으로 열고, 화살표로 표시해준다.
    * (noopener 없이 target=_blank 를 쓰면 열린 페이지가 이쪽 창을 건드릴 수 있다)
@@ -586,7 +611,7 @@
       h.textContent = part[0];
       var b = document.createElement('p');
       b.className = 'detail-body';
-      b.textContent = part[1];
+      setEmphasis(b, part[1]);
       wrap.appendChild(h); wrap.appendChild(b);
       el['detail-block'].appendChild(wrap);
     });
@@ -608,8 +633,10 @@
     ].forEach(function (row) {
       var dt = document.createElement('dt');
       dt.textContent = row[0];
+      // 한국 버전은 이 칸의 place·after 가 facts 를 그대로 쓴다.
+      // textContent 로 찍으면 ** 가 화면에 별표로 나온다.
       var dd = document.createElement('dd');
-      dd.textContent = row[1];
+      setEmphasis(dd, row[1]);
       el['parent-facts'].appendChild(dt);
       el['parent-facts'].appendChild(dd);
     });

@@ -1,5 +1,6 @@
 const { chromium } = require('playwright');
 const CHROME = process.env.CHROME_PATH || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
+const OUT = process.env.SHOT_DIR || require('os').tmpdir();   // 저장소에 남기지 않는다
 const fails=[]; const check=(n,c,x)=>{console.log((c?'  OK   ':'  FAIL ')+n+(x?'  '+x:'')); if(!c)fails.push(n);};
 (async()=>{
   const b=await chromium.launch({executablePath:CHROME});
@@ -36,7 +37,7 @@ const fails=[]; const check=(n,c,x)=>{console.log((c?'  OK   ':'  FAIL ')+n+(x?'
     const hint=await p.locator('#share-hint').innerText();
     check(name+' 공유 눌리고 안내 뜸', hint.length>0, '"'+hint+'"');
     check(name+' JS 에러 없음', errs.length===0, errs[0]||'');
-    if(name==='한국') await p.screenshot({path:'bar-result.png'});
+    if(name==='한국') await p.screenshot({path:require('path').join(OUT,'bar-result.png')});
     await p.close();
   }
   await b.close();

@@ -89,8 +89,8 @@ const AXES_ALL = [
   {
     id: 'openness',
     name: '전공 선택',
-    neg: '입학할 때 정해진다',
-    pos: '나중에 고르거나 얹는다',
+    neg: '입학할 때 정해지는 전공',
+    pos: '들어와서 고르는 전공',
     negShort: '학과 고정',
     posShort: '전공 자유',
   },
@@ -116,8 +116,8 @@ const AXES_ALL = [
   {
     id: 'cost',
     name: '비용 부담',
-    neg: '학비가 선택 기준은 아니다',
-    pos: '학비가 선택지를 좌우한다',
+    neg: '학비가 기준은 아닌 쪽',
+    pos: '학비가 선택을 좌우하는 쪽',
     negShort: '비용 비민감',
     posShort: '비용 민감',
     excludeFromMatch: true,

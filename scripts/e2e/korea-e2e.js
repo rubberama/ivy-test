@@ -1,6 +1,10 @@
 const { chromium } = require('playwright');
 const CHROME = process.env.CHROME_PATH || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
 const BASE = 'http://127.0.0.1:8765/korea-uni/';
+// 스크린샷은 저장소가 아니라 임시 폴더로. 여기 두면 실행할 때마다
+// 저장소가 더러워지고, 실제로 커밋까지 딸려 들어간 적이 있다.
+const OUT = process.env.SHOT_DIR || require('os').tmpdir();
+const out = f => require('path').join(OUT, f);
 const fails = [];
 const check = (n, c, x) => { console.log((c ? '  OK   ' : '  FAIL ') + n + (x ? '  ' + x : '')); if (!c) fails.push(n); };
 (async () => {
@@ -37,8 +41,8 @@ const check = (n, c, x) => { console.log((c ? '  OK   ' : '  FAIL ') + n + (x ? 
     check(mode+' 링크 재현', (await sp.locator('#result-name').innerText()) === name);
     check(mode+' 링크 버튼 문구', (await sp.locator('#btn-restart').innerText()) === '나도 해보기');
     await sp.close();
-    await p.screenshot({ path: `korea-${mode}.png`, fullPage: true });
-    if (mode==='student') require('fs').writeFileSync('korea-result.txt', await p.locator('#screen-result').innerText());
+    await p.screenshot({ path: out(`korea-${mode}.png`), fullPage: true });
+    if (mode==='student') require('fs').writeFileSync(out('korea-result.txt'), await p.locator('#screen-result').innerText());
     await p.close();
   }
   const px = await np(); await px.goto('http://127.0.0.1:8765/');

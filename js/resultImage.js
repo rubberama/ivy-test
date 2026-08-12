@@ -167,12 +167,12 @@ function renderResultCard(canvas, result, copy) {
   ctx.font = font(600, 36);
   var tagline = c.taglineOf ? c.taglineOf(top.school) : top.school.tagline;
   y = drawLines(ctx, wrapText(ctx, tagline, innerW, 2), pad, y, 52);
-  y += 26;
+  y += 22;
 
   // 구분선
   ctx.fillStyle = C.rule;
   ctx.fillRect(pad, y, innerW, 1);
-  y += 30;
+  y += 28;
 
   // 매칭 적합도 — 세리프 숫자가 이 카드의 중심
   ctx.fillStyle = top.school.color;
@@ -184,11 +184,11 @@ function renderResultCard(canvas, result, copy) {
   ctx.letterSpacing = '3px';
   ctx.fillText('매칭 적합도', pad + pctW + 22, y + 66);
   ctx.letterSpacing = '0px';
-  y += 150;
+  y += 142;
 
   ctx.fillStyle = C.rule;
   ctx.fillRect(pad, y, innerW, 1);
-  y += 34;
+  y += 30;
 
   /* 아래쪽 배치
    * 학교 이름·태그라인 길이에 따라 위쪽이 차지하는 높이가 달라진다.
@@ -197,12 +197,42 @@ function renderResultCard(canvas, result, copy) {
    * 이렇게 안 하면 태그라인이 두 줄인 학교에서 칩이 푸터를 덮는다.
    */
   var LABEL_H = 26, CHIP_H = 52, LABEL_GAP = 10, BLOCK_GAP = 18;
+  var EV_LH = 34, EV_GAP = 12;
   var chipBlocks = 1 + (result.reasons && result.reasons.length ? 1 : 0);
-  var bottomH = chipBlocks * (LABEL_H + LABEL_GAP + CHIP_H) + (chipBlocks - 1) * BLOCK_GAP;
+
+  /* 근거 한 줄.
+   * 칩은 "어느 쪽 성향이냐"만 말한다. 카드를 받아 보는 사람 입장에서는
+   * 그게 어디서 나온 소린지 알 수가 없다. 실제 답에서 센 숫자를 한 줄
+   * 붙이면 칩이 근거를 갖는다 — 화면 결과에 이미 있는 문장과 같은 것이다.
+   *
+   * 반드시 한 줄이어야 한다. 두 줄로 넘어가면 그만큼 위쪽 랭킹 세 줄의
+   * 자리를 뺏는데, 세 줄은 이미 최소 높이라 더 못 줄인다. 그래서 세 축을
+   * 순서대로 재보고 한 줄에 들어가는 첫 번째를 쓴다 — 세 축 다 진짜
+   * 근거라서 어느 걸 써도 맞고, 문장 안에 축 이름이 들어 있어 칩과
+   * 짝이 어긋나지도 않는다. 셋 다 길면 그때만 잘라 쓴다.
+   */
+  ctx.font = font(500, 26);
+  var evidenceLines = [];
+  if (c.evidenceOf && result.reasons) {
+    var candidates = result.reasons
+      .map(function (r) { return c.evidenceOf(r.evidence, r.label) || ''; })
+      .filter(Boolean);
+    for (var ei = 0; ei < candidates.length; ei++) {
+      var lines = wrapText(ctx, candidates[ei], innerW, 2);
+      if (lines.length === 1) { evidenceLines = lines; break; }
+    }
+    if (!evidenceLines.length && candidates.length) {
+      evidenceLines = wrapText(ctx, candidates[0], innerW, 1);
+    }
+  }
+  var evidenceH = evidenceLines.length ? evidenceLines.length * EV_LH + EV_GAP : 0;
+
+  var bottomH = chipBlocks * (LABEL_H + LABEL_GAP + CHIP_H) +
+    (chipBlocks - 1) * BLOCK_GAP + evidenceH;
 
   var footerTop = CARD_H - 116;
   var bottomY = footerTop - 28 - bottomH;
-  var ROW_H = Math.max(92, Math.min(128, (bottomY - 26 - y) / 3));
+  var ROW_H = Math.max(86, Math.min(128, (bottomY - 26 - y) / 3));
 
   // TOP 3 — 화면과 같은 줄 구성: 엠블럼 / 순번 + 이름 / 퍼센트
   result.top3.forEach(function (item, i) {
@@ -270,7 +300,15 @@ function renderResultCard(canvas, result, copy) {
     drawLabel(c.cardTraits || '이런 성향이 결정적이었어요', y);
     drawChips(result.reasons.map(function (r) { return r.label; }),
       y + LABEL_H + LABEL_GAP, C.brass, C.brass);
-    y += LABEL_H + LABEL_GAP + CHIP_H + BLOCK_GAP;
+    y += LABEL_H + LABEL_GAP + CHIP_H;
+
+    if (evidenceLines.length) {
+      ctx.fillStyle = C.inkSoft;
+      ctx.font = font(500, 26);
+      drawLines(ctx, evidenceLines, pad, y + EV_GAP, EV_LH);
+      y += evidenceH;
+    }
+    y += BLOCK_GAP;
   }
 
   // 이 학교의 키워드
