@@ -1,6 +1,9 @@
 const { chromium } = require('playwright');
 const CHROME = process.env.CHROME_PATH || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
-const BASE = 'http://127.0.0.1:8765/korea-uni/';
+// 배포본은 슬래시 없는 /korea-uni 로 서빙된다(vercel.json trailingSlash:false).
+// 그 경로에서 상대 자원이 제대로 풀리는지 보려면 BASE 를 바꿔 끼워야 해서 env 로 뺐다.
+//   BASE=http://127.0.0.1:8799/korea-uni node scripts/e2e/korea-e2e.js
+const BASE = process.env.BASE || 'http://127.0.0.1:8765/korea-uni/';
 // 스크린샷은 저장소가 아니라 임시 폴더로. 여기 두면 실행할 때마다
 // 저장소가 더러워지고, 실제로 커밋까지 딸려 들어간 적이 있다.
 const OUT = process.env.SHOT_DIR || require('os').tmpdir();

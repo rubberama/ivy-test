@@ -42,6 +42,7 @@ python3 -m http.server 8000
 캐시·보안 헤더가 들어 있습니다.
 
 - **HTML·CSS·JS 는 `max-age=0, must-revalidate`** — 파일명에 해시가 없어서 오래 캐시하면 수정해도 예전 화면이 남습니다. ETag 로 304 를 받으므로 실제 전송량은 거의 없습니다.
+  `cleanUrls: true` 때문에 사람이 실제로 여는 주소(`/`, `/korea-uni`)에는 확장자가 없습니다. `/(.*).(html|css|js)` 규칙은 확장자를 요구해서 이 둘에 안 걸리므로, 두 경로를 따로 적어둡니다. 규칙을 늘릴 때 같이 챙기세요.
 - **`og.png` 는 1시간** — 메신저가 어차피 자기 쪽에 캐시하므로 짧게 잡아도 손해가 없고, 바꿨을 때 빨리 반영됩니다.
 - `nosniff`, `Referrer-Policy`, `Permissions-Policy` 를 전체 경로에 적용합니다.
 
@@ -56,6 +57,13 @@ git commit -am "배포 주소 변경" && git push
 ```
 
 확인: `https://실제-주소/og.png` 가 브라우저에서 열려야 합니다.
+
+**배포 전 미리 확인하기.** 개발용 `python3 -m http.server` 는 `/korea-uni` 를 `/korea-uni/` 로 넘기는데, Vercel 은 `trailingSlash: false` 라 반대로 넘깁니다. 한국 버전은 `../fonts/suit.css` 처럼 상대 경로로 자원을 걸기 때문에 이 차이가 실제로 문제가 될 수 있습니다. 배포본과 같은 규칙으로 띄워서 확인하세요.
+
+```bash
+node scripts/e2e/serve-vercel.js &                        # 8799 포트
+BASE=http://127.0.0.1:8799/korea-uni node scripts/e2e/korea-e2e.js
+```
 
 ### GitHub Pages
 
@@ -90,9 +98,14 @@ js/share.js                    답변 + 모드 <-> URL 해시 인코딩
 js/resultImage.js              canvas 결과 이미지 (1080x1350)
 js/app.js                      상태 머신 · 렌더링 · 이벤트
 scripts/check-reachability.js  매칭 엔진 검증 (node 로 실행)
+scripts/check-korea.js         한국 30곳 도달성·타당성 검증
+scripts/check-copy.js          화면 문장 전수 검사 (말투·받침·겹말·강조)
+scripts/mark-emphasis.js       해설의 **강조** 를 데이터에 박아 넣는 일회성 스크립트
 scripts/build-preview.js       단일 파일로 합치기
 scripts/build-font.py          SUIT 서브셋 생성
 scripts/build-og.js            링크 미리보기 이미지 생성
+scripts/e2e/                   브라우저 e2e 6종 + 성능 측정 (scripts/e2e/README.md 참고)
+scripts/e2e/serve-vercel.js    vercel.json 규칙대로 띄우기 (배포본과 같은 경로 규칙)
 ```
 
 학교 로고·문장·워드마크는 전부 등록상표라 쓰지 않습니다. 화면에는 활자와 학교 상징색만 씁니다.
@@ -157,7 +170,9 @@ node scripts/build-og.js          # 필요: npm i -D playwright
 질문 문구를 고치는 것만으로는 아무것도 깨지지 않습니다. **가중치나 학교 벡터를 고쳤다면 반드시 검증 스크립트를 돌리세요.**
 
 ```bash
-node scripts/check-reachability.js
+node scripts/check-reachability.js   # 아이비 8곳
+node scripts/check-korea.js          # 한국 30곳
+node scripts/check-copy.js           # 화면에 나가는 문장 전부
 ```
 
 검사 항목:
