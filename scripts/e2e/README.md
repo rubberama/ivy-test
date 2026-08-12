@@ -18,6 +18,7 @@ node scripts/e2e/e2e.js              # 아이비 — 두 모드 완주·공유 �
 node scripts/e2e/korea-e2e.js        # 한국 대학 — 30곳·20문항·모드별 화면
 node scripts/e2e/tap-test.js         # 자동 전진 — 마지막 문항·방향키·되돌아가기
 node scripts/e2e/bar-test.js         # 결과 고정 공유 바 — 노출 조건·가림·동작
+node scripts/e2e/switch-test.js      # 테스트 선택 — 표시·링크·실제 이동
 ```
 
 측정용:

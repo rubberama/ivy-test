@@ -70,6 +70,18 @@
       <p class="fine">질문 20개 · 약 2분</p>
     </div>
 
+    <!-- 어느 테스트를 볼지. 두 테스트가 같은 도메인에 따로 올라가 있어서
+         한쪽에 들어오면 다른 쪽으로 갈 방법이 없었다.
+         내용은 scripts/build-intro.js 가 채운다 — 학교 수와 문항 수를
+         손으로 적어두면 데이터를 고쳤을 때 조용히 어긋난다. -->
+    <div class="block">
+      <p class="label">어떤 테스트를 볼까요?</p>
+      <div class="test-pick" id="test-pick">
+        <a class="test-card" href="../"><span class="test-name">미국 아이비리그</span><span class="test-sub">하버드 · 예일 · 프린스턴 등</span><span class="test-meta">8곳 · 질문 18개</span><span class="test-flag test-go">보러 가기 <span aria-hidden="true">→</span></span></a>
+        <span class="test-card is-here" aria-current="page"><span class="test-name">한국 대학</span><span class="test-sub">서울대 · 카이스트 · 한예종 등</span><span class="test-meta">30곳 · 질문 20개</span><span class="test-flag">지금 보는 중</span></span>
+      </div>
+    </div>
+
     <!-- 시작 전에 누가 답하는지부터 고른다. 같은 18문항이지만
          학생은 자기 얘기로, 학부모는 아이를 떠올리며 답하게 된다. -->
     <div class="block">

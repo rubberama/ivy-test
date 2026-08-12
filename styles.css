@@ -988,3 +988,66 @@ body.has-result-bar #screen-result { padding-bottom: 92px; }
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .result-bar { background: var(--paper); }
 }
+
+/* ── 테스트 선택 ──────────────────────────────────────────────
+   미국 아이비와 한국 대학이 같은 도메인에 따로 올라가 있다.
+   한쪽으로 들어오면 다른 쪽이 있는지도 몰랐다. 인트로에서 바로 넘어가게 한다.
+
+   지금 보고 있는 쪽은 링크가 아니라 표시일 뿐이라 <span> 이다.
+   눌러도 갈 데가 없는 걸 링크로 만들면 눌러보고 아무 일도 안 일어난다. */
+.test-pick { display: grid; gap: 9px; }
+
+.test-card {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    'name flag'
+    'sub  flag'
+    'meta flag';
+  align-items: center;
+  gap: 1px 12px;
+  padding: 14px 16px;
+  border: 1px solid var(--rule);
+  border-radius: var(--r-sm);
+  background: var(--card);
+  text-decoration: none;
+  color: inherit;
+  transition: border-color .16s ease, background-color .16s ease;
+}
+a.test-card:hover { border-color: var(--ivy); background: var(--ivy-wash); }
+
+/* 지금 보고 있는 쪽. 눌러야 하는 건 반대쪽이라 이쪽을 가라앉힌다. */
+.test-card.is-here {
+  background: transparent;
+  border-style: dashed;
+}
+.test-card.is-here .test-name { color: var(--ink-soft); }
+
+.test-name {
+  grid-area: name;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  color: var(--ink);
+}
+.test-sub {
+  grid-area: sub;
+  font-size: 12.5px;
+  color: var(--ink-soft);
+}
+.test-meta {
+  grid-area: meta;
+  font-size: 11.5px;
+  color: var(--ink-faint);
+  letter-spacing: .01em;
+}
+
+.test-flag {
+  grid-area: flag;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: .02em;
+  white-space: nowrap;
+  color: var(--ink-faint);
+}
+.test-flag.test-go { color: var(--ivy); }

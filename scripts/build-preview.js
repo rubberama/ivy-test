@@ -29,6 +29,17 @@ var OUT_EMBED = TEST === 'korea' ? 'dist/embed-korea.html' : 'dist/embed.html';
 
 var html = read(SRC).replace(/(href|src)="\.\.\//g, '$1="');
 
+/* 테스트 선택의 반대쪽 링크는 상대 경로다. 단일 파일에서는 옆에 아무것도
+   없으니 그대로 두면 눌렀을 때 아무 데도 못 간다. 배포 주소로 바꾼다.
+   (index.html 안의 og:url 에서 배포 주소를 읽는다 — 한 군데만 고치면 되게) */
+var SITE = (read('index.html').match(/og:url" content="([^"]+)"/) || [])[1] || '';
+if (SITE) {
+  var base = SITE.replace(/\/$/, '');
+  html = html
+    .replace(/href="korea-uni\/"/g, 'href="' + base + '/korea-uni" target="_blank" rel="noopener"')
+    .replace(/(<a class="test-card") href="\/?"/g, '$1 href="' + base + '/" target="_blank" rel="noopener"');
+}
+
 /* ── CSS 인라인 ────────────────────────────────────────────── */
 // 단일 파일에서는 폰트를 비동기로 받을 이유가 없다(이미 파일 안에 있다).
 // 그래서 preload 와 noscript 짝은 지우고, media="print" 로 걸린 것도

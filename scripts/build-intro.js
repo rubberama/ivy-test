@@ -23,17 +23,53 @@ var path = require('path');
 var ROOT = path.join(__dirname, '..');
 
 var TESTS = [
-  { html: 'index.html', data: 'js/data' },
-  { html: 'korea-uni/index.html', data: 'js/data/korea' },
+  {
+    id: 'ivy', html: 'index.html', data: 'js/data',
+    name: '미국 아이비리그', where: '하버드 · 예일 · 프린스턴 등',
+    // 서로를 가리키는 주소. 루트에서 보면 하위 폴더, 하위 폴더에서 보면 루트다.
+    hrefFrom: { ivy: null, korea: '../' },
+  },
+  {
+    id: 'korea', html: 'korea-uni/index.html', data: 'js/data/korea',
+    name: '한국 대학', where: '서울대 · 카이스트 · 한예종 등',
+    hrefFrom: { ivy: 'korea-uni/', korea: null },
+  },
 ];
 
 function esc(s) {
   return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
+// 각 테스트의 규모를 데이터에서 읽어둔다. 손으로 적으면 어긋난다.
+var META = TESTS.map(function (t) {
+  return {
+    id: t.id,
+    name: t.name,
+    where: t.where,
+    hrefFrom: t.hrefFrom,
+    schools: require(path.join(ROOT, t.data, 'schools.js')).SCHOOLS.length,
+    questions: require(path.join(ROOT, t.data, 'questions.js')).QUESTIONS.length,
+  };
+});
+
 TESTS.forEach(function (t) {
   var axes = require(path.join(ROOT, t.data, 'axes.js'));
   var schools = require(path.join(ROOT, t.data, 'schools.js'));
+
+  // 테스트 선택. 지금 보고 있는 쪽은 눌러도 갈 데가 없으므로 링크로 만들지 않는다.
+  var picker = META.map(function (m) {
+    var here = m.id === t.id;
+    var body =
+      '<span class="test-name">' + esc(m.name) + '</span>' +
+      '<span class="test-sub">' + esc(m.where) + '</span>' +
+      '<span class="test-meta">' + m.schools + '곳 · 질문 ' + m.questions + '개</span>';
+    if (here) {
+      return '        <span class="test-card is-here" aria-current="page">' + body +
+        '<span class="test-flag">지금 보는 중</span></span>';
+    }
+    return '        <a class="test-card" href="' + m.hrefFrom[t.id] + '">' + body +
+      '<span class="test-flag test-go">보러 가기 <span aria-hidden="true">→</span></span></a>';
+  }).join('\n');
 
   var roster = schools.SCHOOLS.map(function (s) {
     return '      <li><span class="roster-ko">' + esc(s.nameKo) + '</span>' +
@@ -56,9 +92,11 @@ TESTS.forEach(function (t) {
   [
     ['roster', /(<ul class="roster" id="roster">)[\s\S]*?(<\/ul>)/, roster],
     ['axis-preview', /(<ul class="axis-preview" id="axis-preview">)[\s\S]*?(<\/ul>)/, axisList],
+    ['test-pick', /(<div class="test-pick" id="test-pick">)[\s\S]*?(<\/div>)/, picker],
   ].forEach(function (spec) {
     if (!spec[1].test(html)) { missing.push(spec[0]); return; }
-    html = html.replace(spec[1], '$1\n' + spec[2] + '\n    $2');
+    var indent = spec[0] === 'test-pick' ? '      ' : '    ';
+    html = html.replace(spec[1], '$1\n' + spec[2] + '\n' + indent + '$2');
   });
 
   if (missing.length) {
@@ -68,6 +106,6 @@ TESTS.forEach(function (t) {
   }
   fs.writeFileSync(p, html);
   console.log('  ' + t.html + '  학교 ' + schools.SCHOOLS.length +
-    '곳 · 축 ' + axes.AXES.length + '개' +
+    '곳 · 축 ' + axes.AXES.length + '개 · 테스트 선택' +
     (html === before ? ' (이미 최신)' : ' 박아넣음'));
 });
