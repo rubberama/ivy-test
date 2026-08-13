@@ -112,8 +112,8 @@ h1{
 <div class="frame">
   <div class="left">
     <div class="brand"><span class="mark">${TEST === 'korea' ? 'UNIV' : 'IVY'}</span><span class="brand-sub">${TEST === 'korea' ? '대학 성향 매칭' : '성향 매칭'}</span></div>
-    <p class="eyebrow">${TEST === 'korea' ? 'Which campus fits?' : 'Which Ivy fits?'}</p>
-    <h1>결이 맞는<br>${TEST === 'korea' ? '대학은' : '아이비리그는'} 어디일까</h1>
+    <p class="eyebrow">Which campus fits?</p>
+    <h1>결이 맞는<br>대학은 어디일까</h1>
     <p class="sub">성적이 아니라 <b>성향</b>으로 찾는 나와 맞는 학교 세 곳.</p>
     <div class="meta">
       <span class="chip">질문 ${TEST === 'korea' ? '20' : '18'}개</span>
